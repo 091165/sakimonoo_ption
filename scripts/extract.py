@@ -953,6 +953,9 @@ def extract_s06(wb_oi, atm):
     global_oi = defaultdict(lambda: {'put_oi': 0, 'call_oi': 0})
     # Per-expiry, ALL strikes (no range limit) for per-expiry top ranking
     global_by_expiry = defaultdict(lambda: defaultdict(lambda: {'put_oi': 0, 'call_oi': 0}))
+    # Per-expiry, EVERY listed strike (incl. 125/250-yen steps) — used for Max Pain,
+    # which must be computed on a single expiry over its full strike range.
+    full_by_expiry = defaultdict(lambda: defaultdict(lambda: {'put_oi': 0, 'call_oi': 0}))
 
     for row in ws.iter_rows(min_row=1, max_row=ws.max_row, values_only=False):
         a_val = str(row[0].value).strip() if row[0].value else ''
@@ -965,6 +968,7 @@ def extract_s06(wb_oi, atm):
             strike = int(m.group(2))
             oi = safe_num(row[2].value if len(row) > 2 else None)
             chg = safe_num(row[3].value if len(row) > 3 else None)
+            full_by_expiry[expiry][strike]['put_oi'] += oi
             if strike % 500 == 0:
                 global_oi[strike]['put_oi'] += oi
                 global_by_expiry[expiry][strike]['put_oi'] += oi
@@ -979,6 +983,7 @@ def extract_s06(wb_oi, atm):
             strike = int(m.group(2))
             oi = safe_num(row[8].value if len(row) > 8 else None)
             chg = safe_num(row[9].value if len(row) > 9 else None)
+            full_by_expiry[expiry][strike]['call_oi'] += oi
             if strike % 500 == 0:
                 global_oi[strike]['call_oi'] += oi
                 global_by_expiry[expiry][strike]['call_oi'] += oi
@@ -1046,9 +1051,37 @@ def extract_s06(wb_oi, atm):
     top_puts = [{'strike': s, 'oi': oi} for s, oi in all_puts[:5]]
     top_calls = [{'strike': s, 'oi': oi} for s, oi in all_calls[:5]]
 
+    # Max Pain of the FRONT expiry, over its full strike range.
+    # Earlier versions computed it on `combined` (all expiries summed, ATM±5000
+    # only), which mixed Dec/Jan open interest into the November figure and
+    # could miss the true minimum — e.g. 10/20: all-expiry window 65,000 vs the
+    # actual November Max Pain 67,500. Front = nearest expiry with >=5,000 lots.
+    max_pain_front = None
+    max_pain_expiry = None
+    for e in sorted(full_by_expiry):
+        strikes = full_by_expiry[e]
+        if sum(v['put_oi'] + v['call_oi'] for v in strikes.values()) < 5000:
+            continue
+        best = None
+        for K in sorted(strikes):
+            pain = 0
+            for st, v in strikes.items():
+                if v['put_oi']:
+                    pain += max(st - K, 0) * v['put_oi']
+                if v['call_oi']:
+                    pain += max(K - st, 0) * v['call_oi']
+            if best is None or pain < best[1]:
+                best = (K, pain)
+        if best:
+            max_pain_front = best[0]
+            max_pain_expiry = e
+        break
+
     return {
         'atm': atm,
         'atm_round': atm_round,
+        'max_pain_front': max_pain_front,
+        'max_pain_expiry': max_pain_expiry,
         'distribution': combined,
         'by_expiry': expiry_distributions,
         'top_puts': top_puts,
@@ -2156,6 +2189,11 @@ def compute_indicators(data):
                 min_pain = total_pain
                 max_pain_strike = K
 
+        # Keep the old all-expiry/windowed figure only for reference.
+        indicators['max_pain_all_window'] = max_pain_strike
+        if s06.get('max_pain_front'):
+            max_pain_strike = s06['max_pain_front']
+            indicators['max_pain_expiry'] = s06.get('max_pain_expiry')
         indicators['max_pain'] = max_pain_strike
         indicators['max_pain_total'] = min_pain
 
