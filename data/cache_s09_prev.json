@@ -1141,16 +1141,15 @@
     }
   ],
   "source": "live",
-  "data_date": "20261021",
+  "data_date": "20261023",
   "strike_matrix": {
-    "atm": 65000,
-    "atm_round": 65000,
+    "atm": 63000,
+    "atm_round": 63000,
     "strikes": [
       65125,
       65250,
       65375,
-      65500,
-      65625
+      65500
     ],
     "participants": [
       {
@@ -1182,10 +1181,6 @@
           "65500": {
             "put": -983.0,
             "call": 61.0
-          },
-          "65625": {
-            "put": 0,
-            "call": 0
           }
         },
         "put_total": -980.0,
@@ -1224,10 +1219,6 @@
           },
           "65500": {
             "put": 400.0,
-            "call": 0
-          },
-          "65625": {
-            "put": 0,
             "call": 0
           }
         },
@@ -1268,19 +1259,15 @@
           "65500": {
             "put": 399.0,
             "call": -8.0
-          },
-          "65625": {
-            "put": 0,
-            "call": -1.0
           }
         },
         "put_total": 392.0,
-        "call_total": 2.0,
-        "significance": 394.0,
+        "call_total": 3.0,
+        "significance": 395.0,
         "is_new": false,
         "deltas": {},
         "put_total_delta": 0.0,
-        "call_total_delta": 0.0
+        "call_total_delta": 1.0
       },
       {
         "name": "ＵＢＳ証券",
@@ -1310,10 +1297,6 @@
           },
           "65500": {
             "put": 100.0,
-            "call": 0
-          },
-          "65625": {
-            "put": 0,
             "call": 0
           }
         },
@@ -1354,19 +1337,15 @@
           "65500": {
             "put": 10.0,
             "call": -51.0
-          },
-          "65625": {
-            "put": 0,
-            "call": 1.0
           }
         },
         "put_total": 9.0,
-        "call_total": -51.0,
-        "significance": 60.0,
+        "call_total": -52.0,
+        "significance": 61.0,
         "is_new": false,
         "deltas": {},
         "put_total_delta": 0.0,
-        "call_total_delta": 0.0
+        "call_total_delta": -1.0
       },
       {
         "name": "三菱ＵＦＪ証券",
@@ -1396,10 +1375,6 @@
           },
           "65500": {
             "put": 60.0,
-            "call": 0
-          },
-          "65625": {
-            "put": 0,
             "call": 0
           }
         },
@@ -1440,10 +1415,6 @@
           "65500": {
             "put": 0,
             "call": -50.0
-          },
-          "65625": {
-            "put": 0,
-            "call": 0
           }
         },
         "put_total": 0,
@@ -1482,10 +1453,6 @@
           },
           "65500": {
             "put": 48.0,
-            "call": 0
-          },
-          "65625": {
-            "put": 0,
             "call": 0
           }
         },
@@ -1526,10 +1493,6 @@
           "65500": {
             "put": -30.0,
             "call": 0
-          },
-          "65625": {
-            "put": 0,
-            "call": 0
           }
         },
         "put_total": -30.0,
@@ -1539,6 +1502,45 @@
         "deltas": {},
         "put_total_delta": 0.0,
         "call_total_delta": 0
+      },
+      {
+        "name": "バークレイズ証券",
+        "category": "eu",
+        "category_label": "欧系",
+        "customer_type": "ー",
+        "futures": {
+          "nk225_large": 4213.0,
+          "nk225_mini": 1107.0,
+          "topix": 9636.0,
+          "direction": "ロング",
+          "summary": "N225 +4213 / mini +1107 / TOPIX +9636",
+          "nk225_large_delta": 0.0
+        },
+        "positions": {
+          "65125": {
+            "put": -20.0,
+            "call": 0
+          },
+          "65250": {
+            "put": 0,
+            "call": 0
+          },
+          "65375": {
+            "put": 11.0,
+            "call": -11.0
+          },
+          "65500": {
+            "put": 24.0,
+            "call": -3.0
+          }
+        },
+        "put_total": 15.0,
+        "call_total": -14.0,
+        "significance": 29.0,
+        "is_new": false,
+        "deltas": {},
+        "put_total_delta": 10.0,
+        "call_total_delta": 0.0
       },
       {
         "name": "ＳＢＩ証券",
@@ -1569,10 +1571,6 @@
           "65500": {
             "put": -16.0,
             "call": 13.0
-          },
-          "65625": {
-            "put": 0,
-            "call": 0
           }
         },
         "put_total": -16.0,
@@ -1612,58 +1610,11 @@
           "65500": {
             "put": 0,
             "call": 14.0
-          },
-          "65625": {
-            "put": 0,
-            "call": 0
           }
         },
         "put_total": -6.0,
         "call_total": 14.0,
         "significance": 20.0,
-        "is_new": false,
-        "deltas": {},
-        "put_total_delta": 0.0,
-        "call_total_delta": 0.0
-      },
-      {
-        "name": "バークレイズ証券",
-        "category": "eu",
-        "category_label": "欧系",
-        "customer_type": "ー",
-        "futures": {
-          "nk225_large": 4213.0,
-          "nk225_mini": 1107.0,
-          "topix": 9636.0,
-          "direction": "ロング",
-          "summary": "N225 +4213 / mini +1107 / TOPIX +9636",
-          "nk225_large_delta": 0.0
-        },
-        "positions": {
-          "65125": {
-            "put": -20.0,
-            "call": 0
-          },
-          "65250": {
-            "put": 0,
-            "call": 0
-          },
-          "65375": {
-            "put": 11.0,
-            "call": -11.0
-          },
-          "65500": {
-            "put": 24.0,
-            "call": -3.0
-          },
-          "65625": {
-            "put": -10.0,
-            "call": 0
-          }
-        },
-        "put_total": 5.0,
-        "call_total": -14.0,
-        "significance": 19.0,
         "is_new": false,
         "deltas": {},
         "put_total_delta": 0.0,
@@ -1698,10 +1649,6 @@
           "65500": {
             "put": 0,
             "call": 14.0
-          },
-          "65625": {
-            "put": 0,
-            "call": 0
           }
         },
         "put_total": 0,
@@ -1741,10 +1688,6 @@
           "65500": {
             "put": 0,
             "call": 10.0
-          },
-          "65625": {
-            "put": 0,
-            "call": 0
           }
         },
         "put_total": 0,
@@ -1754,49 +1697,6 @@
         "deltas": {},
         "put_total_delta": 0,
         "call_total_delta": 0.0
-      },
-      {
-        "name": "野村証券",
-        "category": "domestic",
-        "category_label": "国内",
-        "customer_type": "国内機関投資家",
-        "futures": {
-          "nk225_large": 37374.0,
-          "nk225_mini": 0,
-          "topix": 1233.0,
-          "direction": "ロング",
-          "summary": "N225 +37374 / TOPIX +1233",
-          "nk225_large_delta": 0.0
-        },
-        "positions": {
-          "65125": {
-            "put": 0,
-            "call": 0
-          },
-          "65250": {
-            "put": 0,
-            "call": 0
-          },
-          "65375": {
-            "put": 0,
-            "call": 0
-          },
-          "65500": {
-            "put": 0,
-            "call": 0
-          },
-          "65625": {
-            "put": 10.0,
-            "call": 0
-          }
-        },
-        "put_total": 10.0,
-        "call_total": 0,
-        "significance": 10.0,
-        "is_new": false,
-        "deltas": {},
-        "put_total_delta": 0.0,
-        "call_total_delta": 0
       },
       {
         "name": "楽天証券",
@@ -1827,10 +1727,6 @@
           "65500": {
             "put": -5.0,
             "call": 3.0
-          },
-          "65625": {
-            "put": 0,
-            "call": 0
           }
         },
         "put_total": -5.0,
@@ -1870,10 +1766,6 @@
           "65500": {
             "put": -1.0,
             "call": -4.0
-          },
-          "65625": {
-            "put": 0,
-            "call": 0
           }
         },
         "put_total": -1.0,
@@ -1912,10 +1804,6 @@
           },
           "65500": {
             "put": -5.0,
-            "call": 0
-          },
-          "65625": {
-            "put": 0,
             "call": 0
           }
         },
@@ -1956,10 +1844,6 @@
           "65500": {
             "put": -1.0,
             "call": 0
-          },
-          "65625": {
-            "put": 0,
-            "call": 0
           }
         },
         "put_total": -1.0,
@@ -1999,10 +1883,6 @@
           "65500": {
             "put": 0,
             "call": 1.0
-          },
-          "65625": {
-            "put": 0,
-            "call": 0
           }
         },
         "put_total": 0,
@@ -2014,6 +1894,6 @@
         "call_total_delta": 0.0
       }
     ],
-    "prev_date": "20261020"
+    "prev_date": "20261021"
   }
 }
