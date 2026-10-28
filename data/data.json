@@ -9,7 +9,7 @@
     "major_month": "202611",
     "files_found": {
       "open_interest": "20261028open_interest.xlsx",
-      "jnet": "20261028_volume_by_participant_night_J-NET.xlsx",
+      "jnet": "20261028_volume_by_participant_whole_day_J-NET.xlsx",
       "market_data": "20261028_derivatives_market_data_whole_day.xlsx",
       "op_participants": "20261023_nk225op_oi_by_tp.xlsx",
       "fut_participants": "20261023_indexfut_oi_by_tp.xlsx",
@@ -21,11 +21,11 @@
     "atm_weekly_proxy": 63000,
     "atm_oi_center": 53000,
     "atm_warning": null,
-    "nikkei_close": 64305.0,
+    "nikkei_close": 64255.0,
     "vi": null
   },
   "s01": {
-    "nikkei_close": 64305.0,
+    "nikkei_close": 64255.0,
     "vi": null
   },
   "s02": {
@@ -1307,7 +1307,15 @@
       }
     ]
   },
-  "s07": [],
+  "s07": [
+    {
+      "product": "NIKKEI 225 OOP P2611-63000",
+      "participant": "ＢＮＰパリバ証券",
+      "volume": 100.0,
+      "category": "hf",
+      "is_pair": false
+    }
+  ],
   "s09": {
     "futures": {
       "nk225_large": {
@@ -3793,7 +3801,7 @@
           "call_total_delta": 0
         }
       ],
-      "prev_date": "20261027"
+      "prev_date": "20261028"
     }
   },
   "s10": {

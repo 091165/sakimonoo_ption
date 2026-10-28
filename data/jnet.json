@@ -208,18 +208,17 @@
       "side": "P",
       "strike": 63000,
       "expiry": "2611",
-      "size": 114,
-      "total": 234,
+      "size": 100,
+      "total": 200,
       "is_cross": true,
       "domestic_vs_overseas": true,
       "sessions": [
-        "夜間",
         "日中"
       ],
       "legs": [
         {
           "broker": "ＳＢＩ証券",
-          "vol": 114.0,
+          "vol": 100.0,
           "cat": "domestic",
           "cat_label": "国内"
         },
