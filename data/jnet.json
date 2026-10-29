@@ -229,11 +229,10 @@
       "strike": 65500,
       "expiry": "2611",
       "size": 500,
-      "total": 1010,
+      "total": 1002,
       "is_cross": false,
       "domestic_vs_overseas": true,
       "sessions": [
-        "夜間",
         "日中"
       ],
       "legs": [
