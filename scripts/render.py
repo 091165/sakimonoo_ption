@@ -18,6 +18,7 @@ Dependencies: None (pure Python, no external libraries)
 import argparse
 import json
 import os
+import re
 
 try:
     import render_greeks as _rg
@@ -2392,8 +2393,85 @@ def _preview_gemini(data):
             lines = part.strip().split('\n', 1)
             header = lines[0].strip()[:20]
             return '<div class="mini-metrics"><div class="mini-metric"><div class="mm-label">%s</div><div class="mm-value" style="font-size:12px;color:var(--accent)">■ %s…</div></div></div>' % (badge, esc(header))
-    first = assessment.replace('\r', '').split('\n\n', 1)[0].strip().replace('\n', ' ')[:22]
+    first = assessment.replace('\r', '').replace('**', '').split('\n\n', 1)[0].strip().replace('\n', ' ')[:22]
     return '<div class="mini-metrics"><div class="mini-metric"><div class="mm-label">%s</div><div class="mm-value" style="font-size:12px;color:var(--accent)">%s…</div></div></div>' % (badge, esc(first))
+
+
+_FOLD_RE = re.compile(r'^\s*(?:▼|---+)\s*詳細')
+
+
+def _md_inline(s):
+    """Escape, then turn **x** into bold (the only inline markup supported)."""
+    return re.sub(r'\*\*(.+?)\*\*', r'<strong>\1</strong>', esc(s))
+
+
+def _assessment_table(lines):
+    rows = []
+    for ln in lines:
+        cells = [c.strip() for c in ln.strip().strip('|').split('|')]
+        if all(re.fullmatch(r':?-{2,}:?', c) for c in cells if c):
+            continue  # markdown header separator row
+        rows.append(cells)
+    td = 'padding:4px 6px;border-bottom:1px solid var(--border);white-space:nowrap'
+    h = '<div style="overflow-x:auto;margin:6px 0 0"><table style="border-collapse:collapse;font-size:12px;width:100%">'
+    for ri, cells in enumerate(rows):
+        tag = 'th' if ri == 0 else 'td'
+        style = td + (';color:var(--sub);font-weight:500;text-align:left' if ri == 0 else ';color:var(--text)')
+        h += '<tr>' + ''.join('<%s style="%s">%s</%s>' % (tag, style, _md_inline(c), tag) for c in cells) + '</tr>'
+    return h + '</table></div>'
+
+
+def _assessment_block(block, first):
+    """One blank-line separated block -> HTML. Keeps line breaks, renders
+    「・」/「- 」 lines as bullets, |..| lines as a table, bolds a leading
+    "ラベル：" and treats the very first block as the headline."""
+    lines = [ln for ln in block.split('\n') if ln.strip()]
+    out = []
+    table = []
+    for li, ln in enumerate(lines + ['']):
+        s = ln.strip()
+        if s.startswith('|'):
+            table.append(s)
+            continue
+        if table:
+            out.append(_assessment_table(table))
+            table = []
+        if not s:
+            continue
+        if s.startswith('・') or s.startswith('- '):
+            item = s[1:] if s.startswith('・') else s[2:]
+            out.append('<div style="padding-left:1em;text-indent:-1em">・%s</div>' % _md_inline(item.strip()))
+            continue
+        ci = s.find('：')
+        if li == 0 and not first and ci > 0 and len(s[:ci].replace('**', '')) <= 24:
+            label, body = s[:ci + 1].replace('**', ''), s[ci + 1:].strip()
+            out.append('<div><strong style="color:var(--accent)">%s</strong>%s</div>' % (esc(label), _md_inline(body)))
+        else:
+            out.append('<div>%s</div>' % _md_inline(s))
+    inner = ''.join(out)
+    if first:
+        return '<div style="margin:0 0 11px;color:var(--text);font-weight:600">%s</div>' % inner
+    return '<div style="margin:13px 0 0">%s</div>' % inner
+
+
+def _assessment_blocks(assessment):
+    """Paragraph-format ⑧ text -> list of HTML chunks. A line starting with
+    「▼詳細」 (or 「---詳細」) folds everything after it into a <details>."""
+    text = assessment.replace('\r', '')
+    lines = text.split('\n')
+    fold_at = next((i for i, ln in enumerate(lines) if _FOLD_RE.match(ln)), None)
+    main = '\n'.join(lines[:fold_at] if fold_at is not None else lines)
+    rest = '\n'.join(lines[fold_at + 1:]) if fold_at is not None else ''
+    chunks = []
+    for i, b in enumerate(p.strip() for p in main.split('\n\n') if p.strip()):
+        chunks.append(_assessment_block(b, first=(i == 0)))
+    if rest.strip():
+        # stopPropagation: the grid click handler would otherwise close the card.
+        chunks.append('<details style="margin:16px 0 0" onclick="event.stopPropagation()"><summary style="cursor:pointer;color:var(--accent);font-weight:600">詳細を開く</summary>')
+        for b in (p.strip() for p in rest.split('\n\n') if p.strip()):
+            chunks.append(_assessment_block(b, first=False))
+        chunks.append('</details>')
+    return chunks
 
 
 def _detail_gemini_js(data):
@@ -2419,23 +2497,11 @@ def _detail_gemini_js(data):
             lines = part.split('\n', 1)
             header = lines[0].strip()
             body = lines[1].strip() if len(lines) > 1 else ''
-            js += "h+='<div style=\"margin-top:%dpx\"><strong style=\"color:var(--accent)\">■ %s</strong><br>%s</div>';" % (0 if i <= 1 else 10, _js_str(esc(header)), _js_str(esc(body)))
+            js += "h+='<div style=\"margin-top:%dpx\"><strong style=\"color:var(--accent)\">■ %s</strong><br>%s</div>';" % (0 if i <= 1 else 10, _js_str(_md_inline(header)), _js_str(_md_inline(body).replace('\n', '<br>')))
     else:
-        # paragraph format (blank-line separated). _js_str strips newlines, so
-        # render each paragraph as its own block and bold a leading "ラベル：".
-        paras = [p.strip() for p in assessment.replace('\r', '').split('\n\n') if p.strip()]
-        for i, para in enumerate(paras):
-            para = para.replace('\n', ' ').strip()
-            if i == 0:
-                js += "h+='<div style=\"margin:0 0 11px\"><strong style=\"color:var(--accent)\">%s</strong></div>';" % _js_str(esc(para))
-                continue
-            ci = para.find('：')
-            if 0 < ci <= 24:
-                label = para[:ci + 1]
-                body = para[ci + 1:].strip()
-                js += "h+='<div style=\"margin:13px 0 0\"><strong style=\"color:var(--accent)\">%s</strong>%s</div>';" % (_js_str(esc(label)), _js_str(esc(body)))
-            else:
-                js += "h+='<div style=\"margin:13px 0 0\">%s</div>';" % _js_str(esc(para))
+        # paragraph format (blank-line separated); see _assessment_blocks.
+        for chunk in _assessment_blocks(assessment):
+            js += "h+='%s';" % _js_str(chunk)
     js += "h+='</div>';"
     js += "return h;"
     return js
