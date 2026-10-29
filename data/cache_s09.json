@@ -1395,10 +1395,10 @@
     }
   ],
   "source": "live",
-  "data_date": "20261028",
+  "data_date": "20261029",
   "strike_matrix": {
-    "atm": 64000,
-    "atm_round": 64000,
+    "atm": 64500,
+    "atm_round": 64500,
     "strikes": [
       62500,
       62625,
