@@ -320,6 +320,34 @@ FLOW_VERDICT_CSS = r"""
 .fv-note{font-size:11px;color:var(--sub);line-height:1.55;margin:10px 2px 2px}
 """
 
+# Readability layer, appended after every card's CSS so it wins. Card markup
+# (here and in render_*.py) hard-codes small inline font sizes, so they are
+# bumped one step via attribute selectors rather than edited at ~400 sites.
+READABILITY_CSS = r"""
+:root{--sub:#b4b6d4;--text:#f2f2fa;--border:#2b2b4f}
+body{font-size:15px;line-height:1.75}
+[style*="font-size:9px"]{font-size:11px!important}
+[style*="font-size:10px"]{font-size:12px!important}
+[style*="font-size:11px"]{font-size:13px!important}
+[style*="font-size:12px"]{font-size:14px!important}
+[style*="font-size:13px"]{font-size:15px!important}
+.kpi .label,.card-hdr .date-badge{font-size:11px}
+.mini-metric .mm-label,.summary-item .si-label,.zone-card .zc-detail,.tag{font-size:12px}
+.insight{font-size:14px;line-height:1.85;color:var(--sub)}
+table{font-size:13px}
+th,td{padding:7px 8px}
+.card-hdr .title{font-size:16px}
+.section-hdr .section-title{font-size:13px}
+.bar-row,.bar-val,.analysis-card .ac-body,.analysis-card .ac-title{font-size:13px}
+.mobile-nav a,.topbar nav a,.hero .sub{font-size:13px}
+.card{padding:16px}
+/* Grid items default to min-width:auto, so a wide table or tab row inside an
+   open card stretched it past the viewport on phones. Keep cards in bounds
+   and let the wide content scroll instead. */
+.grid>*{min-width:0}
+.card-detail{overflow-x:auto}
+"""
+
 DASHBOARD_CSS = r"""
 :root{
   --bg:#06060f;--panel:#0c0c1d;--card:#111128;--border:#1e1e3a;
@@ -1587,7 +1615,7 @@ def build_dashboard_html(data, oi_ts=None, wt=None, iv=None, ivts=None, greeks=N
     h += '<meta name="viewport" content="width=device-width,initial-scale=1">\n'
     h += '<title>JPX Market Analysis %s</title>\n' % esc(meta.get('date_formatted', ''))
     h += '<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700&family=Noto+Sans+JP:wght@400;500;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">\n'
-    h += '<style>\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n</style>\n' % (DASHBOARD_CSS, OI_CHART_CSS, WEEKLY_TREND_CSS, IV_CARD_CSS, IV_TREND_CSS, (_rg.GREEKS_CARD_CSS if _rg else ''), (_rj.JNET_CARD_CSS if _rj else ''), (_ow.OPTW_CARD_CSS if _ow else ''), (_ps.POS_CARD_CSS if _ps else ''), (_oc.OPCROSS_CARD_CSS if _oc else ''), FLOW_VERDICT_CSS, (_bw.BW_CARD_CSS if _bw else ''), (_sb.SB_CARD_CSS if _sb else ''), (_rr.RANGE_CARD_CSS if _rr else ''))
+    h += '<style>\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n</style>\n' % (DASHBOARD_CSS, OI_CHART_CSS, WEEKLY_TREND_CSS, IV_CARD_CSS, IV_TREND_CSS, (_rg.GREEKS_CARD_CSS if _rg else ''), (_rj.JNET_CARD_CSS if _rj else ''), (_ow.OPTW_CARD_CSS if _ow else ''), (_ps.POS_CARD_CSS if _ps else ''), (_oc.OPCROSS_CARD_CSS if _oc else ''), FLOW_VERDICT_CSS, (_bw.BW_CARD_CSS if _bw else ''), (_sb.SB_CARD_CSS if _sb else ''), (_rr.RANGE_CARD_CSS if _rr else ''), READABILITY_CSS)
     h += '</head>\n<body>\n'
 
     h += '<div class="topbar">\n  <span class="logo">JPX Dashboard</span>\n  <nav>\n'
