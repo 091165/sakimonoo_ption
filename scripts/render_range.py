@@ -64,6 +64,14 @@ function rgBuild(){
        + '<div>IVの水準：<b>'+rgPct(D.iv)+'</b>は直近'+n+'日（'+rgPct(D.iv_lo)+'〜'+rgPct(D.iv_hi)+'）の中で'+lvl+'。'
        + (edge ? '実現ボラ'+rgPct(D.hv)+'との差は'+(gap>=0?'+':'')+gap.toFixed(1)+'ptで、'+edge+'。' : '') + '</div></div>';
   }
+  if(D.regime){
+    var rt = D.regime==='neg' ? '値動きが<b class="rg-far">加速しやすい</b>（3つの計算方法すべてマイナス）'
+           : D.regime==='pos' ? '値動きが<b class="rg-in">落ち着きやすい</b>（3つの計算方法すべてプラス）'
+           : '計算方法によって判断が<b>割れている</b>';
+    h += '<div class="rg-lvl"><div>地合い：'+rt+'。'
+       + (D.flip ? '境目（ゼロガンマ）は<b>'+rgNum(D.flip)+'</b>（現値の'+(D.flip>=D.spot?'+':'')+rgNum(D.flip-D.spot)+'）で、'+(D.flip>D.spot?'これを上に抜けると':'これを下に割ると')+'地合いが切り替わりやすい。' : '')
+       + '</div></div>';
+  }
   h += '<div class="rg-sec">'+D.expiry_label+'のATM IV '+rgPct(D.iv)+' から見た想定レンジ（現値 '+rgNum(D.spot)+'）</div>';
   h += '<table class="rg-tbl"><thead><tr><th>期間</th><th>±1σ</th><th>下限</th><th>上限</th><th>±2σ</th></tr></thead><tbody>';
   for(var i=0;i<D.rows.length;i++){
@@ -199,7 +207,15 @@ def build_range(greeks, ivts, oi_ts, ghist=None, top_n=8, closes=None):
     # Where today's IV sits in its own recent range: this replaces the
     # separate IV推移 card, whose only trading use was "is IV high or low now".
     recent = series[-20:]
+    # 相場の地合い in one line (replaces the separate GEX card): the sign of
+    # dealer gamma under the three conventions, and the price where it flips.
+    signs = [((e.get('net_' + k) or {}).get('gamma')) for k in ('A', 'B', 'B2')]
+    signs = [g for g in signs if g is not None]
+    regime = ('neg' if signs and all(g < 0 for g in signs) else
+              'pos' if signs and all(g > 0 for g in signs) else 'mixed' if signs else None)
+    flip = (e.get('zero_gamma_A') or {}).get('flip')
     return {
+        'regime': regime, 'flip': flip,
         'spot': spot, 'iv': iv, 'hv': hv, 'hv_n': hv_n,
         'iv_hist': recent, 'iv_lo': min(recent) if recent else None,
         'iv_hi': max(recent) if recent else None,

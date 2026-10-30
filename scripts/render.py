@@ -50,6 +50,10 @@ try:
     import render_fut_brokers as _fb
 except Exception:
     _fb = None
+try:
+    import render_dist as _ds
+except Exception:
+    _ds = None
 import sys
 import copy
 
@@ -1617,13 +1621,16 @@ def build_dashboard_html(data, oi_ts=None, wt=None, iv=None, ivts=None, greeks=N
     nikkei = s01.get('nikkei_close', 0)
     vi = s01.get('vi', 0)
     ind = data.get('indicators', {})
+    # Index close for the OI distribution's spot line and OTM-side walls;
+    # greeks carries the same tp.csv underlying when the close is missing.
+    _spot = nikkei or (greeks or {}).get('spot') or meta.get('atm') or 0
 
     h = '<!DOCTYPE html>\n<html lang="ja">\n<head>\n'
     h += '<meta charset="UTF-8">\n'
     h += '<meta name="viewport" content="width=device-width,initial-scale=1">\n'
     h += '<title>JPX Market Analysis %s</title>\n' % esc(meta.get('date_formatted', ''))
     h += '<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700&family=Noto+Sans+JP:wght@400;500;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">\n'
-    h += '<style>\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n</style>\n' % (DASHBOARD_CSS, OI_CHART_CSS, WEEKLY_TREND_CSS, IV_CARD_CSS, IV_TREND_CSS, (_rg.GREEKS_CARD_CSS if _rg else ''), (_rj.JNET_CARD_CSS if _rj else ''), (_ow.OPTW_CARD_CSS if _ow else ''), (_ps.POS_CARD_CSS if _ps else ''), (_oc.OPCROSS_CARD_CSS if _oc else ''), FLOW_VERDICT_CSS, (_bw.BW_CARD_CSS if _bw else ''), (_sb.SB_CARD_CSS if _sb else ''), (_rr.RANGE_CARD_CSS if _rr else ''), (_ft.FUT_CARD_CSS if _ft else ''), (_fb.FB_CARD_CSS if _fb else ''), READABILITY_CSS)
+    h += '<style>\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n</style>\n' % (DASHBOARD_CSS, OI_CHART_CSS, WEEKLY_TREND_CSS, IV_CARD_CSS, IV_TREND_CSS, (_rg.GREEKS_CARD_CSS if _rg else ''), (_rj.JNET_CARD_CSS if _rj else ''), (_ow.OPTW_CARD_CSS if _ow else ''), (_ps.POS_CARD_CSS if _ps else ''), (_oc.OPCROSS_CARD_CSS if _oc else ''), FLOW_VERDICT_CSS, (_bw.BW_CARD_CSS if _bw else ''), (_sb.SB_CARD_CSS if _sb else ''), (_rr.RANGE_CARD_CSS if _rr else ''), (_ft.FUT_CARD_CSS if _ft else ''), (_fb.FB_CARD_CSS if _fb else ''), (_ds.DIST_CARD_CSS if _ds else ''), READABILITY_CSS)
     h += '</head>\n<body>\n'
 
     h += '<div class="topbar">\n  <span class="logo">JPX Dashboard</span>\n  <nav>\n'
@@ -1652,11 +1659,11 @@ def build_dashboard_html(data, oi_ts=None, wt=None, iv=None, ivts=None, greeks=N
         _pos = sum(1 for x in _g if x > 0)
         if len(_g) == 3:
             if _pos == 3:
-                _regime_html = '<span class="hero-badge rg-pos">地合い 正ガンマ（3規約一致）</span>'
+                _regime_html = '<span class="hero-badge rg-pos">地合い：値動きが落ち着きやすい</span>'
             elif _pos == 0:
-                _regime_html = '<span class="hero-badge rg-neg">地合い 負ガンマ（3規約一致）</span>'
+                _regime_html = '<span class="hero-badge rg-neg">地合い：値動きが加速しやすい</span>'
             else:
-                _regime_html = '<span class="hero-badge rg-mix">地合い まちまち（%d/3が正）</span>' % _pos
+                _regime_html = '<span class="hero-badge rg-mix">地合い：判断が割れている</span>'
     _cal = (_fe or {}).get('T_days')
     _sq_txt = 'SQまで%d営業日' % meta.get('days_to_sq', 0)
     if _cal:
@@ -1778,11 +1785,12 @@ def build_dashboard_html(data, oi_ts=None, wt=None, iv=None, ivts=None, greeks=N
             ('strike_breakdown', '🔬', 'オプションの手口と建玉（行使価格別）',
              (_sb.preview_strike_breakdown(greeks, venue_flow) if _sb else '<span class="mm-label">データ待ち</span>'),
              (_sb.SB_CARD_JS + "return sbBuild();" if (_sb and greeks) else "return '<div class=\\'insight\\'>データなし</div>';"), DB),
-            ('dist', '🦋', 'OP建玉分布', _preview_dist(s06), _detail_dist_js(s06, ind), DB),
+            ('dist', '🦋', 'OP建玉分布',
+             (_ds and _ds.preview(s06, _spot)) or _preview_dist(s06),
+             ("return dsBuild();" if (_ds and _ds.build(s06, _spot)) else _detail_dist_js(s06, ind)), DB),
             ('range', '📐', 'IVから見た想定レンジ',
              (_rr.preview_range(greeks, ivts, oi_ts) if _rr else '<span class="mm-label">データ待ち</span>'),
              (_rr.detail_range_js(greeks) if _rr else "return '<div class=\\'insight\\'>データなし</div>';"), DB),
-            ('greeks', '🧮', '相場の地合い（GEX）', (_rg.preview_greeks(greeks) if _rg else ''), (_rg.detail_greeks_js(greeks) if _rg else ''), DB),
         ]),
         # The old combined 大口手口 card is only kept as a fallback: its futures
         # half is replaced by 先物の大口 and its option half duplicates the
@@ -1855,6 +1863,9 @@ def build_dashboard_html(data, oi_ts=None, wt=None, iv=None, ivts=None, greeks=N
         _closes = [futures_flow['rows'][d].get('close') for d in (futures_flow or {}).get('dates', [])]
         h += _rr.range_data_script(greeks, ivts, oi_ts, greeks_hist, closes=[c for c in _closes if c] or None)
         h += _rr.RANGE_CARD_JS
+    if _ds:
+        h += _ds.dist_data_script(s06, _spot, ind)
+        h += _ds.DIST_CARD_JS
     if _ft and futures_flow:
         h += _ft.futures_data_script(futures_flow, data.get('s02'))
         h += _ft.FUT_CARD_JS
