@@ -73,32 +73,20 @@ function rgBuild(){
        + '</div></div>';
   }
   h += '<div class="rg-sec">'+D.expiry_label+'のATM IV '+rgPct(D.iv)+' から見た想定レンジ（現値 '+rgNum(D.spot)+'）</div>';
-  h += '<table class="rg-tbl"><thead><tr><th>期間</th><th>±1σ</th><th>下限</th><th>上限</th><th>±2σ</th></tr></thead><tbody>';
+  // Kept to what a trade needs: 1 day, 1 week and to SQ at ±1σ. The ±2σ
+  // column, the 1-month row and the per-strike σ list were dropped as detail.
+  h += '<table class="rg-tbl"><thead><tr><th>期間</th><th>±1σ</th><th>下限</th><th>上限</th></tr></thead><tbody>';
   for(var i=0;i<D.rows.length;i++){
     var r = D.rows[i];
+    if(r.label==='1か月') continue;
     h += '<tr class="'+(r.is_sq?'rg-row-sq':'')+'">'
        + '<td>'+r.label+'</td>'
        + '<td>'+rgPct(r.pct)+'</td>'
        + '<td class="rg-lo">'+rgNum(r.low)+'</td>'
-       + '<td class="rg-hi">'+rgNum(r.high)+'</td>'
-       + '<td class="rg-2s">'+rgNum(r.low2)+' 〜 '+rgNum(r.high2)+'</td></tr>';
+       + '<td class="rg-hi">'+rgNum(r.high)+'</td></tr>';
   }
   h += '</tbody></table>';
-  if(D.strikes && D.strikes.length){
-    h += '<div class="rg-sec">建玉の大きい行使価格はSQまでで何σか（建玉の大きい順）</div>';
-    for(var j=0;j<D.strikes.length;j++){
-      var s = D.strikes[j];
-      var cls = (Math.abs(s.sigma) <= 1) ? 'rg-in' : (Math.abs(s.sigma) <= 2 ? 'rg-out' : 'rg-far');
-      h += '<div class="rg-k"><span>'+s.side+rgNum(s.strike)+'（建玉 '+rgNum(s.oi)+'）</span>'
-         + '<span class="rg-sig '+cls+'">'+(s.sigma>0?'+':'')+s.sigma.toFixed(2)+'σ ／ '+(s.dist>0?'+':'')+rgPct(s.dist)+'</span></div>';
-    }
-  }
-  h += '<div class="rg-note">年率のIVを期間に直す式は σ×√(期間/年)。日次は√250、週次は√52、月次は√12で割った値、SQまでは残存日数（暦日）で計算しています。'
-     + '±1σの中に収まる確率がおよそ<b>68%</b>、±2σでおよそ<b>95%</b>です。'
-     + (D.hv ? ('実現ボラ（直近'+D.hv_n+'営業日のHV）は<b>'+rgPct(D.hv)+'</b>で、IVとの差は<b>'+((D.iv-D.hv)>=0?'+':'')+rgPct(D.iv-D.hv)+'</b>。'
-         + 'IVが上ならオプションは実際の値動きより高く値付けされている状態です。') : '実現ボラ（HV）は終値の蓄積が足りず今回は非表示です。')
-     + '</div>';
-  h += '<div class="rg-warn">※これは「この範囲に収まる」という予想ではありません。±1σは<b>3回に1回は外れる前提</b>の幅で、株価指数の分布は正規分布より裾が厚く、急落時は2σも簡単に超えます。レンジの目安であって、売買の判断そのものではありません。</div>';
+  h += '<div class="rg-warn">±1σは3回に1回は外れる前提の幅（収まる確率はおよそ68%）。急落時は大きく超えることがあり、レンジの目安であって売買の判断そのものではありません。</div>';
   return h;
 }
 """

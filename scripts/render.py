@@ -54,6 +54,10 @@ try:
     import render_dist as _ds
 except Exception:
     _ds = None
+try:
+    import render_opt_blocks as _ob
+except Exception:
+    _ob = None
 import sys
 import copy
 
@@ -1601,7 +1605,7 @@ def _detail_ivtrend_js(ivts):
 
 
 
-def build_dashboard_html(data, oi_ts=None, wt=None, iv=None, ivts=None, greeks=None, jnet=None, optw=None, positions=None, broker_hist=None, venue_flow=None, greeks_hist=None, futures_flow=None, fut_brokers=None):
+def build_dashboard_html(data, oi_ts=None, wt=None, iv=None, ivts=None, greeks=None, jnet=None, optw=None, positions=None, broker_hist=None, venue_flow=None, greeks_hist=None, futures_flow=None, fut_brokers=None, opt_blocks=None):
     meta = data['metadata']
     s01 = data.get('s01', {})
     s02 = data.get('s02', {})
@@ -1625,7 +1629,7 @@ def build_dashboard_html(data, oi_ts=None, wt=None, iv=None, ivts=None, greeks=N
     h += '<meta name="viewport" content="width=device-width,initial-scale=1">\n'
     h += '<title>JPX Market Analysis %s</title>\n' % esc(meta.get('date_formatted', ''))
     h += '<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700&family=Noto+Sans+JP:wght@400;500;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">\n'
-    h += '<style>\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n</style>\n' % (DASHBOARD_CSS, OI_CHART_CSS, WEEKLY_TREND_CSS, IV_CARD_CSS, IV_TREND_CSS, (_rg.GREEKS_CARD_CSS if _rg else ''), (_rj.JNET_CARD_CSS if _rj else ''), (_ow.OPTW_CARD_CSS if _ow else ''), (_ps.POS_CARD_CSS if _ps else ''), (_oc.OPCROSS_CARD_CSS if _oc else ''), FLOW_VERDICT_CSS, (_bw.BW_CARD_CSS if _bw else ''), (_sb.SB_CARD_CSS if _sb else ''), (_rr.RANGE_CARD_CSS if _rr else ''), (_ft.FUT_CARD_CSS if _ft else ''), (_fb.FB_CARD_CSS if _fb else ''), (_ds.DIST_CARD_CSS if _ds else ''), READABILITY_CSS)
+    h += '<style>\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n</style>\n' % (DASHBOARD_CSS, OI_CHART_CSS, WEEKLY_TREND_CSS, IV_CARD_CSS, IV_TREND_CSS, (_rg.GREEKS_CARD_CSS if _rg else ''), (_rj.JNET_CARD_CSS if _rj else ''), (_ow.OPTW_CARD_CSS if _ow else ''), (_ps.POS_CARD_CSS if _ps else ''), (_oc.OPCROSS_CARD_CSS if _oc else ''), FLOW_VERDICT_CSS, (_bw.BW_CARD_CSS if _bw else ''), (_sb.SB_CARD_CSS if _sb else ''), (_rr.RANGE_CARD_CSS if _rr else ''), (_ft.FUT_CARD_CSS if _ft else ''), (_fb.FB_CARD_CSS if _fb else ''), (_ds.DIST_CARD_CSS if _ds else ''), (_ob.OB_CARD_CSS if _ob else ''), READABILITY_CSS)
     h += '</head>\n<body>\n'
 
     h += '<div class="topbar">\n  <span class="logo">JPX Dashboard</span>\n  <nav>\n'
@@ -1775,11 +1779,17 @@ def build_dashboard_html(data, oi_ts=None, wt=None, iv=None, ivts=None, greeks=N
         ] + ([
             ('fut_brokers', '🏛', '先物の大口（参加者別）', _fb.preview(fut_brokers), _fb.detail_js(fut_brokers), DB),
         ] if (_fb and fut_brokers) else [])),
-        ('オプション', [
-            ('op_oi_timeseries', '📉', 'オプション建玉の推移', _preview_op_oi_timeseries(oi_ts), _detail_op_oi_timeseries_js(oi_ts), DB),
+        # オプションの大口 leads the group: block crosses are what this
+        # dashboard is read for. It replaces the strike card (建玉×手口×相対IV),
+        # kept only as a fallback when opt_blocks.json is missing.
+        ('オプション', ([
+            ('opt_blocks', '🔎', 'オプションの大口（J-NET）', _ob.preview(opt_blocks, s03), "return obBuild();", DB),
+        ] if (_ob and opt_blocks) else [
             ('strike_breakdown', '🔬', 'オプションの手口と建玉（行使価格別）',
              (_sb.preview_strike_breakdown(greeks, venue_flow) if _sb else '<span class="mm-label">データ待ち</span>'),
              (_sb.SB_CARD_JS + "return sbBuild();" if (_sb and greeks) else "return '<div class=\\'insight\\'>データなし</div>';"), DB),
+        ]) + [
+            ('op_oi_timeseries', '📉', 'オプション建玉の推移', _preview_op_oi_timeseries(oi_ts), _detail_op_oi_timeseries_js(oi_ts), DB),
             ('dist', '🦋', 'オプション建玉の分布',
              (_ds and _ds.preview(s06, _spot)) or _preview_dist(s06),
              ("return dsBuild();" if (_ds and _ds.build(s06, _spot)) else _detail_dist_js(s06, ind)), DB),
@@ -1857,6 +1867,9 @@ def build_dashboard_html(data, oi_ts=None, wt=None, iv=None, ivts=None, greeks=N
         _closes = [futures_flow['rows'][d].get('close') for d in (futures_flow or {}).get('dates', [])]
         h += _rr.range_data_script(greeks, ivts, oi_ts, greeks_hist, closes=[c for c in _closes if c] or None)
         h += _rr.RANGE_CARD_JS
+    if _ob and opt_blocks:
+        h += _ob.data_script(opt_blocks, s03)
+        h += _ob.OB_CARD_JS
     if _ds:
         h += _ds.dist_data_script(s06, _spot, ind)
         h += _ds.DIST_CARD_JS
@@ -3053,6 +3066,16 @@ def run(args):
         except Exception as e:
             print('[render.py] futures_flow.json load error: %s' % e)
 
+    opt_blocks = None
+    _obpath = os.path.join(data_dir, 'opt_blocks.json')
+    if os.path.exists(_obpath):
+        try:
+            with open(_obpath, encoding='utf-8') as f:
+                opt_blocks = json.load(f)
+            print('[render.py] Loaded opt_blocks: %d days' % len(opt_blocks.get('dates', [])))
+        except Exception as e:
+            print('[render.py] opt_blocks.json load error: %s' % e)
+
     fut_brokers = None
     _fbpath = os.path.join(data_dir, 'fut_brokers.json')
     if os.path.exists(_fbpath):
@@ -3096,7 +3119,7 @@ def run(args):
         f.write(build_markdown(data))
     print('[render.py] Markdown: %s (%.1f KB)' % (md_path, os.path.getsize(md_path) / 1024))
     html_path = os.path.join(outdir, 'index.html')
-    html = build_dashboard_html(data, oi_ts=oi_ts, wt=wt, iv=iv, ivts=ivts, greeks=greeks, jnet=jnet, optw=optw, positions=positions, broker_hist=broker_hist, venue_flow=venue_flow, greeks_hist=greeks_hist, futures_flow=futures_flow, fut_brokers=fut_brokers)
+    html = build_dashboard_html(data, oi_ts=oi_ts, wt=wt, iv=iv, ivts=ivts, greeks=greeks, jnet=jnet, optw=optw, positions=positions, broker_hist=broker_hist, venue_flow=venue_flow, greeks_hist=greeks_hist, futures_flow=futures_flow, fut_brokers=fut_brokers, opt_blocks=opt_blocks)
     with open(html_path, 'w', encoding='utf-8') as f:
         f.write(html)
     print('[render.py] Dashboard: %s (%.1f KB)' % (html_path, os.path.getsize(html_path) / 1024))

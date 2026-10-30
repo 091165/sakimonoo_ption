@@ -70,80 +70,6 @@ BW_CARD_CSS = r"""
 """
 
 BW_CARD_JS = r"""
-function bwFmt(v){
-  if(v===null||v===undefined) return '<span class="bw-ze">—</span>';
-  var r=Math.round(v), cls = r>0?'bw-pos':(r<0?'bw-neg':'bw-ze');
-  var s=(r>0?'+':'')+r.toLocaleString();
-  return '<span class="'+cls+'">'+s+'</span>';
-}
-function bwTrend(arr){
-  var v=arr.filter(function(x){return x!==null&&x!==undefined;});
-  if(v.length<2) return '';
-  var a=v[0], b=v[v.length-1], d=b-a;
-  if(Math.abs(d)<Math.max(300,Math.abs(a)*0.15)) return '横ばい';
-  return d>0?'↑増':'↓減';
-}
-function bwLean(arr, kind){
-  // arr of nets; decide buy/sell lean
-  var v=arr.filter(function(x){return x!==null&&x!==undefined&&Math.abs(x)>50;});
-  if(!v.length) return '';
-  var pos=v.filter(function(x){return x>0;}).length;
-  var neg=v.filter(function(x){return x<0;}).length;
-  if(pos>=neg*2 && pos>=2) return kind+'買い持ちが基調';
-  if(neg>=pos*2 && neg>=2) return kind+'売り持ちが基調';
-  return kind+'は局面で入れ替え';
-}
-function bwReadFut(r){
-  var t=bwTrend(r.fut), l=bwLean(r.fut,'先物');
-  var last=r.fut.filter(function(x){return x!==null;}).pop();
-  if(last===undefined) return '';
-  var side = last>0?'買い越し（ロング）':'売り越し（ショート）';
-  return '先物は'+side+'で'+(t||'推移')+'。'+l+'。';
-}
-function bwSpark(arr, w, hgt){
-  // mini bar chart centered on zero. positive=green up, negative=red down.
-  w = w||150; hgt = hgt||26;
-  var vals = arr.map(function(x){return (x===null||x===undefined)?null:x;});
-  var mx = 1;
-  vals.forEach(function(v){ if(v!==null) mx=Math.max(mx, Math.abs(v)); });
-  var n = vals.length, bw = w/n, mid = hgt/2;
-  var bars='';
-  for(var i=0;i<n;i++){
-    var v=vals[i];
-    if(v===null){ continue; }
-    var hh = Math.max(1, Math.abs(v)/mx*(mid-1));
-    var x = i*bw+0.5, bwid=Math.max(1.5,bw-1.5);
-    var y = v>=0 ? (mid-hh) : mid;
-    var col = v>0?'#4ade80':(v<0?'#f87171':'#5b6472');
-    bars += '<rect x="'+x.toFixed(1)+'" y="'+y.toFixed(1)+'" width="'+bwid.toFixed(1)+'" height="'+hh.toFixed(1)+'" fill="'+col+'" rx="0.5"/>';
-  }
-  return '<svg width="'+w+'" height="'+hgt+'" viewBox="0 0 '+w+' '+hgt+'" style="display:block">'
-    +'<line x1="0" y1="'+mid+'" x2="'+w+'" y2="'+mid+'" stroke="#2a3140" stroke-width="0.5"/>'+bars+'</svg>';
-}
-function bwLast(arr){
-  var v=arr.filter(function(x){return x!==null&&x!==undefined;});
-  return v.length? v[v.length-1] : null;
-}
-function bwPrev(arr){
-  var v=arr.filter(function(x){return x!==null&&x!==undefined;});
-  return v.length>1? v[v.length-2] : null;
-}
-function bwChip(arr, label){
-  var last=bwLast(arr), prev=bwPrev(arr);
-  if(last===null) return '';
-  var cls=last>0?'bw-pos':(last<0?'bw-neg':'bw-ze');
-  var s=(last>0?'+':'')+Math.round(last).toLocaleString();
-  var wow='';
-  if(prev!==null){
-    var d=last-prev;
-    if(Math.abs(d)>=Math.max(200,Math.abs(prev)*0.1)){
-      wow='<span class="bw-wow '+(d>0?'bw-pos':'bw-neg')+'">'+(d>0?'▲':'▼')+Math.abs(Math.round(d)).toLocaleString()+'</span>';
-    }
-  }
-  return '<div class="bw-metric"><div class="bw-mlabel">'+label+'</div>'
-    +'<div class="bw-spark">'+bwSpark(arr)+'</div>'
-    +'<div class="bw-mval '+cls+'">'+s+' '+wow+'</div></div>';
-}
 function bwOptSnap(){
   // Weekly option holdings by participant. JPX publishes them for only the
   // five strikes around that week's ATM, so this is a snapshot, not a trend,
@@ -169,26 +95,9 @@ function bwOptSnap(){
   return h+'</details>';
 }
 function bwBuild(){
-  var D=window.BW_DATA||{}; if(!D.rows) return '<div>データなし</div>';
-  var dates=D.dates||[];
-  var h='<div class="bw-intro">主要大口の先物の<b>週次ネット建玉</b>（売買区分あり＝確定値）の推移を、直近'+dates.length+'週のミニ棒グラフで表示。'
-    +'<span class="bw-pos">緑＝買い持ち</span>／<span class="bw-neg">赤＝売り持ち</span>。'
-    +'右端が最新（'+dates[dates.length-1]+'）、▲▼は前週差。</div>';
-  var rows=D.rows.slice(0,10);
-  for(var i=0;i<rows.length;i++){
-    var r=rows[i];
-    h+='<div class="bw-row">';
-    h+='<div class="bw-name">'+r.broker.replace('ＪＰモルガン','JPモルガン')+'<span class="bw-cat">'+(r.cat||'')+'</span></div>';
-    h+='<div class="bw-metrics">';
-    h+=bwChip(r.fut,'先物（日経225ラージ）');
-    h+='</div>';
-    var read=bwReadFut(r);
-    if(read) h+='<div class="bw-read">↳ '+read+'</div>';
-    h+='</div>';
-  }
-  h+='<div class="bw-note">週次建玉は売買区分のある確報値。過去の傾向であり将来を保証しない。</div>';
-  h+=bwOptSnap();
-  return h;
+  // The per-broker futures bar charts were removed: they repeated the weekly
+  // net table above them. Only the option snapshot is added below the table.
+  return bwOptSnap();
 }
 """
 

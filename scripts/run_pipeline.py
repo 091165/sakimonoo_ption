@@ -270,6 +270,16 @@ def main():
         print('[WARN] extract_fut_brokers.py failed (先物の大口 card may be stale)', file=sys.stderr)
         print(result.stderr, file=sys.stderr)
 
+    # Step 2.988: option block trades on J-NET matched to OI change, with
+    # history (オプションの大口 card).
+    ob_cmd = [sys.executable, os.path.join(scripts_dir, 'extract_opt_blocks.py'),
+              '--data-dir', datadir, '--out', os.path.join(datadir, 'opt_blocks.json')]
+    result = subprocess.run(ob_cmd, capture_output=True, text=True)
+    print(result.stdout)
+    if result.returncode != 0:
+        print('[WARN] extract_opt_blocks.py failed (オプションの大口 card may be stale)', file=sys.stderr)
+        print(result.stderr, file=sys.stderr)
+
     # Step 2.99: accumulate weekly per-broker nets into broker_history.json
     # (persistent across weeks; powers the 大口動向 card). Runs only when
     # weekly files are present, otherwise leaves the existing history intact.
