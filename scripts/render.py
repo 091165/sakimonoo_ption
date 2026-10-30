@@ -2440,12 +2440,15 @@ def _assessment_table(lines):
         if all(re.fullmatch(r':?-{2,}:?', c) for c in cells if c):
             continue  # markdown header separator row
         rows.append(cells)
-    td = 'padding:4px 6px;border-bottom:1px solid var(--border);white-space:nowrap'
+    td = 'padding:4px 6px;border-bottom:1px solid var(--border)'
     h = '<div style="overflow-x:auto;margin:6px 0 0"><table style="border-collapse:collapse;font-size:12px;width:100%">'
     for ri, cells in enumerate(rows):
         tag = 'th' if ri == 0 else 'td'
         style = td + (';color:var(--sub);font-weight:500;text-align:left' if ri == 0 else ';color:var(--text)')
-        h += '<tr>' + ''.join('<%s style="%s">%s</%s>' % (tag, style, _md_inline(c), tag) for c in cells) + '</tr>'
+        # Numbers stay on one line; the last column (usually a note) wraps
+        # so a phone-width card does not have to scroll sideways.
+        h += '<tr>' + ''.join('<%s style="%s%s">%s</%s>' % (tag, style, '' if ci == len(cells) - 1 else ';white-space:nowrap', _md_inline(c), tag)
+                              for ci, c in enumerate(cells)) + '</tr>'
     return h + '</table></div>'
 
 
