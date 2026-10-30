@@ -42,6 +42,10 @@ except Exception:
     _fm = None
     _sb = None
     _rr = None
+try:
+    import render_futures as _ft
+except Exception:
+    _ft = None
 import sys
 import copy
 
@@ -1594,7 +1598,7 @@ def _detail_ivtrend_js(ivts):
 
 
 
-def build_dashboard_html(data, oi_ts=None, wt=None, iv=None, ivts=None, greeks=None, jnet=None, optw=None, positions=None, broker_hist=None, venue_flow=None, greeks_hist=None):
+def build_dashboard_html(data, oi_ts=None, wt=None, iv=None, ivts=None, greeks=None, jnet=None, optw=None, positions=None, broker_hist=None, venue_flow=None, greeks_hist=None, futures_flow=None):
     meta = data['metadata']
     s01 = data.get('s01', {})
     s02 = data.get('s02', {})
@@ -1615,7 +1619,7 @@ def build_dashboard_html(data, oi_ts=None, wt=None, iv=None, ivts=None, greeks=N
     h += '<meta name="viewport" content="width=device-width,initial-scale=1">\n'
     h += '<title>JPX Market Analysis %s</title>\n' % esc(meta.get('date_formatted', ''))
     h += '<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700&family=Noto+Sans+JP:wght@400;500;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">\n'
-    h += '<style>\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n</style>\n' % (DASHBOARD_CSS, OI_CHART_CSS, WEEKLY_TREND_CSS, IV_CARD_CSS, IV_TREND_CSS, (_rg.GREEKS_CARD_CSS if _rg else ''), (_rj.JNET_CARD_CSS if _rj else ''), (_ow.OPTW_CARD_CSS if _ow else ''), (_ps.POS_CARD_CSS if _ps else ''), (_oc.OPCROSS_CARD_CSS if _oc else ''), FLOW_VERDICT_CSS, (_bw.BW_CARD_CSS if _bw else ''), (_sb.SB_CARD_CSS if _sb else ''), (_rr.RANGE_CARD_CSS if _rr else ''), READABILITY_CSS)
+    h += '<style>\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n</style>\n' % (DASHBOARD_CSS, OI_CHART_CSS, WEEKLY_TREND_CSS, IV_CARD_CSS, IV_TREND_CSS, (_rg.GREEKS_CARD_CSS if _rg else ''), (_rj.JNET_CARD_CSS if _rj else ''), (_ow.OPTW_CARD_CSS if _ow else ''), (_ps.POS_CARD_CSS if _ps else ''), (_oc.OPCROSS_CARD_CSS if _oc else ''), FLOW_VERDICT_CSS, (_bw.BW_CARD_CSS if _bw else ''), (_sb.SB_CARD_CSS if _sb else ''), (_rr.RANGE_CARD_CSS if _rr else ''), (_ft.FUT_CARD_CSS if _ft else ''), READABILITY_CSS)
     h += '</head>\n<body>\n'
 
     h += '<div class="topbar">\n  <span class="logo">JPX Dashboard</span>\n  <nav>\n'
@@ -1756,10 +1760,12 @@ def build_dashboard_html(data, oi_ts=None, wt=None, iv=None, ivts=None, greeks=N
     card_groups = [
         # ⑧ first: it is the one card read every day, so it leads the page.
         ('今日のまとめ', [
-            ('gemini', '📝', '市況評価（⑧）', _preview_gemini(data), _detail_gemini_js(data), DB),
+            ('gemini', '📝', '今日の分析', _preview_gemini(data), _detail_gemini_js(data), DB),
         ]),
         ('先物', [
-            ('futures', '📈', '先物建玉増減', _preview_futures(s02, oi_ts), _detail_futures_js(s02), DB),
+            ('futures', '📈', '先物（建玉・価格・取引高）',
+             (_ft and futures_flow and _ft.preview_futures(futures_flow, s02)) or _preview_futures(s02, oi_ts),
+             (_ft and futures_flow and _ft.detail_futures_js(futures_flow)) or _detail_futures_js(s02), DB),
         ]),
         ('オプション', [
             ('opval', '💰', 'OP取引代金', _preview_opval(s03), _detail_opval_js(s03), DB),
@@ -1841,6 +1847,9 @@ def build_dashboard_html(data, oi_ts=None, wt=None, iv=None, ivts=None, greeks=N
     if _rr and greeks:
         h += _rr.range_data_script(greeks, ivts, oi_ts, greeks_hist)
         h += _rr.RANGE_CARD_JS
+    if _ft and futures_flow:
+        h += _ft.futures_data_script(futures_flow, data.get('s02'))
+        h += _ft.FUT_CARD_JS
     for card_id, _, _, _, detail_js in cards:
         h += 'function b_%s(){' % card_id
         h += detail_js
@@ -3021,6 +3030,16 @@ def run(args):
         except Exception as e:
             print('[render.py] venue_flow.json load error: %s' % e)
 
+    futures_flow = None
+    _ffpath = os.path.join(data_dir, 'futures_flow.json')
+    if os.path.exists(_ffpath):
+        try:
+            with open(_ffpath, encoding='utf-8') as f:
+                futures_flow = json.load(f)
+            print('[render.py] Loaded futures_flow: %d days' % len(futures_flow.get('dates', [])))
+        except Exception as e:
+            print('[render.py] futures_flow.json load error: %s' % e)
+
     broker_hist = None
     _bhpath = os.path.join(data_dir, 'broker_history.json')
     if os.path.exists(_bhpath):
@@ -3054,7 +3073,7 @@ def run(args):
         f.write(build_markdown(data))
     print('[render.py] Markdown: %s (%.1f KB)' % (md_path, os.path.getsize(md_path) / 1024))
     html_path = os.path.join(outdir, 'index.html')
-    html = build_dashboard_html(data, oi_ts=oi_ts, wt=wt, iv=iv, ivts=ivts, greeks=greeks, jnet=jnet, optw=optw, positions=positions, broker_hist=broker_hist, venue_flow=venue_flow, greeks_hist=greeks_hist)
+    html = build_dashboard_html(data, oi_ts=oi_ts, wt=wt, iv=iv, ivts=ivts, greeks=greeks, jnet=jnet, optw=optw, positions=positions, broker_hist=broker_hist, venue_flow=venue_flow, greeks_hist=greeks_hist, futures_flow=futures_flow)
     with open(html_path, 'w', encoding='utf-8') as f:
         f.write(html)
     print('[render.py] Dashboard: %s (%.1f KB)' % (html_path, os.path.getsize(html_path) / 1024))

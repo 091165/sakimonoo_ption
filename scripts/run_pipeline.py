@@ -248,6 +248,18 @@ def main():
     if result.returncode != 0:
         print('[WARN] extract_venue_flow.py failed (価格帯の内訳 card may be stale)', file=sys.stderr)
 
+    # Step 2.986: futures price x OI x volume history (先物 card). Upserts
+    # today's row into futures_flow.json, which keeps its own history because
+    # the daily market data file is removed from data/ after each run.
+    ff_cmd = [sys.executable, os.path.join(scripts_dir, 'extract_futures_flow.py'),
+              '--data-dir', datadir, '--data', data_json,
+              '--out', os.path.join(datadir, 'futures_flow.json')]
+    result = subprocess.run(ff_cmd, capture_output=True, text=True)
+    print(result.stdout)
+    if result.returncode != 0:
+        print('[WARN] extract_futures_flow.py failed (先物 card falls back to OI only)', file=sys.stderr)
+        print(result.stderr, file=sys.stderr)
+
     # Step 2.99: accumulate weekly per-broker nets into broker_history.json
     # (persistent across weeks; powers the 大口動向 card). Runs only when
     # weekly files are present, otherwise leaves the existing history intact.
