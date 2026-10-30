@@ -7,7 +7,7 @@
 <title>JPX Market Analysis — 2026.03.05</title>
 <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700&family=Noto+Sans+JP:wght@400;500;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#f9f5ee;--panel:#f2efeb;--card:#eae8e7;--card2:#dbd9de;--border:#d5d4d9;--txt:#0d0d19;--txt2:#404058;--put:#790606;--call:#043f87;--atm:#745402;--up:#146f35;--dn:#9f0e0e;--us:#022c5c;--eu:#0e023f;--hf:#745402;--dom:#790606;--foreign:#043f87;--accent:#060f6b}
+:root{--bg:#f9f5ee;--panel:#f2efeb;--card:#eae8e7;--card2:#dbd9de;--border:#d5d4d9;--txt:#0d0d19;--txt2:#404058;--put:#790606;--call:#043f87;--atm:#6a4d02;--up:#136631;--dn:#9f0e0e;--us:#022c5c;--eu:#0e023f;--hf:#6a4d02;--dom:#790606;--foreign:#043f87;--accent:#060f6b}
 *{margin:0;padding:0;box-sizing:border-box}
 body{background:var(--bg);color:var(--txt);font-family:'Noto Sans JP','Outfit',sans-serif;font-size:13px;line-height:1.6}
 .mono{font-family:'DM Mono',monospace}
@@ -49,7 +49,7 @@ body{background:var(--bg);color:var(--txt);font-family:'Noto Sans JP','Outfit',s
 .tag-up{border-left:2px solid var(--up)}.tag-dn{border-left:2px solid var(--dn)}
 .tag-us{background:rgba(2,44,92,.12);color:var(--us)}
 .tag-eu{background:rgba(14,2,63,.12);color:var(--eu)}
-.tag-hf{background:rgba(116,84,2,.12);color:var(--hf)}
+.tag-hf{background:rgba(106,77,2,.12);color:var(--hf)}
 .tag-dom{background:rgba(121,6,6,.12);color:var(--dom)}
 .bar-row{display:flex;align-items:center;gap:8px;margin:4px 0;font-size:11px}
 .bar-label{width:100px;text-align:right;color:var(--txt2);font-size:10px;flex-shrink:0}
@@ -98,7 +98,7 @@ footer{text-align:center;padding:20px;color:var(--txt2);font-size:10px;border-to
 footer a{color:var(--accent);text-decoration:none}
 .pair-card{background:var(--card);border:1px solid var(--accent);border-radius:8px;padding:10px;margin:6px 0;font-size:11px}
 </style>
-<style>.wt-cell-pos-strong,.wt-cell-neg-strong,.latest-btn,.btn:not(.btn-outline),a[style*="background:var(--accent)"]{color:#fff!important}</style></head>
+<style>.wt-cell-pos-strong,.wt-cell-neg-strong,.latest-btn,.btn:not(.btn-outline),a[style*="background:var(--accent)"]{color:#fff!important}.wt-cell-pos-strong{background:#1f7a3d!important}.wt-cell-neg-strong{background:#a3262a!important}</style></head>
 <body>
 <div class="topbar">
 <div class="logo">JPX Market Pulse</div>
@@ -345,7 +345,7 @@ for(var i=0;i<puts.length;i++){
 var s=puts[i][0];var pv=puts[i][1];var cv=calls[i][1];
 var pp=Math.min(pv/mx*100,100);var cp=Math.min(cv/mx*100,100);
 var isATM=Math.abs(s-55000)<=250;
-h+='<div class="bf-row"'+(isATM?' style="background:rgba(116,84,2,.08);border-radius:4px;padding:1px 0"':'')+'>';
+h+='<div class="bf-row"'+(isATM?' style="background:rgba(106,77,2,.08);border-radius:4px;padding:1px 0"':'')+'>';
 h+='<div class="bf-val bf-val-l">'+pv.toLocaleString()+'</div>';
 h+='<div class="bf-left"><div class="bf-bar" style="width:'+pp+'%;background:var(--put)"></div></div>';
 h+='<div class="bf-label"'+(isATM?' style="color:var(--atm);font-weight:600"':'')+'>'+(s/1000).toFixed(1)+'K</div>';

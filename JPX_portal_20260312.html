@@ -8,7 +8,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700&family=Noto+Sans+JP:wght@400;500;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-:root{--bg:#f9f5ee;--panel:#f2efeb;--card:#eae8e7;--border:#d5d4d9;--text:#0d0d19;--muted:#484865;--accent:#060f6b;--red:#790606;--green:#146f35;--blue:#043f87;--yellow:#745402;--put:#790606;--call:#043f87;--atm:#745402;--us:#022c5c;--eu:#0e023f;--hf:#745402;--dom:#790606}
+:root{--bg:#f9f5ee;--panel:#f2efeb;--card:#eae8e7;--border:#d5d4d9;--text:#0d0d19;--muted:#484865;--accent:#060f6b;--red:#790606;--green:#136631;--blue:#043f87;--yellow:#6a4d02;--put:#790606;--call:#043f87;--atm:#6a4d02;--us:#022c5c;--eu:#0e023f;--hf:#6a4d02;--dom:#790606}
 body{font-family:'Noto Sans JP',sans-serif;background:var(--bg);color:var(--text);line-height:1.6;font-size:14px}
 .mono{font-family:'DM Mono',monospace}
 a{color:var(--accent);text-decoration:none}a:hover{text-decoration:underline}
@@ -39,7 +39,7 @@ a{color:var(--accent);text-decoration:none}a:hover{text-decoration:underline}
 .mini-m .m{background:rgba(0,0,0,.04);padding:4px 8px;border-radius:6px;font-family:'DM Mono';font-size:12px}
 .tag{display:inline-block;padding:2px 8px;border-radius:4px;font-size:11px;margin:2px}
 .tag-put{background:rgba(121,6,6,.15);color:var(--put)}.tag-call{background:rgba(4,63,135,.15);color:var(--call)}
-.tag-hf{background:rgba(116,84,2,.15);color:var(--hf)}.tag-eu{background:rgba(14,2,63,.15);color:var(--eu)}
+.tag-hf{background:rgba(106,77,2,.15);color:var(--hf)}.tag-eu{background:rgba(14,2,63,.15);color:var(--eu)}
 .tag-us{background:rgba(2,44,92,.15);color:var(--us)}.tag-dom{background:rgba(121,6,6,.15);color:var(--dom)}
 .dtable{width:100%;border-collapse:collapse;margin:10px 0;font-size:12px}
 .dtable th{text-align:left;padding:6px 8px;border-bottom:1px solid var(--border);color:var(--muted);font-weight:500;font-size:11px}
@@ -68,7 +68,7 @@ a{color:var(--accent);text-decoration:none}a:hover{text-decoration:underline}
 .acard .at{font-size:11px;color:var(--accent);font-weight:600}.acard .ab{font-size:12px;margin-top:4px}
 .pbox{border-radius:8px;padding:10px;text-align:center}
 </style>
-<style>.wt-cell-pos-strong,.wt-cell-neg-strong,.latest-btn,.btn:not(.btn-outline),a[style*="background:var(--accent)"]{color:#fff!important}</style></head>
+<style>.wt-cell-pos-strong,.wt-cell-neg-strong,.latest-btn,.btn:not(.btn-outline),a[style*="background:var(--accent)"]{color:#fff!important}.wt-cell-pos-strong{background:#1f7a3d!important}.wt-cell-neg-strong{background:#a3262a!important}</style></head>
 <body>
 <div class="topbar">
 <div class="logo">📊 JPX Analysis</div>
@@ -181,7 +181,7 @@ function buildBfly(){
   var d=[[49500,2157,450],[50000,5285,2877],[50500,1376,501],[51000,2553,1097],[51500,810,626],[52000,7078,4694],[52500,2962,1362],[53000,4259,2014],[53500,577,391],[54000,3984,4935],[54500,2394,2315],[55000,4860,4749],[55500,1877,2340],[56000,2569,4800],[56500,1446,2102],[57000,2395,2993],[57500,486,2224],[58000,865,5277],[58500,328,695],[59000,913,2991]];
   var mx=7078;
   var s='<div style="font-size:11px;color:var(--muted);margin-bottom:6px">ATM=54,430 | PUT(左)←→CALL(右)</div>';
-  for(var i=0;i<d.length;i++){var k=d[i][0],poi=d[i][1],coi=d[i][2];var pw=poi/mx*100;var cw=coi/mx*100;var isA=Math.abs(k-54430)<=300;var bg=isA?"rgba(116,84,2,.08)":"transparent";var sc=isA?"color:var(--atm);font-weight:700":"";s+='<div class="bfly-row" style="background:'+bg+'"><div class="bfly-put"><div class="bfly-bar" style="width:'+pw+'%;background:var(--put)"></div></div><div class="bfly-strike" style="'+sc+'">'+(k/1000).toFixed(1)+'k</div><div class="bfly-call"><div class="bfly-bar" style="width:'+cw+'%;background:var(--call)"></div></div></div>';}
+  for(var i=0;i<d.length;i++){var k=d[i][0],poi=d[i][1],coi=d[i][2];var pw=poi/mx*100;var cw=coi/mx*100;var isA=Math.abs(k-54430)<=300;var bg=isA?"rgba(106,77,2,.08)":"transparent";var sc=isA?"color:var(--atm);font-weight:700":"";s+='<div class="bfly-row" style="background:'+bg+'"><div class="bfly-put"><div class="bfly-bar" style="width:'+pw+'%;background:var(--put)"></div></div><div class="bfly-strike" style="'+sc+'">'+(k/1000).toFixed(1)+'k</div><div class="bfly-call"><div class="bfly-bar" style="width:'+cw+'%;background:var(--call)"></div></div></div>';}
   s+='<div class="insight"><strong>PUT壁</strong>=52,000(7,078枚)。<strong>CALL壁</strong>=58,000(5,277枚)。SQ着地が54,000-55,000に収斂する構造。</div>';
   return s;
 }
@@ -203,8 +203,8 @@ function buildJNET(){
 }
 function buildOutlook(){
   var s='<div class="rbox">';
-  s+='<div class="ritem" style="background:rgba(20,111,53,.08);border:1px solid rgba(20,111,53,.2)"><div style="font-size:11px;color:var(--green)">▼ サポート</div><div class="mono" style="font-size:16px">54,000</div><div style="font-size:11px;color:var(--muted)">J-NET PUT壁</div><div class="mono" style="font-size:14px;margin-top:4px">52,000</div><div style="font-size:11px;color:var(--muted)">OI壁 7,078枚</div></div>';
-  s+='<div class="ritem" style="background:rgba(116,84,2,.08);border:1px solid rgba(116,84,2,.2);text-align:center"><div style="font-size:11px;color:var(--atm)">SQ予想レンジ</div><div class="mono" style="font-size:20px;color:var(--atm)">53,500 — 55,500</div><div style="font-size:11px;color:var(--muted)">メイン: 54,000-55,000</div></div>';
+  s+='<div class="ritem" style="background:rgba(19,102,49,.08);border:1px solid rgba(19,102,49,.2)"><div style="font-size:11px;color:var(--green)">▼ サポート</div><div class="mono" style="font-size:16px">54,000</div><div style="font-size:11px;color:var(--muted)">J-NET PUT壁</div><div class="mono" style="font-size:14px;margin-top:4px">52,000</div><div style="font-size:11px;color:var(--muted)">OI壁 7,078枚</div></div>';
+  s+='<div class="ritem" style="background:rgba(106,77,2,.08);border:1px solid rgba(106,77,2,.2);text-align:center"><div style="font-size:11px;color:var(--atm)">SQ予想レンジ</div><div class="mono" style="font-size:20px;color:var(--atm)">53,500 — 55,500</div><div style="font-size:11px;color:var(--muted)">メイン: 54,000-55,000</div></div>';
   s+='<div class="ritem" style="background:rgba(121,6,6,.08);border:1px solid rgba(121,6,6,.2);text-align:right"><div style="font-size:11px;color:var(--red)">▲ レジスタンス</div><div class="mono" style="font-size:16px">55,500</div><div style="font-size:11px;color:var(--muted)">J-NET CALL壁</div><div class="mono" style="font-size:14px;margin-top:4px">56,000</div><div style="font-size:11px;color:var(--muted)">CALL OI 4,800枚</div></div></div>';
   s+='<div class="acards">';
   s+='<div class="acard"><div class="at">📊 需給</div><div class="ab">mini-192K消化。6月ロール秩序的。PUT新規+14K→下値ヘッジ旺盛。</div></div>';

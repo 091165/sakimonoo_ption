@@ -6,7 +6,7 @@
 <title>JPX Derivatives Intelligence</title>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700;900&family=DM+Mono:wght@400;500&family=Outfit:wght@300;400;600;800;900&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#f9f5ee;--panel:#f2efeb;--card:#eae8e7;--border:#d7d7dc;--txt:#080914;--muted:#5a5e7c;--dim:#999cc2;--cyan:#096270;--blue:#083096;--gold:#745402;--red:#790606;--green:#146f35;--purple:#060f6b;--mono:'DM Mono',monospace;--disp:'Outfit',sans-serif;--body:'Noto Sans JP',sans-serif}
+:root{--bg:#f9f5ee;--panel:#f2efeb;--card:#eae8e7;--border:#d7d7dc;--txt:#080914;--muted:#515570;--dim:#999cc2;--cyan:#096270;--blue:#083096;--gold:#6a4d02;--red:#790606;--green:#136631;--purple:#060f6b;--mono:'DM Mono',monospace;--disp:'Outfit',sans-serif;--body:'Noto Sans JP',sans-serif}
 *{margin:0;padding:0;box-sizing:border-box}html{scroll-behavior:smooth}body{background:var(--bg);color:var(--txt);font-family:var(--body);overflow-x:hidden;font-size:13px}
 a{color:inherit;text-decoration:none}
 
@@ -98,7 +98,7 @@ a{color:inherit;text-decoration:none}
 .bf-hdr,.bf-r{display:flex;align-items:center;height:28px}
 .bf-hdr{border-bottom:1px solid #b5b5d5;padding-bottom:4px}
 .bf-r{border-bottom:1px solid #e0dee0}
-.bf-r.atm{background:rgba(116,84,2,.06)}
+.bf-r.atm{background:rgba(106,77,2,.06)}
 .bf-cell{flex-shrink:0;font-family:var(--mono)}
 .bf-bar-wrap{flex:1;display:flex;padding:0 2px}
 .bf-bar{height:14px;border-radius:3px}
@@ -107,11 +107,11 @@ a{color:inherit;text-decoration:none}
 .tbl{width:100%;border-collapse:collapse;font-size:12px}
 .tbl th{padding:10px 16px;text-align:left;color:#434c65;border-bottom:2px solid #b5b5d5}
 .tbl td{padding:8px 16px;border-bottom:1px solid #d5d4d9}
-.tbl .pair-row{background:rgba(116,84,2,.05)}
-.pair-badge{margin-left:8px;font-size:9px;color:var(--gold);border:1px solid rgba(116,84,2,.3);border-radius:4px;padding:1px 6px}
+.tbl .pair-row{background:rgba(106,77,2,.05)}
+.pair-badge{margin-left:8px;font-size:9px;color:var(--gold);border:1px solid rgba(106,77,2,.3);border-radius:4px;padding:1px 6px}
 
 /* PAIR CARD */
-.pair-card{display:flex;align-items:center;gap:12px;padding:10px 16px;background:#e1e0e1;border-radius:10px;border:1px solid rgba(116,84,2,.2);flex-wrap:wrap;margin-bottom:8px}
+.pair-card{display:flex;align-items:center;gap:12px;padding:10px 16px;background:#e1e0e1;border-radius:10px;border:1px solid rgba(106,77,2,.2);flex-wrap:wrap;margin-bottom:8px}
 
 /* LEVEL BAR */
 .lv-row{display:flex;align-items:center;gap:12px;padding:8px 0}
@@ -134,14 +134,14 @@ a{color:inherit;text-decoration:none}
 .tags{display:flex;gap:8px;flex-wrap:wrap}
 .tag{display:inline-block;padding:2px 10px;border-radius:20px;font-size:11px;font-weight:700}
 .t-red{background:rgba(121,6,6,.15);color:#790606;border:1px solid rgba(121,6,6,.3)}
-.t-green{background:rgba(20,111,53,.15);color:#146f35;border:1px solid rgba(20,111,53,.3)}
+.t-green{background:rgba(19,102,49,.15);color:#136631;border:1px solid rgba(19,102,49,.3)}
 .t-purple{background:rgba(12,14,133,.15);color:#060f6b;border:1px solid rgba(12,14,133,.3)}
 
 .footer{padding:40px 48px;border-top:1px solid var(--border);text-align:center}
 .footer-text{font-size:11px;color:var(--dim);font-family:var(--mono)}
 @media(max-width:768px){.topbar{padding:0 16px}.topbar-nav{display:none}.hero{padding:100px 20px 40px}.dash-header{padding:0 20px}.frame-wrap{margin:0 12px;border-radius:10px}.footer{padding:30px 20px}.bar-label{width:70px;font-size:9px}.mobile-nav{display:flex!important}}
 </style>
-<style>.wt-cell-pos-strong,.wt-cell-neg-strong,.latest-btn,.btn:not(.btn-outline),a[style*="background:var(--accent)"]{color:#fff!important}</style></head>
+<style>.wt-cell-pos-strong,.wt-cell-neg-strong,.latest-btn,.btn:not(.btn-outline),a[style*="background:var(--accent)"]{color:#fff!important}.wt-cell-pos-strong{background:#1f7a3d!important}.wt-cell-neg-strong{background:#a3262a!important}</style></head>
 <body>
 
 <!-- TOPBAR -->
@@ -180,7 +180,7 @@ a{color:inherit;text-decoration:none}
 <span class="dash-date">DATA: 2026.02.27 — SQ: 2026.03.13</span>
 </div>
 <div class="frame-wrap">
-<div class="frame-bar"><span class="fdot" style="background:#790606"></span><span class="fdot" style="background:#745402"></span><span class="fdot" style="background:#146f35"></span><span class="frame-url">jpx-intelligence://dashboard/20260227</span></div>
+<div class="frame-bar"><span class="fdot" style="background:#790606"></span><span class="fdot" style="background:#6a4d02"></span><span class="fdot" style="background:#136631"></span><span class="frame-url">jpx-intelligence://dashboard/20260227</span></div>
 <div class="db">
 
 <!-- HEADER KPI -->
@@ -190,8 +190,8 @@ a{color:inherit;text-decoration:none}
 <div style="text-align:right"><div style="font-size:20px;font-weight:800;color:#000915;font-family:var(--mono)">2026.02.27</div><div style="font-size:11px;color:#434c65">金曜日 大引け</div></div>
 </div>
 <div class="db-kpi-row">
-<div class="kpi"><div class="kpi-label">日経平均（現物）</div><div class="kpi-val" style="color:#000915">58,850.27 円</div><div class="kpi-sub" style="color:#146f35">+96.88 円</div></div>
-<div class="kpi"><div class="kpi-label">日経VI</div><div class="kpi-val" style="color:#146f35">27.89</div><div class="kpi-sub" style="color:#790606">-1.14</div></div>
+<div class="kpi"><div class="kpi-label">日経平均（現物）</div><div class="kpi-val" style="color:#000915">58,850.27 円</div><div class="kpi-sub" style="color:#136631">+96.88 円</div></div>
+<div class="kpi"><div class="kpi-label">日経VI</div><div class="kpi-val" style="color:#136631">27.89</div><div class="kpi-sub" style="color:#790606">-1.14</div></div>
 <div class="kpi"><div class="kpi-label">デイリー予測値幅</div><div class="kpi-val" style="color:#060f6b">57,812 ~ 59,888</div><div class="kpi-sub" style="color:#434c65">VI÷√250</div></div>
 <div class="kpi"><div class="kpi-label">ウィークリー予測値幅</div><div class="kpi-val" style="color:#060f6b">56,574 ~ 61,126</div><div class="kpi-sub" style="color:#434c65">VI÷√52</div></div>
 </div></div>
@@ -227,14 +227,14 @@ a{color:inherit;text-decoration:none}
 <!-- TAB 2: 建玉分布 -->
 <div id="t2" class="tab-content">
 <div class="sec-title"><div class="sec-num">⑥</div><span class="sec-text">建玉分布（直近メジャー限月・500円刻み）</span></div>
-<div style="font-size:11px;color:#434c65;margin-bottom:12px">ATM: <span style="color:#745402;font-weight:700">59,100円</span>　<span style="color:#790606">■</span> プット　<span style="color:#043f87">■</span> コール</div>
+<div style="font-size:11px;color:#434c65;margin-bottom:12px">ATM: <span style="color:#6a4d02;font-weight:700">59,100円</span>　<span style="color:#790606">■</span> プット　<span style="color:#043f87">■</span> コール</div>
 <div class="card" style="padding:12px 0;overflow:hidden" id="bf-table"></div>
 </div>
 
 <!-- TAB 3: 手口 -->
 <div id="t3" class="tab-content">
 <div class="sec-title"><div class="sec-num">⑦</div><span class="sec-text">大口手口（J-NET：NIKKEI 225 OOP）</span></div>
-<div style="font-size:11px;color:#434c65;margin-bottom:8px">SBI証券除外 | 100枚以上 | <span style="color:#745402">■</span> 対当ペア</div>
+<div style="font-size:11px;color:#434c65;margin-bottom:8px">SBI証券除外 | 100枚以上 | <span style="color:#6a4d02">■</span> 対当ペア</div>
 <div class="card" style="overflow:hidden;margin-bottom:16px">
 <table class="tbl">
 <thead><tr><th>銘柄</th><th>参加者</th><th style="text-align:right">取引高</th></tr></thead>
@@ -245,8 +245,8 @@ a{color:inherit;text-decoration:none}
 <tr class="pair-row"><td style="font-family:var(--mono);font-weight:700;color:#043f87">C59000</td><td>モルガンＭＵＦＧ証券<span class="pair-badge">ペア</span></td><td style="text-align:right;font-family:var(--mono);font-weight:700;color:#000915">150</td></tr>
 </tbody></table></div>
 <h3 style="font-size:14px;color:#000915;font-weight:700;margin-bottom:8px">同一数量の対当ペア</h3>
-<div class="pair-card"><span style="font-family:var(--mono);font-weight:700;color:#043f87;min-width:60px">C59000</span><span>ＵＢＳ証券</span><span style="color:#0c0e85">⟷</span><span>シティグループ</span><span style="margin-left:auto;font-family:var(--mono);font-weight:700;color:#745402">各150枚</span></div>
-<div class="pair-card"><span style="font-family:var(--mono);font-weight:700;color:#043f87;min-width:60px">C59000</span><span>ＡＢＮクリアリン</span><span style="color:#0c0e85">⟷</span><span>モルガンＭＵＦＧ</span><span style="margin-left:auto;font-family:var(--mono);font-weight:700;color:#745402">各150枚</span></div>
+<div class="pair-card"><span style="font-family:var(--mono);font-weight:700;color:#043f87;min-width:60px">C59000</span><span>ＵＢＳ証券</span><span style="color:#0c0e85">⟷</span><span>シティグループ</span><span style="margin-left:auto;font-family:var(--mono);font-weight:700;color:#6a4d02">各150枚</span></div>
+<div class="pair-card"><span style="font-family:var(--mono);font-weight:700;color:#043f87;min-width:60px">C59000</span><span>ＡＢＮクリアリン</span><span style="color:#0c0e85">⟷</span><span>モルガンＭＵＦＧ</span><span style="margin-left:auto;font-family:var(--mono);font-weight:700;color:#6a4d02">各150枚</span></div>
 </div>
 
 <!-- TAB 4: 総合評価 -->
@@ -305,7 +305,7 @@ function buildSigChart() {
   var html = '';
   data.forEach(function(d){
     var w = Math.round(Math.abs(d.v)/max*100);
-    var color = d.v >= 0 ? '#146f35' : '#790606';
+    var color = d.v >= 0 ? '#136631' : '#790606';
     var sign = d.v >= 0 ? '+' : '';
     html += '<div class="bar-item"><div class="bar-label" style="width:85px;font-size:9px">' + d.id + '</div>';
     html += '<div class="bar-track"><div class="bar-fill" style="width:'+w+'%;background:'+color+';opacity:.85"></div></div>';
@@ -333,7 +333,7 @@ function buildButterfly() {
   html += '<div class="bf-cell" style="width:55px;text-align:right;padding-right:4px;font-size:9px;color:#790606;font-weight:700">建玉</div>';
   html += '<div class="bf-cell" style="width:42px;text-align:right;padding-right:4px;font-size:9px;color:#790606">前日比</div>';
   html += '<div style="flex:1;text-align:right;padding-right:8px;font-size:9px;color:#790606">◀ プット</div>';
-  html += '<div class="bf-cell" style="width:56px;text-align:center;font-size:9px;color:#745402;font-weight:700;border-left:1px solid #b5b5d5;border-right:1px solid #b5b5d5">行使価格</div>';
+  html += '<div class="bf-cell" style="width:56px;text-align:center;font-size:9px;color:#6a4d02;font-weight:700;border-left:1px solid #b5b5d5;border-right:1px solid #b5b5d5">行使価格</div>';
   html += '<div style="flex:1;text-align:left;padding-left:8px;font-size:9px;color:#043f87">コール ▶</div>';
   html += '<div class="bf-cell" style="width:42px;text-align:left;padding-left:4px;font-size:9px;color:#043f87">前日比</div>';
   html += '<div class="bf-cell" style="width:55px;text-align:left;padding-left:4px;font-size:9px;color:#043f87;font-weight:700">建玉</div>';
@@ -343,11 +343,11 @@ function buildButterfly() {
     var isA = d.s === atm;
     html += '<div class="bf-r'+(isA?' atm':'')+'">';
     html += '<div class="bf-cell" style="width:55px;text-align:right;padding-right:4px;font-size:10px;color:#20272e">'+(d.p>0?d.p.toLocaleString():'')+'</div>';
-    html += '<div class="bf-cell" style="width:42px;text-align:right;padding-right:4px;font-size:9px;color:'+(d.pc>0?'#146f35':d.pc<0?'#790606':'transparent')+'">'+(d.pc?fs(d.pc):'')+'</div>';
+    html += '<div class="bf-cell" style="width:42px;text-align:right;padding-right:4px;font-size:9px;color:'+(d.pc>0?'#136631':d.pc<0?'#790606':'transparent')+'">'+(d.pc?fs(d.pc):'')+'</div>';
     html += '<div class="bf-bar-wrap" style="justify-content:flex-end"><div class="bf-bar" style="width:'+d.p*sc+'%;background:linear-gradient(270deg,#790606,#e46666);opacity:.8;border-radius:3px 0 0 3px"></div></div>';
-    html += '<div class="bf-cell" style="width:56px;text-align:center;font-size:10px;font-weight:'+(isA?800:500)+';color:'+(isA?'#745402':'#20272e')+';border-left:1px solid #b5b5d5;border-right:1px solid #b5b5d5;background:'+(isA?'rgba(116,84,2,.1)':'transparent')+'">'+d.s.toLocaleString()+'</div>';
+    html += '<div class="bf-cell" style="width:56px;text-align:center;font-size:10px;font-weight:'+(isA?800:500)+';color:'+(isA?'#6a4d02':'#20272e')+';border-left:1px solid #b5b5d5;border-right:1px solid #b5b5d5;background:'+(isA?'rgba(106,77,2,.1)':'transparent')+'">'+d.s.toLocaleString()+'</div>';
     html += '<div class="bf-bar-wrap" style="justify-content:flex-start"><div class="bf-bar" style="width:'+d.c*sc+'%;background:linear-gradient(90deg,#043f87,#a0bce1);opacity:.8;border-radius:0 3px 3px 0"></div></div>';
-    html += '<div class="bf-cell" style="width:42px;text-align:left;padding-left:4px;font-size:9px;color:'+(d.cc>0?'#146f35':d.cc<0?'#790606':'transparent')+'">'+(d.cc?fs(d.cc):'')+'</div>';
+    html += '<div class="bf-cell" style="width:42px;text-align:left;padding-left:4px;font-size:9px;color:'+(d.cc>0?'#136631':d.cc<0?'#790606':'transparent')+'">'+(d.cc?fs(d.cc):'')+'</div>';
     html += '<div class="bf-cell" style="width:55px;text-align:left;padding-left:4px;font-size:10px;color:#20272e">'+(d.c>0?d.c.toLocaleString():'')+'</div>';
     html += '</div>';
   });
@@ -358,14 +358,14 @@ function buildLevels() {
   var levels = [
     {price:62000,label:"第三抵抗",sub:"C62000=4,477枚",color:"#9f0e0e"},
     {price:60000,label:"第一抵抗",sub:"C60000=6,324枚(解消中)",color:"#790606"},
-    {price:59100,label:"ATM（先物清算値）",sub:"",color:"#745402"},
-    {price:58000,label:"第一支持",sub:"C5,746枚ガンマフロア",color:"#146f35"},
-    {price:56000,label:"第二支持",sub:"P3,134枚+前回J-NET帯",color:"#136b33"},
+    {price:59100,label:"ATM（先物清算値）",sub:"",color:"#6a4d02"},
+    {price:58000,label:"第一支持",sub:"C5,746枚ガンマフロア",color:"#136631"},
+    {price:56000,label:"第二支持",sub:"P3,134枚+前回J-NET帯",color:"#11632f"},
     {price:55000,label:"第三支持",sub:"P3,502枚の最大壁",color:"#5ce990"}
   ];
   var html = '';
   levels.forEach(function(l){
-    var bb = l.color==='#745402' ? '2px solid #745402' : '1px dashed #b5b5d5';
+    var bb = l.color==='#6a4d02' ? '2px solid #6a4d02' : '1px dashed #b5b5d5';
     html += '<div class="lv-row" style="border-bottom:'+bb+'">';
     html += '<div class="lv-price" style="color:'+l.color+'">'+l.price.toLocaleString()+'</div>';
     html += '<div class="lv-bar" style="background:linear-gradient(90deg,'+l.color+'40,transparent)"></div>';
@@ -401,7 +401,7 @@ function buildOIChange() {
   html += '<div style="display:flex;gap:16px;font-size:11px;color:#434c65;margin-bottom:16px;justify-content:center">';
   html += '<span><span style="color:#790606">■</span> プット</span>';
   html += '<span><span style="color:#043f87">■</span> コール</span>';
-  html += '<span style="color:#146f35">▲ 増加</span>';
+  html += '<span style="color:#136631">▲ 増加</span>';
   html += '<span style="color:#790606">▼ 減少</span>';
   html += '</div>';
 
@@ -410,7 +410,7 @@ function buildOIChange() {
     html += '<div style="font-size:12px;color:#000915;font-weight:700;margin-bottom:8px">'+r.label+'</div>';
     // Put row
     var pW = Math.round(Math.abs(r.put)/max*45);
-    var pColor = r.put >= 0 ? '#146f35' : '#790606';
+    var pColor = r.put >= 0 ? '#136631' : '#790606';
     var pSign = r.put >= 0 ? '+' : '';
     var pDir = r.put >= 0 ? 'right' : 'left';
     html += '<div style="display:flex;align-items:center;height:32px;margin-bottom:4px">';
@@ -430,7 +430,7 @@ function buildOIChange() {
 
     // Call row
     var cW = Math.round(Math.abs(r.call)/max*45);
-    var cColor = r.call >= 0 ? '#146f35' : '#790606';
+    var cColor = r.call >= 0 ? '#136631' : '#790606';
     var cSign = r.call >= 0 ? '+' : '';
     html += '<div style="display:flex;align-items:center;height:32px">';
     html += '<div style="width:50px;font-size:11px;color:#043f87;text-align:right;padding-right:8px;font-weight:700;flex-shrink:0">CALL</div>';

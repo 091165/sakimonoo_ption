@@ -7,7 +7,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700&family=Noto+Sans+JP:wght@400;500;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#f9f5ee;--panel:#f2efeb;--card:#eae8e7;--border:#d5d4d9;--text:#0d0d19;--dim:#484865;--accent:#060f6b;--put:#790606;--call:#043f87;--atm:#745402;--up:#146f35;--dn:#9f0e0e;--us:#022c5c;--eu:#0e023f;--hf:#745402;--dom:#790606;--overseas:#043f87}
+:root{--bg:#f9f5ee;--panel:#f2efeb;--card:#eae8e7;--border:#d5d4d9;--text:#0d0d19;--dim:#484865;--accent:#060f6b;--put:#790606;--call:#043f87;--atm:#6a4d02;--up:#136631;--dn:#9f0e0e;--us:#022c5c;--eu:#0e023f;--hf:#6a4d02;--dom:#790606;--overseas:#043f87}
 *{margin:0;padding:0;box-sizing:border-box}
 body{background:var(--bg);color:var(--text);font-family:"Noto Sans JP","Outfit",sans-serif;font-size:14px;line-height:1.6}
 .mono{font-family:"DM Mono",monospace}
@@ -57,7 +57,7 @@ table.dt td{padding:5px 8px;border-bottom:1px solid rgba(213,212,217,0.5)}
 .sr-level .price{font-family:"DM Mono";font-weight:600;font-size:14px;min-width:70px}
 .sr-s{background:rgba(121,6,6,0.08);border-left:3px solid var(--put)}
 .sr-r{background:rgba(4,63,135,0.08);border-left:3px solid var(--call)}
-.range-box{display:flex;justify-content:center;gap:16px;margin:10px 0;padding:12px;background:rgba(116,84,2,0.06);border:1px solid rgba(116,84,2,0.15);border-radius:8px}
+.range-box{display:flex;justify-content:center;gap:16px;margin:10px 0;padding:12px;background:rgba(106,77,2,0.06);border:1px solid rgba(106,77,2,0.15);border-radius:8px}
 .range-box .rng{text-align:center}
 .range-box .rng .rl{font-size:10px;color:var(--dim)}
 .range-box .rng .rv{font-family:"DM Mono";font-size:16px;font-weight:600;color:var(--atm)}
@@ -69,7 +69,7 @@ table.dt td{padding:5px 8px;border-bottom:1px solid rgba(213,212,217,0.5)}
 .footer{text-align:center;padding:24px;color:var(--dim);font-size:11px;border-top:1px solid var(--border);margin-top:20px}
 .footer a{color:var(--accent);text-decoration:none;margin:0 8px}
 </style>
-<style>.wt-cell-pos-strong,.wt-cell-neg-strong,.latest-btn,.btn:not(.btn-outline),a[style*="background:var(--accent)"]{color:#fff!important}</style></head>
+<style>.wt-cell-pos-strong,.wt-cell-neg-strong,.latest-btn,.btn:not(.btn-outline),a[style*="background:var(--accent)"]{color:#fff!important}.wt-cell-pos-strong{background:#1f7a3d!important}.wt-cell-neg-strong{background:#a3262a!important}</style></head>
 <body>
 <div class="topbar">
 <div class="logo">JPXダッシュボード</div>
@@ -214,7 +214,7 @@ h+='<tr><td class="mono">49,000</td><td class="mono" style="color:var(--put)">1,
 h+='<tr><td class="mono">49,500</td><td class="mono" style="color:var(--put)">1,200</td><td class="mono">0</td><td class="mono" style="color:var(--call)">491</td><td class="mono">0</td></tr>';
 h+='<tr><td class="mono">50,000</td><td class="mono" style="color:var(--put)">3,629</td><td class="mono">0</td><td class="mono" style="color:var(--call)">1,575</td><td class="mono">0</td></tr>';
 h+='<tr><td class="mono">50,500</td><td class="mono" style="color:var(--put)">153</td><td class="mono">0</td><td class="mono" style="color:var(--call)">100</td><td class="mono">0</td></tr>';
-h+='<tr style="background:rgba(116,84,2,0.1)"><td class="mono">51,000 ATM</td><td class="mono" style="color:var(--put)">2,661</td><td class="mono">0</td><td class="mono" style="color:var(--call)">1,157</td><td class="mono">0</td></tr>';
+h+='<tr style="background:rgba(106,77,2,0.1)"><td class="mono">51,000 ATM</td><td class="mono" style="color:var(--put)">2,661</td><td class="mono">0</td><td class="mono" style="color:var(--call)">1,157</td><td class="mono">0</td></tr>';
 h+='<tr><td class="mono">51,500</td><td class="mono" style="color:var(--put)">1</td><td class="mono">0</td><td class="mono" style="color:var(--call)">6</td><td class="mono">0</td></tr>';
 h+='<tr><td class="mono">52,000</td><td class="mono" style="color:var(--put)">1,558</td><td class="mono">-5</td><td class="mono" style="color:var(--call)">726</td><td class="mono">0</td></tr>';
 h+='<tr><td class="mono">52,500</td><td class="mono" style="color:var(--put)">308</td><td class="mono">0</td><td class="mono" style="color:var(--call)">150</td><td class="mono">0</td></tr>';

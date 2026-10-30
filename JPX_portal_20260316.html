@@ -7,7 +7,7 @@
 <title>JPX Market Analysis — 2026.03.16</title>
 <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700&family=Noto+Sans+JP:wght@400;500;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#f9f5ee;--panel:#f2efeb;--card:#eae8e7;--border:#d5d4d9;--accent:#060f6b;--text:#0d0d19;--muted:#484865;--put:#790606;--call:#043f87;--atm:#745402;--up:#146f35;--dn:#9f0e0e;--us:#022c5c;--eu:#0e023f;--hf:#745402;--dom:#790606;--overseas:#043f87}
+:root{--bg:#f9f5ee;--panel:#f2efeb;--card:#eae8e7;--border:#d5d4d9;--accent:#060f6b;--text:#0d0d19;--muted:#484865;--put:#790606;--call:#043f87;--atm:#6a4d02;--up:#136631;--dn:#9f0e0e;--us:#022c5c;--eu:#0e023f;--hf:#6a4d02;--dom:#790606;--overseas:#043f87}
 *{margin:0;padding:0;box-sizing:border-box}
 body{background:var(--bg);color:var(--text);font-family:'Noto Sans JP','Outfit',sans-serif;line-height:1.6;min-height:100vh}
 a{color:var(--accent);text-decoration:none}
@@ -49,19 +49,19 @@ a{color:var(--accent);text-decoration:none}
 .tag{font-size:10px;padding:2px 7px;border-radius:4px;font-family:'DM Mono'}
 .tag-p{background:rgba(121,6,6,.12);color:var(--put)}
 .tag-c{background:rgba(4,63,135,.12);color:var(--call)}
-.tag-up{background:rgba(20,111,53,.12);color:var(--up)}
+.tag-up{background:rgba(19,102,49,.12);color:var(--up)}
 .tag-dn{background:rgba(159,14,14,.12);color:var(--dn)}
-.tag-atm{background:rgba(116,84,2,.12);color:var(--atm)}
+.tag-atm{background:rgba(106,77,2,.12);color:var(--atm)}
 .tag-us{background:rgba(2,44,92,.12);color:var(--us)}
 .tag-eu{background:rgba(14,2,63,.12);color:var(--eu)}
-.tag-hf{background:rgba(116,84,2,.12);color:var(--hf)}
+.tag-hf{background:rgba(106,77,2,.12);color:var(--hf)}
 .tag-dom{background:rgba(121,6,6,.12);color:var(--dom)}
 .card-detail{display:none;padding:14px}
 .card.open .card-detail{display:block}
 table.dt{width:100%;border-collapse:collapse;font-size:12px;margin:8px 0}
 table.dt th{background:var(--card);color:var(--muted);padding:6px 8px;text-align:left;font-weight:500;font-size:11px;border-bottom:1px solid var(--border)}
 table.dt td{padding:5px 8px;border-bottom:1px solid rgba(213,212,217,.5);font-family:'DM Mono';font-size:12px}
-table.dt tr.atm-row{background:rgba(116,84,2,.06)}
+table.dt tr.atm-row{background:rgba(106,77,2,.06)}
 .bar-row{display:flex;align-items:center;gap:6px;margin:3px 0;font-size:11px}
 .bar-label{width:90px;text-align:right;font-family:'DM Mono';font-size:11px;color:var(--muted);flex-shrink:0}
 .bar-track{flex:1;height:14px;background:var(--card);border-radius:3px;position:relative;overflow:hidden}
@@ -94,7 +94,7 @@ footer a{color:var(--accent);margin:0 8px}
 .bf-val-r{text-align:left}
 .pair-card{background:rgba(6,15,107,.06);border:1px solid rgba(6,15,107,.2);border-radius:8px;padding:8px 12px;margin:6px 0;font-size:12px}
 </style>
-<style>.wt-cell-pos-strong,.wt-cell-neg-strong,.latest-btn,.btn:not(.btn-outline),a[style*="background:var(--accent)"]{color:#fff!important}</style></head>
+<style>.wt-cell-pos-strong,.wt-cell-neg-strong,.latest-btn,.btn:not(.btn-outline),a[style*="background:var(--accent)"]{color:#fff!important}.wt-cell-pos-strong{background:#1f7a3d!important}.wt-cell-neg-strong{background:#a3262a!important}</style></head>
 <body>
 <div class="topbar">
 <div class="logo">JPX Derivatives</div>
@@ -245,7 +245,7 @@ for(var i=0;i<bdata.length;i++){
 var d=bdata[i];var k=d[0];var pOI=d[1];var cOI=d[3];
 var pW=pOI/mxOI*100;var cW=cOI/mxOI*100;
 var isATM=Math.abs(k-53530)<500;
-s+='<div class="bf-row'+(isATM?' style="background:rgba(116,84,2,.06)"':'')+'">';
+s+='<div class="bf-row'+(isATM?' style="background:rgba(106,77,2,.06)"':'')+'">';
 s+='<div class="bf-val bf-val-l" style="color:var(--put)">'+pOI.toLocaleString()+'</div>';
 s+='<div class="bf-left"><div class="bf-bar" style="width:'+pW+'%;background:var(--put)"></div></div>';
 s+='<div class="bf-label'+(isATM?' style="color:var(--atm);font-weight:700"':'')+'">'+k.toLocaleString()+'</div>';

@@ -6,7 +6,7 @@
 <title>JPX Market Dashboard — 2026年3月11日（水）</title>
 <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700&family=Noto+Sans+JP:wght@400;500;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#f9f5ee;--panel:#f2efeb;--card:#eae8e7;--border:#d5d4d9;--text:#0d0d19;--dim:#484865;--accent:#060f6b;--red:#790606;--green:#146f35;--blue:#043f87;--yellow:#745402;--put:#790606;--call:#043f87;--us:#022c5c;--eu:#0e023f;--hf:#745402;--dom:#790606}
+:root{--bg:#f9f5ee;--panel:#f2efeb;--card:#eae8e7;--border:#d5d4d9;--text:#0d0d19;--dim:#484865;--accent:#060f6b;--red:#790606;--green:#136631;--blue:#043f87;--yellow:#6a4d02;--put:#790606;--call:#043f87;--us:#022c5c;--eu:#0e023f;--hf:#6a4d02;--dom:#790606}
 *{margin:0;padding:0;box-sizing:border-box}
 body{background:var(--bg);color:var(--text);font-family:'Noto Sans JP',sans-serif;font-size:13px;line-height:1.6}
 a{color:var(--accent);text-decoration:none}
@@ -46,8 +46,8 @@ a{color:var(--accent);text-decoration:none}
 .tags{display:flex;flex-wrap:wrap;gap:4px;margin-top:6px}
 .tag{font-size:10px;padding:2px 7px;border-radius:4px;background:rgba(6,15,107,.12);color:var(--accent)}
 .tag-red{background:rgba(121,6,6,.12);color:var(--red)}
-.tag-green{background:rgba(20,111,53,.12);color:var(--green)}
-.tag-yellow{background:rgba(116,84,2,.12);color:var(--yellow)}
+.tag-green{background:rgba(19,102,49,.12);color:var(--green)}
+.tag-yellow{background:rgba(106,77,2,.12);color:var(--yellow)}
 .tag-blue{background:rgba(4,63,135,.12);color:var(--blue)}
 .bar-chart{margin:10px 0}
 .bar-row{display:flex;align-items:center;margin:3px 0;font-size:11px}
@@ -73,14 +73,14 @@ table.dt tr:hover{background:rgba(6,15,107,.04)}
 .profile-tag{display:inline-block;font-size:9px;padding:1px 6px;border-radius:3px;margin-right:3px}
 .pt-us{background:rgba(2,44,92,.15);color:var(--us)}
 .pt-eu{background:rgba(14,2,63,.15);color:var(--eu)}
-.pt-hf{background:rgba(116,84,2,.15);color:var(--hf)}
+.pt-hf{background:rgba(106,77,2,.15);color:var(--hf)}
 .pt-dom{background:rgba(121,6,6,.15);color:var(--dom)}
 footer{text-align:center;padding:20px;color:var(--dim);font-size:10px;border-top:1px solid var(--border);margin-top:20px}
 footer a{color:var(--accent);margin:0 8px}
 .sim-btn{display:inline-block;padding:10px 24px;background:var(--accent);color:#000000;border-radius:8px;text-decoration:none;font-family:Outfit;font-weight:600;font-size:13px}
 .gradient-bar{height:6px;border-radius:3px;margin:6px 0;background:linear-gradient(90deg,var(--put) 0%,var(--yellow) 50%,var(--call) 100%)}
 </style>
-<style>.wt-cell-pos-strong,.wt-cell-neg-strong,.latest-btn,.btn:not(.btn-outline),a[style*="background:var(--accent)"]{color:#fff!important}</style></head>
+<style>.wt-cell-pos-strong,.wt-cell-neg-strong,.latest-btn,.btn:not(.btn-outline),a[style*="background:var(--accent)"]{color:#fff!important}.wt-cell-pos-strong{background:#1f7a3d!important}.wt-cell-neg-strong{background:#a3262a!important}</style></head>
 <body>
 
 <div class="topbar">
@@ -332,7 +332,7 @@ function buildCard5(){
   var h='<div class="section-title">建玉分布 (2603限月, ATM=' + fmt(atm) + ')</div>';
   for(var i=0;i<strikes.length;i++){
     var s=strikes[i],isAtm=Math.abs(s-atm)<500;
-    var bg=isAtm?'background:rgba(116,84,2,.06);':'';
+    var bg=isAtm?'background:rgba(106,77,2,.06);':'';
     h+='<div class="butterfly" style="'+bg+'">';
     h+='<div class="bf-val" style="color:var(--put)">'+(pChg[i]>=0?'+':'')+pChg[i]+'</div>';
     h+='<div class="bf-val" style="color:var(--put)">'+fmt(pOI[i])+'</div>';
@@ -374,7 +374,7 @@ function buildCard6(){
 
 function buildCard7(){
   return '<div class="section-title">短期予想レンジ</div>'+
-    '<div style="position:relative;height:80px;background:linear-gradient(90deg,rgba(121,6,6,.1),rgba(116,84,2,.1),rgba(4,63,135,.1));border-radius:8px;margin:10px 0;padding:8px">'+
+    '<div style="position:relative;height:80px;background:linear-gradient(90deg,rgba(121,6,6,.1),rgba(106,77,2,.1),rgba(4,63,135,.1));border-radius:8px;margin:10px 0;padding:8px">'+
     '<div style="position:absolute;left:0;top:50%;transform:translateY(-50%);text-align:center;width:25%"><div style="font-size:10px;color:var(--dim)">サポート</div><div style="font-family:DM Mono;font-size:14px;color:var(--green)">52,000</div></div>'+
     '<div style="position:absolute;left:25%;top:50%;transform:translateY(-50%);text-align:center;width:25%"><div style="font-size:10px;color:var(--dim)">レンジ下限</div><div style="font-family:DM Mono;font-size:14px;color:var(--put)">54,000</div></div>'+
     '<div style="position:absolute;left:50%;top:50%;transform:translateY(-50%);text-align:center;width:25%"><div style="font-size:10px;color:var(--dim)">レンジ上限</div><div style="font-family:DM Mono;font-size:14px;color:var(--call)">56,500</div></div>'+
@@ -427,7 +427,7 @@ function buildCard9(){
     '🧱壁: 50,000 (6,906枚)<br>📊フロー: +488枚増<br>📈OTM確率: 99.9%<br>⚠️リスク: 中東全面戦争→原油150ドル超<br>→推奨: P50,000売/P48,000買のスプレッド</div></div>'+
     '<div class="sub-card" style="border-color:var(--green)"><h4>★★★★ OTMプット (50,000-53,000)</h4><div style="font-size:11px">'+
     '🧱壁: 52,000 (7,081枚)<br>📊フロー: 52,500 -669 / 53,000 -554 (利確進行)<br>📈OTM確率: 92-98%<br>→推奨: P52,000売/P50,000買</div></div>'+
-    '<div class="sub-card" style="border-color:rgba(116,84,2,.3)"><h4>ATM帯 (53,000-57,000) — 売り非推奨</h4><div style="font-size:11px">'+
+    '<div class="sub-card" style="border-color:rgba(106,77,2,.3)"><h4>ATM帯 (53,000-57,000) — 売り非推奨</h4><div style="font-size:11px">'+
     'SQ2日前でγリスク最大。ATM近傍のプレミアム売りは損益急変リスクが極めて高い。スプレッド以外は回避推奨。</div></div>'+
     '<div class="sub-card" style="border-color:var(--green)"><h4>★★★★ OTMコール (57,000-60,000)</h4><div style="font-size:11px">'+
     '🧱壁: 58,000 (5,210枚) / 60,000 (6,968枚)<br>📈OTM確率: 87-96%<br>🌏参加者: BofA C56,000で850枚→コール売り方向<br>→推奨: C58,000売/C60,000買</div></div>'+

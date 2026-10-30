@@ -10,8 +10,8 @@
 :root{
 --bg:#f9f5ee;--panel:#f2efeb;--card:#eae8e7;--card2:#e6e4e4;
 --border:#d4d6d8;--txt:#0d1219;--txt2:#3c495b;
---put:#790606;--call:#043f87;--atm:#745402;--up:#146f35;--dn:#9f0e0e;
---us:#022c5c;--eu:#0e023f;--hf:#745402;--dom:#790606;
+--put:#790606;--call:#043f87;--atm:#6a4d02;--up:#136631;--dn:#9f0e0e;
+--us:#022c5c;--eu:#0e023f;--hf:#6a4d02;--dom:#790606;
 }
 body{background:var(--bg);color:var(--txt);font-family:'Noto Sans JP','Outfit',sans-serif;overflow-x:hidden}
 .mono{font-family:'DM Mono',monospace}.outfit{font-family:'Outfit',sans-serif}
@@ -86,7 +86,7 @@ body{background:var(--bg);color:var(--txt);font-family:'Noto Sans JP','Outfit',s
 .bf-right{flex:1;display:flex;height:100%}
 .bf-bar{height:100%;border-radius:2px;min-width:1px}
 .bf-lbl{width:40px;text-align:center;font-family:'DM Mono';font-size:9px;color:var(--txt2);flex-shrink:0}
-.bf-atm{background:rgba(116,84,2,.08);border-radius:3px}
+.bf-atm{background:rgba(106,77,2,.08);border-radius:3px}
 .bf-atm .bf-lbl{color:var(--atm);font-weight:700}
 
 /* INSIGHT BOX */
@@ -127,7 +127,7 @@ body{background:var(--bg);color:var(--txt);font-family:'Noto Sans JP','Outfit',s
 footer{text-align:center;padding:20px;border-top:1px solid var(--border);color:var(--txt2);font-size:11px}
 footer a{color:var(--call);text-decoration:none}
 </style>
-<style>.wt-cell-pos-strong,.wt-cell-neg-strong,.latest-btn,.btn:not(.btn-outline),a[style*="background:var(--accent)"]{color:#fff!important}</style></head>
+<style>.wt-cell-pos-strong,.wt-cell-neg-strong,.latest-btn,.btn:not(.btn-outline),a[style*="background:var(--accent)"]{color:#fff!important}.wt-cell-pos-strong{background:#1f7a3d!important}.wt-cell-neg-strong{background:#a3262a!important}</style></head>
 <body>
 
 <!-- TOPBAR -->
@@ -167,12 +167,12 @@ footer a{color:var(--call);text-decoration:none}
     <div class="dcard-detail"><div class="dcard-sep"></div><div id="det-prem"></div></div>
   </div>
 
-  <div class="dcard" onclick="toggle(this)" style="--accent:#146f35">
+  <div class="dcard" onclick="toggle(this)" style="--accent:#136631">
     <div class="dcard-head"><span class="dcard-icon">📊</span><div class="dcard-info"><div class="dcard-title">④ オプション建玉増減</div><div class="dcard-preview">PUT +3,094 / CALL +10,127 — コール大幅増</div></div><div class="dcard-arrow">▼</div></div>
     <div class="dcard-detail"><div class="dcard-sep"></div><div id="det-oi"></div></div>
   </div>
 
-  <div class="dcard" onclick="toggle(this)" style="--accent:#9e4304">
+  <div class="dcard" onclick="toggle(this)" style="--accent:#943f04">
     <div class="dcard-head"><span class="dcard-icon">⚡</span><div class="dcard-info"><div class="dcard-title">⑤ 重要建玉変化</div><div class="dcard-preview"><span class="tag" style="background:#60a5fa22;color:#043f87">C61K +1,297</span><span class="tag" style="background:#f8717122;color:#790606">P50K -749</span><span class="tag" style="background:#f8717122;color:#790606">P47K +711</span></div></div><div class="dcard-arrow">▼</div></div>
     <div class="dcard-detail"><div class="dcard-sep"></div><div id="det-sig"></div></div>
   </div>
@@ -183,7 +183,7 @@ footer a{color:var(--call);text-decoration:none}
   </div>
 
   <div class="dcard" onclick="toggle(this)" style="--accent:#47ebd9">
-    <div class="dcard-head"><span class="dcard-icon">🏛</span><div class="dcard-info"><div class="dcard-title">⑦ 大口手口（J-NET）</div><div class="dcard-preview"><span class="tag" style="background:#fbbf2422;color:#745402">ABN×3</span><span class="tag" style="background:#93c5fd22;color:#022c5c">シティ225</span><span class="tag" style="background:#93c5fd22;color:#022c5c">JPM100</span> 計1,050枚</div></div><div class="dcard-arrow">▼</div></div>
+    <div class="dcard-head"><span class="dcard-icon">🏛</span><div class="dcard-info"><div class="dcard-title">⑦ 大口手口（J-NET）</div><div class="dcard-preview"><span class="tag" style="background:#fbbf2422;color:#6a4d02">ABN×3</span><span class="tag" style="background:#93c5fd22;color:#022c5c">シティ225</span><span class="tag" style="background:#93c5fd22;color:#022c5c">JPM100</span> 計1,050枚</div></div><div class="dcard-arrow">▼</div></div>
     <div class="dcard-detail"><div class="dcard-sep"></div><div id="det-flow"></div></div>
   </div>
 
@@ -294,17 +294,17 @@ function bBF(){
 
 function bFlow(){
   var h='<div style="font-size:12px;font-weight:700;margin-bottom:6px">対当ペア</div>';
-  h+='<div class="pcard"><div class="pcard-t">🔗 C2603-55,000 — 各225枚</div><div class="pcard-d"><span class="tag" style="background:#93c5fd22;color:#022c5c">米系</span>シティグループ ⇔ <span class="tag" style="background:#fbbf2422;color:#745402">HF代理</span>ＡＢＮクリアリン</div></div>';
-  h+='<div class="pcard"><div class="pcard-t">🔗 P2603-54,500 — 各100枚</div><div class="pcard-d"><span class="tag" style="background:#fbbf2422;color:#745402">HF代理</span>ＢＮＰパリバ ⇔ <span class="tag" style="background:#fbbf2422;color:#745402">HF代理</span>ＡＢＮクリアリン</div></div>';
+  h+='<div class="pcard"><div class="pcard-t">🔗 C2603-55,000 — 各225枚</div><div class="pcard-d"><span class="tag" style="background:#93c5fd22;color:#022c5c">米系</span>シティグループ ⇔ <span class="tag" style="background:#fbbf2422;color:#6a4d02">HF代理</span>ＡＢＮクリアリン</div></div>';
+  h+='<div class="pcard"><div class="pcard-t">🔗 P2603-54,500 — 各100枚</div><div class="pcard-d"><span class="tag" style="background:#fbbf2422;color:#6a4d02">HF代理</span>ＢＮＰパリバ ⇔ <span class="tag" style="background:#fbbf2422;color:#6a4d02">HF代理</span>ＡＢＮクリアリン</div></div>';
   h+='<div style="font-size:12px;font-weight:700;margin:12px 0 6px">手口一覧</div>';
   var rows=[
     ['C2603-55,000','シティグループ証券','米系','#022c5c',225],
-    ['C2603-55,000','ＡＢＮクリアリン証券','HF代理','#745402',225],
-    ['P2603-54,000','ＡＢＮクリアリン証券','HF代理','#745402',200],
+    ['C2603-55,000','ＡＢＮクリアリン証券','HF代理','#6a4d02',225],
+    ['P2603-54,000','ＡＢＮクリアリン証券','HF代理','#6a4d02',200],
     ['P2603-54,000','ＪＰモルガン証券','米系','#022c5c',100],
     ['P2603-54,000','大和証券','国内','#790606',100],
-    ['P2603-54,500','ＢＮＰパリバ証券','HF代理','#745402',100],
-    ['P2603-54,500','ＡＢＮクリアリン証券','HF代理','#745402',100]
+    ['P2603-54,500','ＢＮＰパリバ証券','HF代理','#6a4d02',100],
+    ['P2603-54,500','ＡＢＮクリアリン証券','HF代理','#6a4d02',100]
   ];
   h+='<div style="overflow-x:auto"><table class="dtable"><thead><tr><th>銘柄</th><th>参加者</th><th>分類</th><th style="text-align:right">枚数</th></tr></thead><tbody>';
   rows.forEach(function(r){
@@ -322,7 +322,7 @@ function bOut(){
     {p:'58,000',l:'R3 — C建玉5,970枚集中',c:'var(--call)',bg:'rgba(4,63,135,.06)'},
     {p:'57,000',l:'R2 — C建玉4,061枚の壁',c:'var(--call)',bg:'rgba(4,63,135,.06)'},
     {p:'55,000',l:'R1 — C5,589枚+ABN対当(蓋)',c:'var(--call)',bg:'rgba(4,63,135,.06)'},
-    {p:'54,250',l:'◆ ATM（先物清算値）',c:'var(--atm)',bg:'rgba(116,84,2,.1)'},
+    {p:'54,250',l:'◆ ATM（先物清算値）',c:'var(--atm)',bg:'rgba(106,77,2,.1)'},
     {p:'52,000',l:'S1 — P建玉5,957枚 第2支持',c:'var(--put)',bg:'rgba(121,6,6,.06)'},
     {p:'50,000',l:'S2 — P最大7,466枚+心理節目',c:'var(--put)',bg:'rgba(121,6,6,.06)'}
   ];
@@ -332,8 +332,8 @@ function bOut(){
   });
   h+='<div style="text-align:center;padding:14px;margin:14px 0;border-radius:8px;background:linear-gradient(135deg,rgba(12,14,133,.1),rgba(48,8,139,.1));border:1px solid rgba(12,14,133,.2)"><div style="font-size:10px;color:var(--txt2);margin-bottom:3px">SQ（3/12）短期予想レンジ</div><div class="mono" style="font-size:24px;font-weight:900">50,000 <span style="color:#0c0e85;font-size:14px">〜</span> 55,000</div><div style="font-size:10px;color:var(--txt2);margin-top:4px">VI急騰下のハイボラ環境、中東情勢次第で±3,000円の振幅</div></div>';
   var cards=[
-    {i:'⚡',t:'需給の歪み',b:'mini建玉+67,640枚の爆発的増加。個人・短期勢のパニック売り/逆張り買いが混在。ラージ+8,132枚で機関は冷静。TOPIX+7,787は年金リバランス。',tags:'<span class="tag" style="background:#ef444422;color:#9f0e0e">mini爆増</span><span class="tag" style="background:#4ade8022;color:#146f35">年金買い</span>'},
-    {i:'🔍',t:'手口の解釈',b:'ABNクリアリン（HF代理）がC55,000売り+P54,000-54,500買いのカラー構築。55,000円が「上値の蓋」。シティ/JPモルガンがATM近辺で活動。大和がP54,000で国内ヘッジ。',tags:'<span class="tag" style="background:#60a5fa22;color:#043f87">55K蓋</span><span class="tag" style="background:#fbbf2422;color:#745402">ABNカラー</span>'},
+    {i:'⚡',t:'需給の歪み',b:'mini建玉+67,640枚の爆発的増加。個人・短期勢のパニック売り/逆張り買いが混在。ラージ+8,132枚で機関は冷静。TOPIX+7,787は年金リバランス。',tags:'<span class="tag" style="background:#ef444422;color:#9f0e0e">mini爆増</span><span class="tag" style="background:#4ade8022;color:#136631">年金買い</span>'},
+    {i:'🔍',t:'手口の解釈',b:'ABNクリアリン（HF代理）がC55,000売り+P54,000-54,500買いのカラー構築。55,000円が「上値の蓋」。シティ/JPモルガンがATM近辺で活動。大和がP54,000で国内ヘッジ。',tags:'<span class="tag" style="background:#60a5fa22;color:#043f87">55K蓋</span><span class="tag" style="background:#fbbf2422;color:#6a4d02">ABNカラー</span>'},
     {i:'📊',t:'建玉変動',b:'コール+10,127枚は急落局面のプレミアム収入狙いコール売り。3月限P-1,487はSQ前利確。4月限C61,000+1,297が中期上値目処。P25,000+703テールヘッジ急増。',tags:'<span class="tag" style="background:#ef444422;color:#9f0e0e">C売り増</span><span class="tag" style="background:#c4b5fd22;color:#0e023f">テールヘッジ</span>'},
     {i:'🎯',t:'結論',b:'VI 56超のハイボラ環境。3月SQまでの予想レンジ50,000-55,000円。中東情勢（イラン攻撃の拡大/収束）が最大変数。原油高→インフレ懸念、3月期末の年金売りも重荷。早期収束なら55,000-57,000円への急反発余地。',tags:'<span class="tag" style="background:#c4b5fd22;color:#0e023f">50K-55K</span><span class="tag" style="background:#ef444422;color:#9f0e0e">VI急騰</span>'}
   ];

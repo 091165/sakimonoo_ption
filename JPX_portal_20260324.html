@@ -5,7 +5,7 @@
 <style>
 
 *{margin:0;padding:0;box-sizing:border-box}
-:root{--bg:#f9f5ee;--panel:#f2efeb;--card:#eae8e7;--border:#d5d4d9;--text:#0d0d19;--dim:#484865;--accent:#060f6b;--put:#790606;--call:#043f87;--atm:#745402;--up:#146f35;--down:#9f0e0e;--us:#022c5c;--eu:#0e023f;--hf:#745402;--dom:#790606;--overseas:#043f87}
+:root{--bg:#f9f5ee;--panel:#f2efeb;--card:#eae8e7;--border:#d5d4d9;--text:#0d0d19;--dim:#484865;--accent:#060f6b;--put:#790606;--call:#043f87;--atm:#6a4d02;--up:#136631;--down:#9f0e0e;--us:#022c5c;--eu:#0e023f;--hf:#6a4d02;--dom:#790606;--overseas:#043f87}
 body{background:var(--bg);color:var(--text);font-family:'Noto Sans JP',sans-serif;font-size:14px;line-height:1.6}
 .mono{font-family:'DM Mono',monospace}
 .topbar{position:sticky;top:0;z-index:100;background:rgba(249,245,238,.92);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);padding:10px 20px;display:flex;align-items:center;justify-content:space-between}
@@ -45,11 +45,11 @@ body{background:var(--bg);color:var(--text);font-family:'Noto Sans JP',sans-seri
 .tag{display:inline-block;font-size:11px;padding:2px 8px;border-radius:4px;margin:2px}
 .tag-p{background:rgba(121,6,6,.15);color:var(--put)}
 .tag-c{background:rgba(4,63,135,.15);color:var(--call)}
-.tag-up{background:rgba(20,111,53,.15);color:var(--up)}
+.tag-up{background:rgba(19,102,49,.15);color:var(--up)}
 .tag-down{background:rgba(159,14,14,.15);color:var(--down)}
 .tag-us{background:rgba(2,44,92,.12);color:var(--us)}
 .tag-eu{background:rgba(14,2,63,.12);color:var(--eu)}
-.tag-hf{background:rgba(116,84,2,.12);color:var(--hf)}
+.tag-hf{background:rgba(106,77,2,.12);color:var(--hf)}
 .tag-dom{background:rgba(121,6,6,.12);color:var(--dom)}
 .butterfly{margin:10px 0}
 .bf-row{display:flex;align-items:center;margin:2px 0;font-size:11px}
@@ -66,7 +66,7 @@ table.dt{width:100%;border-collapse:collapse;font-size:12px;margin:10px 0}
 table.dt th{background:rgba(0,0,0,.04);padding:6px 8px;text-align:left;font-weight:500;border-bottom:1px solid var(--border);font-size:11px;color:var(--dim)}
 table.dt td{padding:5px 8px;border-bottom:1px solid rgba(0,0,0,.03);font-family:'DM Mono';font-size:11px}
 table.dt tr:hover{background:rgba(0,0,0,.02)}
-.range-box{background:rgba(116,84,2,.08);border:1px solid rgba(116,84,2,.2);border-radius:8px;padding:10px;margin:10px 0;text-align:center}
+.range-box{background:rgba(106,77,2,.08);border:1px solid rgba(106,77,2,.2);border-radius:8px;padding:10px;margin:10px 0;text-align:center}
 .range-box .rt{font-size:11px;color:var(--atm)}
 .range-box .rv{font-family:'DM Mono';font-size:16px;font-weight:600;margin-top:4px}
 .sr-level{display:flex;align-items:center;gap:8px;margin:4px 0;font-size:12px}
@@ -81,7 +81,7 @@ footer{text-align:center;padding:24px 16px;border-top:1px solid var(--border);co
 footer a{color:var(--accent);text-decoration:none}
 .sim-btn{display:inline-block;padding:10px 24px;background:var(--accent);color:#000000;border-radius:8px;text-decoration:none;font-family:Outfit;font-weight:600;font-size:13px}
 
-</style><style>.wt-cell-pos-strong,.wt-cell-neg-strong,.latest-btn,.btn:not(.btn-outline),a[style*="background:var(--accent)"]{color:#fff!important}</style></head><body>
+</style><style>.wt-cell-pos-strong,.wt-cell-neg-strong,.latest-btn,.btn:not(.btn-outline),a[style*="background:var(--accent)"]{color:#fff!important}.wt-cell-pos-strong{background:#1f7a3d!important}.wt-cell-neg-strong{background:#a3262a!important}</style></head><body>
 <div class="topbar">
 <div class="logo">JPX Dashboard</div>
 <nav>
@@ -274,7 +274,7 @@ h+="<tr><td><span class='tag tag-us'>GS</span></td><td class=mono>C2604-53000</t
 h+="<tr><td><span class='tag tag-us'>JPM</span></td><td class=mono>C2604-53000</td><td class=mono>100</td><td>&#x7C73;&#x7CFB;</td></tr>";
 h+="<tr><td><span class='tag tag-us'>BofA</span></td><td class=mono>C2604-53000</td><td class=mono>100</td><td>&#x7C73;&#x7CFB;</td></tr>";
 h+="</table>";
-h+="<div style='background:rgba(116,84,2,.08);border:1px solid rgba(116,84,2,.2);border-radius:8px;padding:10px;margin:10px 0'>";
+h+="<div style='background:rgba(106,77,2,.08);border:1px solid rgba(106,77,2,.2);border-radius:8px;padding:10px;margin:10px 0'>";
 h+="<div style=font-size:12px;font-weight:600;color:var(--atm)>&#x5BFE;&#x5F53;&#x30DA;&#x30A2;</div>";
 h+="<div style=font-size:12px;margin-top:4px;color:var(--dim)>ABN 325&#x679A; vs GS+JPM+BofA (100+100+100) &#xFF5C; C2604-53000&#x3002;HF&#x4EE3;&#x7406;&#x304C;&#x7C73;&#x7CFB;3&#x793E;&#x306B;&#x30B3;&#x30FC;&#x30EB;&#x58F2;&#x308A;&#xFF1D;53,000&#x5186;&#x306B;&#x4E0A;&#x5024;&#x306E;&#x84CB;&#x8A2D;&#x5B9A;&#x3002;</div>";
 h+="</div>";

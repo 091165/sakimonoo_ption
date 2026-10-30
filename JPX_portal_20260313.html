@@ -9,9 +9,9 @@
 :root{
 --bg:#f9f5ee;--panel:#f2efeb;--card:#eae8e7;--card-hover:#dcdbdf;
 --border:#d5d4d9;--text:#0d0d19;--muted:#484865;--accent:#060f6b;
---red:#790606;--green:#146f35;--blue:#043f87;--yellow:#745402;
+--red:#790606;--green:#136631;--blue:#043f87;--yellow:#6a4d02;
 --put:#790606;--call:#043f87;
---us:#022c5c;--eu:#0e023f;--hf:#745402;--dom:#790606;
+--us:#022c5c;--eu:#0e023f;--hf:#6a4d02;--dom:#790606;
 }
 *{margin:0;padding:0;box-sizing:border-box}
 body{background:var(--bg);color:var(--text);font-family:'Noto Sans JP',sans-serif;font-size:13px;line-height:1.6}
@@ -70,7 +70,7 @@ td.num{font-family:'DM Mono';text-align:right}
 footer{text-align:center;padding:24px;color:var(--muted);font-size:11px;border-top:1px solid var(--border);margin-top:20px}
 footer a{color:var(--accent);text-decoration:none}
 </style>
-<style>.wt-cell-pos-strong,.wt-cell-neg-strong,.latest-btn,.btn:not(.btn-outline),a[style*="background:var(--accent)"]{color:#fff!important}</style></head>
+<style>.wt-cell-pos-strong,.wt-cell-neg-strong,.latest-btn,.btn:not(.btn-outline),a[style*="background:var(--accent)"]{color:#fff!important}.wt-cell-pos-strong{background:#1f7a3d!important}.wt-cell-neg-strong{background:#a3262a!important}</style></head>
 <body>
 <div class="topbar">
 <div class="logo">JPX Dashboard</div>
@@ -310,7 +310,7 @@ function buildDetail(card){
       break;
     case 'd7':
       h='<div style="display:flex;gap:12px;flex-wrap:wrap;margin-bottom:12px">';
-      h+='<div style="flex:1;min-width:200px;background:rgba(20,111,53,.05);border:1px solid rgba(20,111,53,.15);border-radius:8px;padding:10px">';
+      h+='<div style="flex:1;min-width:200px;background:rgba(19,102,49,.05);border:1px solid rgba(19,102,49,.15);border-radius:8px;padding:10px">';
       h+='<div style="font-size:10px;color:var(--green)">サポート</div>';
       h+='<div style="font-family:DM Mono;font-size:14px">S1: 53,000 / S2: 50,000 / S3: 48,500</div></div>';
       h+='<div style="flex:1;min-width:200px;background:rgba(121,6,6,.05);border:1px solid rgba(121,6,6,.15);border-radius:8px;padding:10px">';

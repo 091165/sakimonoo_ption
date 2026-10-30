@@ -22,12 +22,17 @@ import sys
 MARKER = '<!--theme:warm-->'
 CREAM = (0.988, 0.965, 0.918)
 CARD = (222, 222, 222)   # darkest themed surface (table headers); text must read on it
-MIN_RATIO = 4.6          # WCAG AA for body text, with a little margin
+MIN_RATIO = 5.2          # WCAG AA (4.5) with room for the tinted fills that
+                         # sit under coloured text (light green/red cells, chips)
 # Rules added after re-colouring: white text that sat on a coloured fill
 # (strong table cells, accent buttons) stays white, because the fill turns
 # dark too and inverting the text would leave dark on dark.
+# The strong cells' fill is translucent; over cream it lands mid-tone, too
+# light for white text, so it is made solid.
 EXTRA_CSS = ('<style>.wt-cell-pos-strong,.wt-cell-neg-strong,.latest-btn,.btn:not(.btn-outline),'
-             'a[style*="background:var(--accent)"]{color:#fff!important}</style>')
+             'a[style*="background:var(--accent)"]{color:#fff!important}'
+             '.wt-cell-pos-strong{background:#1f7a3d!important}'
+             '.wt-cell-neg-strong{background:#a3262a!important}</style>')
 
 
 def _lum(c):

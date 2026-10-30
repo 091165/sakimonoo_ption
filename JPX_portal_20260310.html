@@ -7,7 +7,7 @@
 <title>JPX市場分析 54,248円 | 2026.03.10</title>
 <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700&family=Noto+Sans+JP:wght@400;500;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#f9f5ee;--panel:#f2efeb;--card:#eae8e7;--border:#d5d4d9;--text:#0d0d19;--muted:#484865;--accent:#060f6b;--put:#790606;--call:#043f87;--atm:#745402;--inc:#146f35;--dec:#9f0e0e;--us:#022c5c;--eu:#0e023f;--hf:#745402;--jp:#790606}
+:root{--bg:#f9f5ee;--panel:#f2efeb;--card:#eae8e7;--border:#d5d4d9;--text:#0d0d19;--muted:#484865;--accent:#060f6b;--put:#790606;--call:#043f87;--atm:#6a4d02;--inc:#136631;--dec:#9f0e0e;--us:#022c5c;--eu:#0e023f;--hf:#6a4d02;--jp:#790606}
 *{margin:0;padding:0;box-sizing:border-box}
 body{background:var(--bg);color:var(--text);font-family:'Noto Sans JP',sans-serif;font-size:13px;line-height:1.6}
 .topbar{position:sticky;top:0;z-index:100;background:rgba(249,245,238,.92);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);padding:10px 20px;display:flex;justify-content:space-between;align-items:center}
@@ -41,12 +41,12 @@ body{background:var(--bg);color:var(--text);font-family:'Noto Sans JP',sans-seri
 .inc{color:var(--inc)}.dec{color:var(--dec)}
 .tag{display:inline-block;padding:2px 8px;border-radius:4px;font-size:10px;font-family:'DM Mono';margin:2px}
 .tag.put{background:rgba(121,6,6,.15);color:var(--put)}.tag.call{background:rgba(4,63,135,.15);color:var(--call)}
-.tag.inc{background:rgba(20,111,53,.12);color:var(--inc)}.tag.dec{background:rgba(159,14,14,.12);color:var(--dec)}
+.tag.inc{background:rgba(19,102,49,.12);color:var(--inc)}.tag.dec{background:rgba(159,14,14,.12);color:var(--dec)}
 .insight{background:rgba(6,15,107,.06);border:1px solid rgba(6,15,107,.15);border-radius:8px;padding:12px;margin-top:12px;font-size:12px;line-height:1.7}
 .insight b{color:var(--accent)}
 /* Butterfly chart */
 .bf-row{display:grid;grid-template-columns:1fr 90px 70px 90px 1fr;align-items:center;gap:4px;padding:2px 0;font-size:11px}
-.bf-row.atm-row{background:rgba(116,84,2,.08);border-radius:4px}
+.bf-row.atm-row{background:rgba(106,77,2,.08);border-radius:4px}
 .bf-p-bar{display:flex;justify-content:flex-end}.bf-c-bar{display:flex}
 .bf-bar{height:14px;border-radius:2px}.bf-bar.put{background:var(--put)}.bf-bar.call{background:var(--call)}
 .bf-strike{text-align:center;font-family:'DM Mono';font-weight:500;color:var(--atm)}
@@ -73,7 +73,7 @@ body{background:var(--bg);color:var(--text);font-family:'Noto Sans JP',sans-seri
 .pt-profile{margin-top:14px}.pt-profile h4{font-size:13px;margin-bottom:8px;color:var(--accent);font-family:Outfit}
 .pf-row{display:flex;align-items:center;gap:8px;padding:4px 0;font-size:11px;border-bottom:1px solid var(--border)}
 .pf-name{min-width:120px;font-weight:500}.pf-tag{padding:2px 8px;border-radius:4px;font-size:10px;font-family:'DM Mono'}
-.pf-tag.bear{background:rgba(159,14,14,.15);color:var(--dec)}.pf-tag.bull{background:rgba(20,111,53,.12);color:var(--inc)}
+.pf-tag.bear{background:rgba(159,14,14,.15);color:var(--dec)}.pf-tag.bull{background:rgba(19,102,49,.12);color:var(--inc)}
 .pf-tag.neutral{background:rgba(6,15,107,.1);color:var(--accent)}
 /* Strategy map */
 .sm-compare{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px}
@@ -103,7 +103,7 @@ body{background:var(--bg);color:var(--text);font-family:'Noto Sans JP',sans-seri
 .a-card h5{color:var(--accent);font-size:12px;margin-bottom:6px;font-family:Outfit}
 @media(max-width:768px){.grid{grid-template-columns:1fr}.sm-compare,.pt-summary,.analysis-cards{grid-template-columns:1fr}.bf-row{font-size:10px}.kpi-strip{gap:12px}}
 </style>
-<style>.wt-cell-pos-strong,.wt-cell-neg-strong,.latest-btn,.btn:not(.btn-outline),a[style*="background:var(--accent)"]{color:#fff!important}</style></head>
+<style>.wt-cell-pos-strong,.wt-cell-neg-strong,.latest-btn,.btn:not(.btn-outline),a[style*="background:var(--accent)"]{color:#fff!important}.wt-cell-pos-strong{background:#1f7a3d!important}.wt-cell-neg-strong{background:#a3262a!important}</style></head>
 <body>
 <div class="topbar">
 <div class="topbar-logo">JPX Derivatives</div>
@@ -388,25 +388,25 @@ P合計: <span class="inc">+2,063</span> / C合計: <span class="inc">+3,686</sp
 <div class="card" onclick="toggle(this,6)">
 <div class="card-head"><span class="card-icon">🏛</span><span class="card-title">大口手口（J-NET）</span></div>
 <div class="card-preview">
-<span class="tag" style="background:rgba(116,84,2,.12);color:#745402">ABN 600+400</span>
+<span class="tag" style="background:rgba(106,77,2,.12);color:#6a4d02">ABN 600+400</span>
 <span class="tag" style="background:rgba(121,6,6,.12);color:var(--jp)">野村 600+200</span>
 <span class="tag" style="background:rgba(2,44,92,.12);color:var(--us)">Goldman 450</span>
 </div>
-<div class="card-detail" id="d6"><div class="jt-row"><span class="jt-inst put">P54000</span><span class="jt-name" style="color:#745402">ＡＢＮクリアリン</span><div class="jt-bar-wrap"><div class="jt-bar" style="width:100%;background:#745402"></div></div><span class="jt-vol">600</span></div>
+<div class="card-detail" id="d6"><div class="jt-row"><span class="jt-inst put">P54000</span><span class="jt-name" style="color:#6a4d02">ＡＢＮクリアリン</span><div class="jt-bar-wrap"><div class="jt-bar" style="width:100%;background:#6a4d02"></div></div><span class="jt-vol">600</span></div>
 <div class="jt-row"><span class="jt-inst put">P54000</span><span class="jt-name" style="color:#022c5c">ゴールドマン</span><div class="jt-bar-wrap"><div class="jt-bar" style="width:75%;background:#022c5c"></div></div><span class="jt-vol">450</span></div>
 <div class="jt-row"><span class="jt-inst put">P54000</span><span class="jt-name" style="color:#022c5c">ＪＰモルガン</span><div class="jt-bar-wrap"><div class="jt-bar" style="width:50%;background:#022c5c"></div></div><span class="jt-vol">300</span></div>
 <div class="jt-row"><span class="jt-inst put">P54000</span><span class="jt-name" style="color:#790606">野村</span><div class="jt-bar-wrap"><div class="jt-bar" style="width:33%;background:#790606"></div></div><span class="jt-vol">200</span></div>
 <div class="jt-row"><span class="jt-inst put">P54000</span><span class="jt-name" style="color:#790606">三菱ＵＦＪ</span><div class="jt-bar-wrap"><div class="jt-bar" style="width:25%;background:#790606"></div></div><span class="jt-vol">150</span></div>
 <div class="jt-row"><span class="jt-inst put">P54000</span><span class="jt-name" style="color:#0e023f">バークレイズ</span><div class="jt-bar-wrap"><div class="jt-bar" style="width:25%;background:#0e023f"></div></div><span class="jt-vol">150</span></div>
-<div class="jt-row"><span class="jt-inst put">P54000</span><span class="jt-name" style="color:#745402">ＢＮＰパリバ</span><div class="jt-bar-wrap"><div class="jt-bar" style="width:17%;background:#745402"></div></div><span class="jt-vol">100</span></div>
+<div class="jt-row"><span class="jt-inst put">P54000</span><span class="jt-name" style="color:#6a4d02">ＢＮＰパリバ</span><div class="jt-bar-wrap"><div class="jt-bar" style="width:17%;background:#6a4d02"></div></div><span class="jt-vol">100</span></div>
 <div class="jt-row"><span class="jt-inst call">C55000</span><span class="jt-name" style="color:#790606">野村</span><div class="jt-bar-wrap"><div class="jt-bar" style="width:100%;background:#790606"></div></div><span class="jt-vol">600</span></div>
-<div class="jt-row"><span class="jt-inst call">C55000</span><span class="jt-name" style="color:#745402">ＢＮＰパリバ</span><div class="jt-bar-wrap"><div class="jt-bar" style="width:67%;background:#745402"></div></div><span class="jt-vol">400</span></div>
-<div class="jt-row"><span class="jt-inst call">C55000</span><span class="jt-name" style="color:#745402">ＡＢＮクリアリン</span><div class="jt-bar-wrap"><div class="jt-bar" style="width:67%;background:#745402"></div></div><span class="jt-vol">400</span></div>
+<div class="jt-row"><span class="jt-inst call">C55000</span><span class="jt-name" style="color:#6a4d02">ＢＮＰパリバ</span><div class="jt-bar-wrap"><div class="jt-bar" style="width:67%;background:#6a4d02"></div></div><span class="jt-vol">400</span></div>
+<div class="jt-row"><span class="jt-inst call">C55000</span><span class="jt-name" style="color:#6a4d02">ＡＢＮクリアリン</span><div class="jt-bar-wrap"><div class="jt-bar" style="width:67%;background:#6a4d02"></div></div><span class="jt-vol">400</span></div>
 <div class="jt-row"><span class="jt-inst call">C55000</span><span class="jt-name" style="color:#022c5c">ＪＰモルガン</span><div class="jt-bar-wrap"><div class="jt-bar" style="width:50%;background:#022c5c"></div></div><span class="jt-vol">300</span></div>
 <div class="jt-row"><span class="jt-inst call">C55000</span><span class="jt-name" style="color:#790606">みずほ</span><div class="jt-bar-wrap"><div class="jt-bar" style="width:33%;background:#790606"></div></div><span class="jt-vol">200</span></div>
 <div class="jt-row"><span class="jt-inst call">C55000</span><span class="jt-name" style="color:#022c5c">シティ</span><div class="jt-bar-wrap"><div class="jt-bar" style="width:33%;background:#022c5c"></div></div><span class="jt-vol">200</span></div>
 <div class="jt-row"><span class="jt-inst call">C54500</span><span class="jt-name" style="color:#790606">三菱ＵＦＪ</span><div class="jt-bar-wrap"><div class="jt-bar" style="width:25%;background:#790606"></div></div><span class="jt-vol">150</span></div>
-<div class="jt-row"><span class="jt-inst call">C54500</span><span class="jt-name" style="color:#745402">ＡＢＮクリアリン</span><div class="jt-bar-wrap"><div class="jt-bar" style="width:25%;background:#745402"></div></div><span class="jt-vol">150</span></div>
+<div class="jt-row"><span class="jt-inst call">C54500</span><span class="jt-name" style="color:#6a4d02">ＡＢＮクリアリン</span><div class="jt-bar-wrap"><div class="jt-bar" style="width:25%;background:#6a4d02"></div></div><span class="jt-vol">150</span></div>
 <div class="jt-row"><span class="jt-inst call">C54000</span><span class="jt-name" style="color:#022c5c">ＪＰモルガン</span><div class="jt-bar-wrap"><div class="jt-bar" style="width:33%;background:#022c5c"></div></div><span class="jt-vol">200</span></div>
 <div class="jt-row"><span class="jt-inst call">C54000</span><span class="jt-name" style="color:#790606">野村</span><div class="jt-bar-wrap"><div class="jt-bar" style="width:33%;background:#790606"></div></div><span class="jt-vol">200</span></div>
 
@@ -435,7 +435,7 @@ P合計: <span class="inc">+2,063</span> / C合計: <span class="inc">+3,686</sp
 <div style="width:40px;height:4px;background:var(--dec);border-radius:2px"></div>
 <span style="color:var(--dec)">58,000</span>
 </div>
-<div style="text-align:center;margin-bottom:14px;padding:10px;background:rgba(116,84,2,.06);border:1px solid rgba(116,84,2,.15);border-radius:8px">
+<div style="text-align:center;margin-bottom:14px;padding:10px;background:rgba(106,77,2,.06);border:1px solid rgba(106,77,2,.15);border-radius:8px">
 <div style="font-family:Outfit;font-weight:600;color:var(--atm);font-size:14px">SQ着地予想レンジ: 52,500 〜 56,000</div>
 <div style="color:var(--muted);font-size:11px;margin-top:4px">中央値: 54,250付近 ｜ VI=41.3環境</div>
 </div>
@@ -475,7 +475,7 @@ P合計: <span class="inc">+2,063</span> / C合計: <span class="inc">+3,686</sp
 <div class="pf-row"><span class="pf-name" style="color:#022c5c">Goldman 米系</span><span class="dec">N225−11,749 / TOPIX−45,116</span><span class="pf-tag bear">TOPIXベア</span></div>
 <div class="pf-row"><span class="pf-name" style="color:#790606">野村 国内</span><span class="inc">N225+22,190 / P+440</span><span class="pf-tag bull">N225ブル</span></div>
 <div class="pf-row"><span class="pf-name" style="color:#022c5c">JPM 米系</span><span class="inc">N225+8,659 / P売−429</span><span class="pf-tag neutral">カバードP</span></div>
-<div class="pf-row"><span class="pf-name" style="color:#745402">ABN HF代理</span><span class="inc">N225+5,162 / P+361</span><span class="pf-tag neutral">プロテクティブ</span></div>
+<div class="pf-row"><span class="pf-name" style="color:#6a4d02">ABN HF代理</span><span class="inc">N225+5,162 / P+361</span><span class="pf-tag neutral">プロテクティブ</span></div>
 </div>
 <div class="insight"><b>海外全方位ベア vs 国内リスクテイク</b>: HSBC(−28,000)+Goldman(TOPIX−45,000)が最大ショート。野村(+22,190)が単独で国内ブルを牽引。ABNはN225ロング+プット買い=プロテクティブ。3/6時点、次回3/17更新。</div>
 </div>

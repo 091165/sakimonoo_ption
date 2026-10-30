@@ -9,7 +9,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700&family=Noto+Sans+JP:wght@400;500;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-:root{--bg:#f9f5ee;--panel:#f2efeb;--card:#eae8e7;--border:#d5d4d9;--text:#0d0d19;--muted:#484865;--accent:#060f6b;--put:#790606;--call:#043f87;--atm:#745402;--up:#146f35;--dn:#9f0e0e;--us:#022c5c;--eu:#0e023f;--hf:#745402;--dom:#790606;--overseas:#043f87}
+:root{--bg:#f9f5ee;--panel:#f2efeb;--card:#eae8e7;--border:#d5d4d9;--text:#0d0d19;--muted:#484865;--accent:#060f6b;--put:#790606;--call:#043f87;--atm:#6a4d02;--up:#136631;--dn:#9f0e0e;--us:#022c5c;--eu:#0e023f;--hf:#6a4d02;--dom:#790606;--overseas:#043f87}
 body{background:var(--bg);color:var(--text);font-family:'Noto Sans JP',sans-serif;font-size:14px;line-height:1.6}
 .mono{font-family:'DM Mono',monospace}.outfit{font-family:'Outfit',sans-serif}
 a{color:var(--accent);text-decoration:none}a:hover{text-decoration:underline}
@@ -38,9 +38,9 @@ a{color:var(--accent);text-decoration:none}a:hover{text-decoration:underline}
 .tags{display:flex;flex-wrap:wrap;gap:4px;margin-top:6px}
 .tag{display:inline-block;padding:2px 8px;border-radius:4px;font-size:11px;font-family:'DM Mono';background:rgba(6,15,107,.12);color:var(--accent)}
 .tag-p{background:rgba(121,6,6,.12);color:var(--put)}.tag-c{background:rgba(4,63,135,.12);color:var(--call)}
-.tag-up{background:rgba(20,111,53,.12);color:var(--up)}.tag-dn{background:rgba(159,14,14,.12);color:var(--dn)}
+.tag-up{background:rgba(19,102,49,.12);color:var(--up)}.tag-dn{background:rgba(159,14,14,.12);color:var(--dn)}
 .tag-us{background:rgba(2,44,92,.12);color:var(--us)}.tag-eu{background:rgba(14,2,63,.12);color:var(--eu)}
-.tag-hf{background:rgba(116,84,2,.12);color:var(--hf)}.tag-dom{background:rgba(121,6,6,.12);color:var(--dom)}
+.tag-hf{background:rgba(106,77,2,.12);color:var(--hf)}.tag-dom{background:rgba(121,6,6,.12);color:var(--dom)}
 .dtable{width:100%;border-collapse:collapse;font-size:12px;margin:10px 0}
 .dtable th{text-align:left;padding:6px 8px;color:var(--muted);font-weight:500;border-bottom:1px solid var(--border);font-size:11px}
 .dtable td{padding:5px 8px;border-bottom:1px solid rgba(213,212,217,.5)}.dtable .mono{font-family:'DM Mono'}
@@ -53,7 +53,7 @@ a{color:var(--accent);text-decoration:none}a:hover{text-decoration:underline}
 .footer{text-align:center;padding:24px;font-size:12px;color:var(--muted);border-top:1px solid var(--border);margin-top:20px}.footer a{margin:0 8px}
 ::-webkit-scrollbar{width:6px}::-webkit-scrollbar-track{background:var(--bg)}::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px}
 </style>
-<style>.wt-cell-pos-strong,.wt-cell-neg-strong,.latest-btn,.btn:not(.btn-outline),a[style*="background:var(--accent)"]{color:#fff!important}</style></head>
+<style>.wt-cell-pos-strong,.wt-cell-neg-strong,.latest-btn,.btn:not(.btn-outline),a[style*="background:var(--accent)"]{color:#fff!important}.wt-cell-pos-strong{background:#1f7a3d!important}.wt-cell-neg-strong{background:#a3262a!important}</style></head>
 <body>
 <div class="topbar">
   <div class="topbar-logo">JPX Dashboard</div>
@@ -131,7 +131,7 @@ var P=[4393,2269,6643,2296,6693,1434,2591,579,6014,3483,3809,584,4804,2324,4193,
 var C=[2556,0,1820,450,3317,501,1097,630,4727,1423,2160,413,5150,1485,5256,2111,4209,2198,3420,2344];
 var mx=6693;h='<div style="font-size:11px;color:var(--muted);margin-bottom:4px">PUT OI \u2190 \u2502 \u2192 CALL OI</div>';
 for(var i=0;i<S.length;i++){var atm=(S[i]===52500||S[i]===53000);
-h+='<div class="bfly-row"'+(atm?' style="background:rgba(116,84,2,.08)"':'')+'>'+
+h+='<div class="bfly-row"'+(atm?' style="background:rgba(106,77,2,.08)"':'')+'>'+
 '<div class="bfly-left"><div class="bfly-bar" style="width:'+Math.round(P[i]/mx*100)+'%;background:var(--put)"></div></div>'+
 '<div class="bfly-lbl"'+(atm?' style="color:var(--atm);font-weight:700"':'')+'>'+(S[i]/1000).toFixed(1)+'k</div>'+
 '<div class="bfly-right"><div class="bfly-bar" style="width:'+Math.round(C[i]/mx*100)+'%;background:var(--call)"></div></div></div>';

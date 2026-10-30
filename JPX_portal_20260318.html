@@ -5,7 +5,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Noto+Sans+JP:wght@400;500;700&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#f9f5ee;--panel:#f2efeb;--card:#eae8e7;--card-hover:#dcdbdf;--border:#d5d4d9;--accent:#060f6b;--accent2:#0c0e85;--text:#0d1219;--sub:#3c495b;--put:#790606;--call:#043f87;--atm:#745402;--up:#146f35;--down:#9f0e0e;--us:#022c5c;--eu:#0e023f;--hf:#745402;--dom:#790606;--sea:#043f87}
+:root{--bg:#f9f5ee;--panel:#f2efeb;--card:#eae8e7;--card-hover:#dcdbdf;--border:#d5d4d9;--accent:#060f6b;--accent2:#0c0e85;--text:#0d1219;--sub:#3c495b;--put:#790606;--call:#043f87;--atm:#6a4d02;--up:#136631;--down:#9f0e0e;--us:#022c5c;--eu:#0e023f;--hf:#6a4d02;--dom:#790606;--sea:#043f87}
 *{margin:0;padding:0;box-sizing:border-box}
 body{background:var(--bg);color:var(--text);font-family:"Noto Sans JP",sans-serif;font-size:13px;line-height:1.6}
 .mono{font-family:"DM Mono",monospace}.outfit{font-family:"Outfit",sans-serif}
@@ -24,7 +24,7 @@ body{background:var(--bg);color:var(--text);font-family:"Noto Sans JP",sans-seri
 .card-preview{font-size:12px;color:var(--sub)}.card-detail{display:none;margin-top:12px;font-size:12px}.card.open .card-detail{display:block}
 .mini-metric{display:inline-block;background:rgba(0,0,0,.04);border-radius:6px;padding:4px 8px;margin:2px;font-family:"DM Mono";font-size:11px}
 .tag{display:inline-block;padding:2px 7px;border-radius:4px;font-size:10px;font-family:"DM Mono";margin:1px}
-.tag-put{background:rgba(121,6,6,.15);color:var(--put)}.tag-call{background:rgba(4,63,135,.15);color:var(--call)}.tag-up{background:rgba(20,111,53,.15);color:var(--up)}.tag-down{background:rgba(159,14,14,.15);color:var(--down)}.tag-atm{background:rgba(116,84,2,.15);color:var(--atm)}
+.tag-put{background:rgba(121,6,6,.15);color:var(--put)}.tag-call{background:rgba(4,63,135,.15);color:var(--call)}.tag-up{background:rgba(19,102,49,.15);color:var(--up)}.tag-down{background:rgba(159,14,14,.15);color:var(--down)}.tag-atm{background:rgba(106,77,2,.15);color:var(--atm)}
 .bar-row{display:flex;align-items:center;gap:6px;margin:3px 0;font-size:11px}.bar-label{width:80px;text-align:right;font-family:"DM Mono";color:var(--sub);flex-shrink:0}.bar-track{flex:1;height:16px;background:rgba(0,0,0,.03);border-radius:3px;position:relative;overflow:hidden}.bar-fill{height:100%;border-radius:3px;min-width:2px}
 .tbl{width:100%;border-collapse:collapse;font-size:11px;margin:8px 0}.tbl th{background:rgba(0,0,0,.04);padding:6px 8px;text-align:left;font-family:Outfit;font-weight:500;color:var(--sub);border-bottom:1px solid var(--border)}.tbl td{padding:5px 8px;border-bottom:1px solid rgba(0,0,0,.03);font-family:"DM Mono"}.tbl tr:hover{background:rgba(0,0,0,.02)}
 .insight{background:rgba(6,15,107,.08);border-left:3px solid var(--accent);border-radius:0 8px 8px 0;padding:10px 14px;margin:10px 0;font-size:12px;color:var(--sub);line-height:1.7}
@@ -34,7 +34,7 @@ body{background:var(--bg);color:var(--text);font-family:"Noto Sans JP",sans-seri
 .sr-chart{position:relative;height:120px;margin:12px 0;background:rgba(0,0,0,.02);border-radius:8px;border:1px solid var(--border);overflow:hidden}
 .sim-btn{display:inline-block;padding:10px 24px;background:var(--accent);color:#000000;border-radius:8px;text-decoration:none;font-family:Outfit;font-weight:600;font-size:13px;margin:14px 0;text-align:center}
 .footer{text-align:center;padding:20px;color:var(--sub);font-size:11px;border-top:1px solid var(--border);margin-top:20px}.footer a{color:var(--accent);text-decoration:none;margin:0 8px}
-</style><style>.wt-cell-pos-strong,.wt-cell-neg-strong,.latest-btn,.btn:not(.btn-outline),a[style*="background:var(--accent)"]{color:#fff!important}</style></head><body>
+</style><style>.wt-cell-pos-strong,.wt-cell-neg-strong,.latest-btn,.btn:not(.btn-outline),a[style*="background:var(--accent)"]{color:#fff!important}.wt-cell-pos-strong{background:#1f7a3d!important}.wt-cell-neg-strong{background:#a3262a!important}</style></head><body>
 <div class="topbar"><span class="logo">JPX Analysis</span><nav><a href="index.html">Dashboard</a><a href="pnl_simulator.html">P&L Simulator</a><a href="archive.html">Archive</a></nav></div>
 <div class="hero"><h1 class="outfit">JPX Derivatives Dashboard</h1><div class="sub">2026.03.18 Wed — FOMC Day 1</div></div>
 <div class="kpi-strip">
@@ -72,7 +72,7 @@ body{background:var(--bg);color:var(--text);font-family:"Noto Sans JP",sans-seri
 </div>
 <div class="card" data-card="jnet">
 <div class="card-head"><span class="icon">🏛</span><span class="title">大口手口(J-NET)</span></div>
-<div class="card-preview"><span class="tag" style="background:rgba(14,2,63,.15);color:var(--eu)">UBS 550</span><span class="tag" style="background:rgba(116,84,2,.15);color:var(--hf)">ABN 550</span><span class="tag" style="background:rgba(116,84,2,.15);color:var(--hf)">BNP 240</span></div>
+<div class="card-preview"><span class="tag" style="background:rgba(14,2,63,.15);color:var(--eu)">UBS 550</span><span class="tag" style="background:rgba(106,77,2,.15);color:var(--hf)">ABN 550</span><span class="tag" style="background:rgba(106,77,2,.15);color:var(--hf)">BNP 240</span></div>
 <div class="card-detail" id="detail-jnet"></div>
 </div>
 <div class="card" data-card="assess">
@@ -250,7 +250,7 @@ h+="<tr><td style=\"color:var(--call)\">C2604-56000</td><td>UBS証券</td><td cl
 h+="</table>";
 h+="<div class=\"section-title\">対当ペア</div>";
 h+="<div style=\"display:flex;gap:8px;flex-wrap:wrap\">";
-h+="<div style=\"flex:1;min-width:200px;background:rgba(0,0,0,.03);border-radius:8px;padding:10px\"><div style=\"font-size:10px;color:var(--sub)\">P2604-54500 x 550枚</div><div style=\"margin-top:4px\"><span class=\"tag\" style=\"background:rgba(14,2,63,.15);color:var(--eu)\">UBS</span> \u2194 <span class=\"tag\" style=\"background:rgba(116,84,2,.15);color:var(--hf)\">ABN</span></div></div>";
+h+="<div style=\"flex:1;min-width:200px;background:rgba(0,0,0,.03);border-radius:8px;padding:10px\"><div style=\"font-size:10px;color:var(--sub)\">P2604-54500 x 550枚</div><div style=\"margin-top:4px\"><span class=\"tag\" style=\"background:rgba(14,2,63,.15);color:var(--eu)\">UBS</span> \u2194 <span class=\"tag\" style=\"background:rgba(106,77,2,.15);color:var(--hf)\">ABN</span></div></div>";
 h+="<div style=\"flex:1;min-width:200px;background:rgba(0,0,0,.03);border-radius:8px;padding:10px\"><div style=\"font-size:10px;color:var(--sub)\">P2604-54625 x 200枚</div><div style=\"margin-top:4px\"><span class=\"tag\" style=\"background:rgba(2,44,92,.15);color:var(--us)\">Citi</span> \u2194 <span class=\"tag\" style=\"background:rgba(2,44,92,.15);color:var(--us)\">BofA</span></div></div>";
 h+="</div>";
 h+="<div class=\"insight\"><strong>解釈:</strong> ABNがP54500売り+C56000売り — ショートストラングル型。UBSが対当相手。BNPはC55000で240枚。機関はATM近傍でプレミアム売りに積極的。HF代理勢が主導。</div>";

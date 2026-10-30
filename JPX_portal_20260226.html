@@ -10,7 +10,7 @@
 :root{
 --bg:#f9f5ee;--panel:#f2efeb;--card:#e1e0e1;--border:#d2d1d6;
 --text:#20272e;--text2:#434c65;--white:#000915;
---put:#790606;--call:#043f87;--atm:#745402;--green:#146f35;--red:#9f0e0e;
+--put:#790606;--call:#043f87;--atm:#6a4d02;--green:#136631;--red:#9f0e0e;
 --accent:#0c0e85;--accent2:#30088b;
 }
 html{scroll-behavior:smooth}
@@ -67,7 +67,7 @@ background:radial-gradient(ellipse,rgba(12,14,133,.12),transparent 70%);pointer-
 .browser-toolbar{display:flex;align-items:center;gap:10px;padding:12px 16px;background:#f4f1ec;border-bottom:1px solid var(--border)}
 .dots{display:flex;gap:6px}
 .dot{width:10px;height:10px;border-radius:50%}
-.dot-r{background:#8f0700}.dot-y{background:#7f5701}.dot-g{background:#156a22}
+.dot-r{background:#8f0700}.dot-y{background:#755001}.dot-g{background:#13611f}
 .url-bar{flex:1;background:var(--card);border:1px solid var(--border);border-radius:6px;padding:4px 12px;font-size:11px;color:var(--text2);font-family:'DM Mono'}
 
 /* KPI header inside browser */
@@ -117,7 +117,7 @@ background:radial-gradient(ellipse,rgba(12,14,133,.12),transparent 70%);pointer-
 .bf-header,.bf-row{display:flex;align-items:center;height:26px}
 .bf-header{border-bottom:1px solid var(--border);margin-bottom:4px;font-size:9px;font-weight:700;color:var(--text2)}
 .bf-row{border-bottom:1px solid #e8e6e6}
-.bf-row.atm-row{background:rgba(116,84,2,.06)}
+.bf-row.atm-row{background:rgba(106,77,2,.06)}
 .bf-oi{width:55px;text-align:right;padding-right:4px;font-size:10px;font-family:'DM Mono';color:var(--text);flex-shrink:0}
 .bf-chg{width:48px;text-align:right;padding-right:4px;font-size:9px;font-family:'DM Mono';flex-shrink:0}
 .bf-bar-area{flex:1;display:flex;align-items:center}
@@ -125,17 +125,17 @@ background:radial-gradient(ellipse,rgba(12,14,133,.12),transparent 70%);pointer-
 .bf-bar-right{flex:1;display:flex;justify-content:flex-start;padding-left:1px}
 .bf-bar{height:12px;border-radius:3px;min-width:1px}
 .bf-strike{width:56px;text-align:center;font-size:10px;font-family:'DM Mono';font-weight:500;color:var(--text);flex-shrink:0;border-left:1px solid var(--border);border-right:1px solid var(--border)}
-.bf-strike.atm{font-weight:800;color:var(--atm);background:rgba(116,84,2,.08)}
+.bf-strike.atm{font-weight:800;color:var(--atm);background:rgba(106,77,2,.08)}
 
 /* Table (⑦) */
 .flow-table{width:100%;border-collapse:collapse;font-size:12px}
 .flow-table th{padding:10px 14px;text-align:left;color:var(--text2);border-bottom:2px solid var(--border);font-weight:500;font-size:11px}
 .flow-table td{padding:8px 14px;border-bottom:1px solid #e0dee0}
-.flow-table tr.pair-row{background:rgba(116,84,2,.04)}
-.pair-badge{font-size:9px;color:var(--atm);border:1px solid rgba(116,84,2,.3);border-radius:4px;padding:1px 6px;margin-left:8px}
+.flow-table tr.pair-row{background:rgba(106,77,2,.04)}
+.pair-badge{font-size:9px;color:var(--atm);border:1px solid rgba(106,77,2,.3);border-radius:4px;padding:1px 6px;margin-left:8px}
 
 /* Pair cards */
-.pair-card{display:flex;align-items:center;gap:12px;padding:10px 16px;background:var(--card);border-radius:10px;border:1px solid rgba(116,84,2,.2);flex-wrap:wrap;margin-bottom:8px}
+.pair-card{display:flex;align-items:center;gap:12px;padding:10px 16px;background:var(--card);border-radius:10px;border:1px solid rgba(106,77,2,.2);flex-wrap:wrap;margin-bottom:8px}
 .pair-arrow{font-size:14px;color:var(--accent)}
 
 /* Levels (⑧) */
@@ -162,7 +162,7 @@ background:radial-gradient(ellipse,rgba(12,14,133,.12),transparent 70%);pointer-
 .tags{display:flex;gap:8px;flex-wrap:wrap}
 .tag{display:inline-block;padding:2px 10px;border-radius:20px;font-size:10px;font-weight:700}
 .tag-red{background:rgba(121,6,6,.12);color:var(--put);border:1px solid rgba(121,6,6,.25)}
-.tag-green{background:rgba(20,111,53,.12);color:var(--green);border:1px solid rgba(20,111,53,.25)}
+.tag-green{background:rgba(19,102,49,.12);color:var(--green);border:1px solid rgba(19,102,49,.25)}
 .tag-purple{background:rgba(12,14,133,.12);color:#060f6b;border:1px solid rgba(12,14,133,.25)}
 
 /* Footer */
@@ -170,7 +170,7 @@ background:radial-gradient(ellipse,rgba(12,14,133,.12),transparent 70%);pointer-
 .footer a{color:var(--accent);text-decoration:none;margin:0 10px}
 .footer a:hover{color:var(--white)}
 </style>
-<style>.wt-cell-pos-strong,.wt-cell-neg-strong,.latest-btn,.btn:not(.btn-outline),a[style*="background:var(--accent)"]{color:#fff!important}</style></head>
+<style>.wt-cell-pos-strong,.wt-cell-neg-strong,.latest-btn,.btn:not(.btn-outline),a[style*="background:var(--accent)"]{color:#fff!important}.wt-cell-pos-strong{background:#1f7a3d!important}.wt-cell-neg-strong{background:#a3262a!important}</style></head>
 <body>
 
 <!-- ═══ TOPBAR ═══ -->
@@ -361,9 +361,9 @@ var pairsArr=[{a:"ゴールドマン証券",b:"モルガンＭＵＦＧ証券",c
 var levels=[
   {price:60000,label:"第二抵抗",sub:"C60000 = 7,277枚（-1,109解消中）",color:"#9f0e0e"},
   {price:59000,label:"第一抵抗",sub:"J-NET C59000に海外勢売り集中",color:"#790606"},
-  {price:58850,label:"ATM（先物清算値）",sub:"",color:"#745402",atm:true},
-  {price:56000,label:"第一支持",sub:"P56000 +988枚の大量新規建玉",color:"#146f35"},
-  {price:55000,label:"第二支持",sub:"P3,496枚 / C5,324枚 交差点",color:"#136b33"}
+  {price:58850,label:"ATM（先物清算値）",sub:"",color:"#6a4d02",atm:true},
+  {price:56000,label:"第一支持",sub:"P56000 +988枚の大量新規建玉",color:"#136631"},
+  {price:55000,label:"第二支持",sub:"P3,496枚 / C5,324枚 交差点",color:"#11632f"}
 ];
 var outlookArr=[
   {title:"需給の歪み",icon:"⚡",body:"mini 3月限が-6,691枚の大幅減少。個人・短期筋のロング解消が加速。一方、ラージ+1,113枚、TOPIX+11,546枚と機関投資家は積極的に積み増し。「個人は撤退・機関は買い継続」の二極化構図。",tags:[{t:"mini大幅売り越し",c:"tag-red"},{t:"機関積み増し",c:"tag-green"}]},
