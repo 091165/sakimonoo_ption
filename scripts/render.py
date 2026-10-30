@@ -1852,7 +1852,8 @@ def build_dashboard_html(data, oi_ts=None, wt=None, iv=None, ivts=None, greeks=N
     if _sb and greeks:
         h += _sb.sb_data_script(greeks, venue_flow, data.get('indicators'))
     if _rr and greeks:
-        h += _rr.range_data_script(greeks, ivts, oi_ts, greeks_hist)
+        _closes = [futures_flow['rows'][d].get('close') for d in (futures_flow or {}).get('dates', [])]
+        h += _rr.range_data_script(greeks, ivts, oi_ts, greeks_hist, closes=[c for c in _closes if c] or None)
         h += _rr.RANGE_CARD_JS
     if _ft and futures_flow:
         h += _ft.futures_data_script(futures_flow, data.get('s02'))

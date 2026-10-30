@@ -139,7 +139,7 @@ def _close_series(greeks, oi_ts, ghist):
     return [by_date[d] for d in sorted(by_date)]
 
 
-def build_range(greeks, ivts, oi_ts, ghist=None, top_n=8):
+def build_range(greeks, ivts, oi_ts, ghist=None, top_n=8, closes=None):
     """Assemble the card payload. Returns None when the inputs are not there."""
     if not greeks or not greeks.get('expiries'):
         return None
@@ -192,7 +192,10 @@ def build_range(greeks, ivts, oi_ts, ghist=None, top_n=8):
             strikes.append({'side': side, 'strike': k, 'oi': oi,
                             'dist': dist, 'sigma': dist / sq_pct})
 
-    hv, hv_n = _hv(_close_series(greeks, oi_ts, ghist))
+    # Prefer the complete daily cash-close series (futures_flow.json). The
+    # merged fallback skips days the pipeline did not run (10/19, 10/22, ...)
+    # and mixes in futures closes, which overstated HV (32% vs 27.6% on 10/30).
+    hv, hv_n = _hv(closes if closes else _close_series(greeks, oi_ts, ghist))
     # Where today's IV sits in its own recent range: this replaces the
     # separate IV推移 card, whose only trading use was "is IV high or low now".
     recent = series[-20:]
@@ -205,8 +208,8 @@ def build_range(greeks, ivts, oi_ts, ghist=None, top_n=8):
     }
 
 
-def range_data_script(greeks, ivts, oi_ts, ghist=None):
-    d = build_range(greeks, ivts, oi_ts, ghist)
+def range_data_script(greeks, ivts, oi_ts, ghist=None, closes=None):
+    d = build_range(greeks, ivts, oi_ts, ghist, closes=closes)
     if not d:
         return ''
     # Bare JS, no <script> wrapper: this is injected INSIDE the dashboard's

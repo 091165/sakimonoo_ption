@@ -56,8 +56,12 @@ def classify(price_pct, chg, oi):
 def build(flow, s02=None, n=20):
     if not flow or not flow.get('dates'):
         return None
-    dates = flow['dates'][-(n + 1):]
     rows = flow['rows']
+    # Only days with OI: the history also holds close-only days (kept for the
+    # HV calculation), and the price move must span the same days as the OI
+    # change it is paired with.
+    dates = [dt for dt in flow['dates'] if any((rows[dt].get(k) or {}).get('oi') for k, _ in PRODUCTS)]
+    dates = dates[-(n + 1):]
     out = {'dates': [], 'close': [], 'pct': [], 'products': {}, 'months': {}}
     for i, dt in enumerate(dates):
         if i == 0 and len(dates) > n:

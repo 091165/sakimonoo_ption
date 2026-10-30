@@ -106,10 +106,13 @@ def _seed_from_history(flow, data_dir):
                 cell.setdefault('oi', int(tot[i]))
                 if i > 0 and tot[i - 1]:
                     cell.setdefault('chg', int(tot[i] - tot[i - 1]))
+    # Closes are kept even for days without OI data: the range card computes
+    # realised volatility from this one consistent cash-close series and needs
+    # more than 20 of them.
     for tp in glob.glob(os.path.join(data_dir, 'ose*tp.csv')):
         m = re.search(r'ose(\d{8})tp\.csv$', tp)
-        if m and m.group(1) in flow['rows'] and not flow['rows'][m.group(1)].get('close'):
-            flow['rows'][m.group(1)]['close'] = _close_from_tp(tp)
+        if m and not flow['rows'].get(m.group(1), {}).get('close'):
+            flow['rows'].setdefault(m.group(1), {})['close'] = _close_from_tp(tp)
     # Days without a tp.csv (e.g. 10/08): fall back to the fetched OHLC history,
     # whose closes match the tp.csv underlying on the days both exist.
     ml = os.path.join(data_dir, 'market_latest.json')
@@ -117,8 +120,8 @@ def _seed_from_history(flow, data_dir):
         with open(ml, encoding='utf-8') as f:
             for bar in (json.load(f).get('ohlc_history') or []):
                 dt = str(bar.get('date', '')).replace('-', '')
-                if dt in flow['rows'] and not flow['rows'][dt].get('close') and bar.get('close'):
-                    flow['rows'][dt]['close'] = round(float(bar['close']), 2)
+                if dt and not flow['rows'].get(dt, {}).get('close') and bar.get('close'):
+                    flow['rows'].setdefault(dt, {})['close'] = round(float(bar['close']), 2)
 
 
 def _backfill_git(flow, repo_root):
