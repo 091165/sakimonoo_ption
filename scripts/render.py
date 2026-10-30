@@ -62,6 +62,10 @@ try:
     import render_technical as _tc
 except Exception:
     _tc = None
+try:
+    import theme as _theme
+except Exception:
+    _theme = None
 import sys
 import copy
 
@@ -2951,6 +2955,9 @@ def update_archive(archive_path, data):
     entry += '      <span class="entry-arrow">&rarr;</span>\n    </a>\n'
     with open(archive_path, 'r', encoding='utf-8') as f:
         html = f.read()
+    if _theme and _theme.MARKER in html:
+        # the archive page is already warm-themed; colour the new entry to match
+        entry = _theme.warm_fragment(entry)
     portal_link = 'JPX_portal_%s.html' % date_str
     if portal_link in html:
         print('[render.py] archive already contains %s — skipping' % date_str)
@@ -3135,12 +3142,15 @@ def run(args):
     print('[render.py] Markdown: %s (%.1f KB)' % (md_path, os.path.getsize(md_path) / 1024))
     html_path = os.path.join(outdir, 'index.html')
     html = build_dashboard_html(data, oi_ts=oi_ts, wt=wt, iv=iv, ivts=ivts, greeks=greeks, jnet=jnet, optw=optw, positions=positions, broker_hist=broker_hist, venue_flow=venue_flow, greeks_hist=greeks_hist, futures_flow=futures_flow, fut_brokers=fut_brokers, opt_blocks=opt_blocks)
+    if _theme:
+        html = _theme.warm(html)
     with open(html_path, 'w', encoding='utf-8') as f:
         f.write(html)
     print('[render.py] Dashboard: %s (%.1f KB)' % (html_path, os.path.getsize(html_path) / 1024))
     sim_path = os.path.join(outdir, 'pnl_simulator.html')
     with open(sim_path, 'w', encoding='utf-8') as f:
-        f.write(build_simulator_html(data))
+        sim = build_simulator_html(data)
+        f.write(_theme.warm(sim) if _theme else sim)
     print('[render.py] Simulator: %s' % sim_path)
     portal_path = os.path.join(outdir, 'JPX_portal_%s.html' % date_str)
     with open(portal_path, 'w', encoding='utf-8') as f:

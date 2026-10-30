@@ -1,22 +1,22 @@
 <!DOCTYPE html>
 
 <html lang="ja">
-<head>
+<head><!--theme:warm-->
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>JPX Market Analysis — 2026.03.05</title>
 <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700&family=Noto+Sans+JP:wght@400;500;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#06060f;--panel:#0c0c1d;--card:#111128;--card2:#181838;--border:#1e1e3a;--txt:#e2e2f0;--txt2:#9898b4;--put:#f87171;--call:#60a5fa;--atm:#fbbf24;--up:#4ade80;--dn:#ef4444;--us:#93c5fd;--eu:#c4b5fd;--hf:#fbbf24;--dom:#f87171;--foreign:#60a5fa;--accent:#818cf8}
+:root{--bg:#f9f5ee;--panel:#f2efeb;--card:#eae8e7;--card2:#dbd9de;--border:#d5d4d9;--txt:#0d0d19;--txt2:#404058;--put:#790606;--call:#043f87;--atm:#745402;--up:#146f35;--dn:#9f0e0e;--us:#022c5c;--eu:#0e023f;--hf:#745402;--dom:#790606;--foreign:#043f87;--accent:#060f6b}
 *{margin:0;padding:0;box-sizing:border-box}
 body{background:var(--bg);color:var(--txt);font-family:'Noto Sans JP','Outfit',sans-serif;font-size:13px;line-height:1.6}
 .mono{font-family:'DM Mono',monospace}
-.topbar{position:sticky;top:0;z-index:100;background:rgba(6,6,15,.92);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);padding:10px 20px;display:flex;align-items:center;justify-content:space-between}
+.topbar{position:sticky;top:0;z-index:100;background:rgba(249,245,238,.92);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);padding:10px 20px;display:flex;align-items:center;justify-content:space-between}
 .topbar .logo{font-family:'Outfit';font-weight:700;font-size:16px;color:var(--accent)}
 .topbar nav a{color:var(--txt2);text-decoration:none;margin-left:18px;font-size:12px;transition:.2s}
 .topbar nav a:hover{color:var(--txt)}
 @media(max-width:768px){.topbar nav{display:none}}
-.hero{text-align:center;padding:28px 20px 14px;background:radial-gradient(ellipse at 50% 0%,rgba(129,140,248,.08),transparent 70%)}
+.hero{text-align:center;padding:28px 20px 14px;background:radial-gradient(ellipse at 50% 0%,rgba(6,15,107,.08),transparent 70%)}
 .hero h1{font-family:'Outfit';font-size:22px;font-weight:700;color:var(--txt);animation:fadeUp .6s}
 .hero .sub{color:var(--txt2);font-size:12px;margin-top:4px}
 @keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
@@ -47,10 +47,10 @@ body{background:var(--bg);color:var(--txt);font-family:'Noto Sans JP','Outfit',s
 .tag{font-size:10px;padding:2px 8px;border-radius:4px;background:var(--card2);color:var(--txt2)}
 .tag-put{border-left:2px solid var(--put)}.tag-call{border-left:2px solid var(--call)}
 .tag-up{border-left:2px solid var(--up)}.tag-dn{border-left:2px solid var(--dn)}
-.tag-us{background:rgba(147,197,253,.12);color:var(--us)}
-.tag-eu{background:rgba(196,181,253,.12);color:var(--eu)}
-.tag-hf{background:rgba(251,191,36,.12);color:var(--hf)}
-.tag-dom{background:rgba(248,113,113,.12);color:var(--dom)}
+.tag-us{background:rgba(2,44,92,.12);color:var(--us)}
+.tag-eu{background:rgba(14,2,63,.12);color:var(--eu)}
+.tag-hf{background:rgba(116,84,2,.12);color:var(--hf)}
+.tag-dom{background:rgba(121,6,6,.12);color:var(--dom)}
 .bar-row{display:flex;align-items:center;gap:8px;margin:4px 0;font-size:11px}
 .bar-label{width:100px;text-align:right;color:var(--txt2);font-size:10px;flex-shrink:0}
 .bar-track{flex:1;height:18px;background:var(--card);border-radius:4px;position:relative;overflow:hidden}
@@ -68,7 +68,7 @@ body{background:var(--bg);color:var(--txt);font-family:'Noto Sans JP','Outfit',s
 .insight::before{content:'💡 '}
 .tbl{width:100%;border-collapse:collapse;font-size:11px;margin:8px 0}
 .tbl th{text-align:left;color:var(--txt2);font-weight:500;padding:6px 8px;border-bottom:1px solid var(--border);font-size:10px}
-.tbl td{padding:5px 8px;border-bottom:1px solid rgba(30,30,58,.5)}
+.tbl td{padding:5px 8px;border-bottom:1px solid rgba(213,212,217,.5)}
 .tbl .mono{font-family:'DM Mono'}
 .summary-box{background:var(--card2);border-radius:10px;padding:14px;margin:8px 0}
 .summary-box h4{font-size:12px;margin-bottom:8px;color:var(--txt)}
@@ -92,13 +92,13 @@ body{background:var(--bg);color:var(--txt);font-family:'Noto Sans JP','Outfit',s
 .zb-left{flex:1;display:flex;justify-content:flex-end}
 .zb-right{flex:1;display:flex;justify-content:flex-start}
 .zb-bar{height:100%;border-radius:3px;min-width:1px}
-.zb-zero{width:1px;background:rgba(255,255,255,.3);flex-shrink:0}
+.zb-zero{width:1px;background:rgba(0,0,0,.3);flex-shrink:0}
 .zb-val{width:60px;font-family:'DM Mono';font-size:10px;flex-shrink:0;text-align:right}
 footer{text-align:center;padding:20px;color:var(--txt2);font-size:10px;border-top:1px solid var(--border)}
 footer a{color:var(--accent);text-decoration:none}
 .pair-card{background:var(--card);border:1px solid var(--accent);border-radius:8px;padding:10px;margin:6px 0;font-size:11px}
 </style>
-</head>
+<style>.wt-cell-pos-strong,.wt-cell-neg-strong,.latest-btn,.btn:not(.btn-outline),a[style*="background:var(--accent)"]{color:#fff!important}</style></head>
 <body>
 <div class="topbar">
 <div class="logo">JPX Market Pulse</div>
@@ -209,7 +209,7 @@ footer a{color:var(--accent);text-decoration:none}
 <div class="dcard-preview">
 <div class="tags">
 <span class="tag tag-hf">ABN P/C</span>
-<span class="tag" style="border-left:2px solid #93c5fd">シティ P200</span>
+<span class="tag" style="border-left:2px solid #022c5c">シティ P200</span>
 <span class="tag tag-dom">野村 P/C</span>
 </div>
 <div style="font-size:10px;color:var(--txt2);margin-top:4px">合計 520枚 / 対当1ペア</div>
@@ -345,7 +345,7 @@ for(var i=0;i<puts.length;i++){
 var s=puts[i][0];var pv=puts[i][1];var cv=calls[i][1];
 var pp=Math.min(pv/mx*100,100);var cp=Math.min(cv/mx*100,100);
 var isATM=Math.abs(s-55000)<=250;
-h+='<div class="bf-row"'+(isATM?' style="background:rgba(251,191,36,.08);border-radius:4px;padding:1px 0"':'')+'>';
+h+='<div class="bf-row"'+(isATM?' style="background:rgba(116,84,2,.08);border-radius:4px;padding:1px 0"':'')+'>';
 h+='<div class="bf-val bf-val-l">'+pv.toLocaleString()+'</div>';
 h+='<div class="bf-left"><div class="bf-bar" style="width:'+pp+'%;background:var(--put)"></div></div>';
 h+='<div class="bf-label"'+(isATM?' style="color:var(--atm);font-weight:600"':'')+'>'+(s/1000).toFixed(1)+'K</div>';

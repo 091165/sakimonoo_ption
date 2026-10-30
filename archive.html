@@ -1,44 +1,44 @@
 <!DOCTYPE html>
 <html lang="ja">
-<head>
+<head><!--theme:warm-->
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>JPX Derivatives Intelligence — アーカイブ</title>
 <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700&family=Noto+Sans+JP:wght@400;500;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#06060f;--panel:#0c0c1d;--card:#111128;--border:#1e1e3a;--text:#e2e2f0;--muted:#8888aa;--accent:#818cf8;--red:#f87171;--green:#4ade80;--blue:#60a5fa;--yellow:#fbbf24;--cyan:#22d3ee}
+:root{--bg:#f9f5ee;--panel:#f2efeb;--card:#eae8e7;--border:#d5d4d9;--text:#0d0d19;--muted:#484865;--accent:#060f6b;--red:#790606;--green:#146f35;--blue:#043f87;--yellow:#745402;--cyan:#096270}
 *{margin:0;padding:0;box-sizing:border-box}
 body{background:var(--bg);color:var(--text);font-family:'Noto Sans JP',sans-serif;font-size:13px;min-height:100vh}
 a{color:inherit;text-decoration:none}
-.topbar{position:sticky;top:0;z-index:100;background:rgba(6,6,15,.92);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);padding:10px 20px;display:flex;align-items:center;justify-content:space-between}
+.topbar{position:sticky;top:0;z-index:100;background:rgba(249,245,238,.92);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);padding:10px 20px;display:flex;align-items:center;justify-content:space-between}
 .topbar .logo{font-family:'Outfit';font-weight:700;font-size:16px;color:var(--accent)}
 .topbar nav a{color:var(--muted);text-decoration:none;font-size:13px;margin-left:18px;transition:color .2s}
 .topbar nav a:hover{color:var(--accent)}.topbar nav a.active{color:var(--accent)}
 @media(max-width:768px){.topbar nav{display:none}}
 .hero{text-align:center;padding:32px 20px 16px;position:relative}
-.hero h1{font-family:'Outfit';font-size:24px;font-weight:700;color:#fff}
+.hero h1{font-family:'Outfit';font-size:24px;font-weight:700;color:#000000}
 .hero .sub{color:var(--muted);font-size:12px;margin-top:4px}
 .container{max-width:800px;margin:0 auto;padding:0 16px 40px}
 .latest-banner{background:var(--card);border:1px solid var(--accent);border-radius:10px;padding:16px;display:flex;align-items:center;justify-content:space-between;margin:16px 0 24px}
 .latest-banner .label{font-size:10px;color:var(--accent);text-transform:uppercase;letter-spacing:1px}
 .latest-banner .title{font-family:Outfit;font-size:14px;font-weight:600;margin-top:2px}
-.latest-btn{background:var(--accent);color:#fff;padding:8px 18px;border-radius:6px;font-family:Outfit;font-weight:600;font-size:12px}
+.latest-btn{background:var(--accent);color:#000000;padding:8px 18px;border-radius:6px;font-family:Outfit;font-weight:600;font-size:12px}
 .sq-section{margin-bottom:24px}
 .sq-header{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--border);margin-bottom:8px;flex-wrap:wrap}
-.sq-badge{font-family:'DM Mono';font-size:11px;padding:3px 10px;border-radius:4px;background:rgba(129,140,248,.1);color:var(--accent);border:1px solid rgba(129,140,248,.2);font-weight:600}
-.sq-badge.current{background:rgba(74,222,128,.1);color:var(--green);border-color:rgba(74,222,128,.2)}
+.sq-badge{font-family:'DM Mono';font-size:11px;padding:3px 10px;border-radius:4px;background:rgba(6,15,107,.1);color:var(--accent);border:1px solid rgba(6,15,107,.2);font-weight:600}
+.sq-badge.current{background:rgba(20,111,53,.1);color:var(--green);border-color:rgba(20,111,53,.2)}
 .sq-meta{font-size:11px;color:var(--muted)}.sq-range{font-family:'DM Mono';font-size:11px;color:var(--yellow)}
 .entry{display:flex;align-items:center;gap:12px;padding:10px 14px;border:1px solid var(--border);border-radius:8px;margin:6px 0;transition:all .2s;background:var(--card)}
 .entry:hover{border-color:var(--accent);background:var(--panel);transform:translateX(2px)}
-.entry-date{font-family:'DM Mono';font-size:13px;color:#fff;min-width:90px;font-weight:500}
+.entry-date{font-family:'DM Mono';font-size:13px;color:#000000;min-width:90px;font-weight:500}
 .entry-weekday{font-size:11px;color:var(--muted);min-width:20px}
 .entry-tags{display:flex;gap:6px;flex-wrap:wrap;flex:1}
 .etag{font-family:'DM Mono';font-size:10px;padding:2px 8px;border-radius:4px}
-.etag-nikkei{background:rgba(226,226,240,.06);color:var(--text);border:1px solid var(--border)}
+.etag-nikkei{background:rgba(13,13,25,.06);color:var(--text);border:1px solid var(--border)}
 .etag-nikkei.down{color:var(--red)}
-.etag-vi{background:rgba(129,140,248,.06);color:var(--accent);border:1px solid rgba(129,140,248,.15)}
-.etag-vi.high{color:var(--red);background:rgba(248,113,113,.08);border-color:rgba(248,113,113,.15)}
-.etag-sq{background:rgba(251,191,36,.1);color:var(--yellow);border:1px solid rgba(251,191,36,.2);font-weight:600}
+.etag-vi{background:rgba(6,15,107,.06);color:var(--accent);border:1px solid rgba(6,15,107,.15)}
+.etag-vi.high{color:var(--red);background:rgba(121,6,6,.08);border-color:rgba(121,6,6,.15)}
+.etag-sq{background:rgba(116,84,2,.1);color:var(--yellow);border:1px solid rgba(116,84,2,.2);font-weight:600}
 .entry-arrow{font-size:14px;color:var(--accent);opacity:.4;transition:.2s;flex-shrink:0}
 .entry:hover .entry-arrow{opacity:1;transform:translateX(2px)}
 .mobile-nav{display:none;justify-content:center;gap:12px;padding:8px;border-bottom:1px solid var(--border)}
@@ -48,7 +48,7 @@ a{color:inherit;text-decoration:none}
 footer{text-align:center;padding:24px;color:var(--muted);font-size:11px;border-top:1px solid var(--border);margin-top:30px}
 footer a{color:var(--accent);text-decoration:none;margin:0 8px}
 </style>
-</head>
+<style>.wt-cell-pos-strong,.wt-cell-neg-strong,.latest-btn,.btn:not(.btn-outline),a[style*="background:var(--accent)"]{color:#fff!important}</style></head>
 <body>
 
 <div class="topbar">
@@ -101,7 +101,7 @@ footer a{color:var(--accent);text-decoration:none;margin:0 8px}
       <span class="entry-tags">
         <span class="etag etag-nikkei">62,980</span>
       </span>
-      <span class="entry-note" style="display:block;font-size:10px;color:#7c879b;margin-top:4px;line-height:1.5;font-family:DM Mono,monospace">ATM63,000 MaxPain67,000　注目: C68,000 -568 C67,000 +453 JNET P63,000 450枚(2社)</span>
+      <span class="entry-note" style="display:block;font-size:10px;color:#555e6f;margin-top:4px;line-height:1.5;font-family:DM Mono,monospace">ATM63,000 MaxPain67,000　注目: C68,000 -568 C67,000 +453 JNET P63,000 450枚(2社)</span>
       <span class="entry-arrow">&rarr;</span>
     </a>
 
@@ -111,7 +111,7 @@ footer a{color:var(--accent);text-decoration:none;margin:0 8px}
       <span class="entry-tags">
         <span class="etag etag-nikkei">64,620</span>
       </span>
-      <span class="entry-note" style="display:block;font-size:10px;color:#7c879b;margin-top:4px;line-height:1.5;font-family:DM Mono,monospace">ATM64,500 MaxPain67,000　注目: P62,000 +354 P64,000 +319 C67,000 +305 JNET C65,500 1,000枚(3社)</span>
+      <span class="entry-note" style="display:block;font-size:10px;color:#555e6f;margin-top:4px;line-height:1.5;font-family:DM Mono,monospace">ATM64,500 MaxPain67,000　注目: P62,000 +354 P64,000 +319 C67,000 +305 JNET C65,500 1,000枚(3社)</span>
       <span class="entry-arrow">&rarr;</span>
     </a>
 
@@ -121,7 +121,7 @@ footer a{color:var(--accent);text-decoration:none;margin:0 8px}
       <span class="entry-tags">
         <span class="etag etag-nikkei">64,305</span>
       </span>
-      <span class="entry-note" style="display:block;font-size:10px;color:#7c879b;margin-top:4px;line-height:1.5;font-family:DM Mono,monospace">ATM64,500 MaxPain67,000　注目: C67,000 +259</span>
+      <span class="entry-note" style="display:block;font-size:10px;color:#555e6f;margin-top:4px;line-height:1.5;font-family:DM Mono,monospace">ATM64,500 MaxPain67,000　注目: C67,000 +259</span>
       <span class="entry-arrow">&rarr;</span>
     </a>
 
@@ -131,7 +131,7 @@ footer a{color:var(--accent);text-decoration:none;margin:0 8px}
       <span class="entry-tags">
         <span class="etag etag-nikkei">63,790</span>
       </span>
-      <span class="entry-note" style="display:block;font-size:10px;color:#7c879b;margin-top:4px;line-height:1.5;font-family:DM Mono,monospace">ATM64,000 MaxPain67,000　注目: C66,000 +411 P62,000 +292</span>
+      <span class="entry-note" style="display:block;font-size:10px;color:#555e6f;margin-top:4px;line-height:1.5;font-family:DM Mono,monospace">ATM64,000 MaxPain67,000　注目: C66,000 +411 P62,000 +292</span>
       <span class="entry-arrow">&rarr;</span>
     </a>
 
@@ -141,7 +141,7 @@ footer a{color:var(--accent);text-decoration:none;margin:0 8px}
       <span class="entry-tags">
         <span class="etag etag-nikkei">62,895</span>
       </span>
-      <span class="entry-note" style="display:block;font-size:10px;color:#7c879b;margin-top:4px;line-height:1.5;font-family:DM Mono,monospace">ATM63,000 MaxPain67,000　注目: P60,000 -503 JNET P62,000 600枚(2社)</span>
+      <span class="entry-note" style="display:block;font-size:10px;color:#555e6f;margin-top:4px;line-height:1.5;font-family:DM Mono,monospace">ATM63,000 MaxPain67,000　注目: P60,000 -503 JNET P62,000 600枚(2社)</span>
       <span class="entry-arrow">&rarr;</span>
     </a>
 
@@ -151,7 +151,7 @@ footer a{color:var(--accent);text-decoration:none;margin:0 8px}
       <span class="entry-tags">
         <span class="etag etag-nikkei">62,920</span>
       </span>
-      <span class="entry-note" style="display:block;font-size:10px;color:#7c879b;margin-top:4px;line-height:1.5;font-family:DM Mono,monospace">ATM63,000 MaxPain67,000　注目: C64,000 +567 P62,000 -484 C68,000 +462 JNET P63,000 670枚(4社)</span>
+      <span class="entry-note" style="display:block;font-size:10px;color:#555e6f;margin-top:4px;line-height:1.5;font-family:DM Mono,monospace">ATM63,000 MaxPain67,000　注目: C64,000 +567 P62,000 -484 C68,000 +462 JNET P63,000 670枚(4社)</span>
       <span class="entry-arrow">&rarr;</span>
     </a>
 
@@ -161,7 +161,7 @@ footer a{color:var(--accent);text-decoration:none;margin:0 8px}
       <span class="entry-tags">
         <span class="etag etag-nikkei">64,765</span>
       </span>
-      <span class="entry-note" style="display:block;font-size:10px;color:#7c879b;margin-top:4px;line-height:1.5;font-family:DM Mono,monospace">ATM65,000 MaxPain67,500</span>
+      <span class="entry-note" style="display:block;font-size:10px;color:#555e6f;margin-top:4px;line-height:1.5;font-family:DM Mono,monospace">ATM65,000 MaxPain67,500</span>
       <span class="entry-arrow">&rarr;</span>
     </a>
 
@@ -171,7 +171,7 @@ footer a{color:var(--accent);text-decoration:none;margin:0 8px}
       <span class="entry-tags">
         <span class="etag etag-nikkei">64,450</span>
       </span>
-      <span class="entry-note" style="display:block;font-size:10px;color:#7c879b;margin-top:4px;line-height:1.5;font-family:DM Mono,monospace">ATM64,500 MaxPain65,000　注目: P60,000 +2,011 P59,500 -399 P64,000 +341</span>
+      <span class="entry-note" style="display:block;font-size:10px;color:#555e6f;margin-top:4px;line-height:1.5;font-family:DM Mono,monospace">ATM64,500 MaxPain65,000　注目: P60,000 +2,011 P59,500 -399 P64,000 +341</span>
       <span class="entry-arrow">&rarr;</span>
     </a>
 
@@ -181,7 +181,7 @@ footer a{color:var(--accent);text-decoration:none;margin:0 8px}
       <span class="entry-tags">
         <span class="etag etag-nikkei">63,925</span>
       </span>
-      <span class="entry-note" style="display:block;font-size:10px;color:#7c879b;margin-top:4px;line-height:1.5;font-family:DM Mono,monospace">ATM64,000 MaxPain65,000　注目: C68,000 +1,185 P64,000 -277 P65,000 +225</span>
+      <span class="entry-note" style="display:block;font-size:10px;color:#555e6f;margin-top:4px;line-height:1.5;font-family:DM Mono,monospace">ATM64,000 MaxPain65,000　注目: C68,000 +1,185 P64,000 -277 P65,000 +225</span>
       <span class="entry-arrow">&rarr;</span>
     </a>
 
@@ -191,7 +191,7 @@ footer a{color:var(--accent);text-decoration:none;margin:0 8px}
       <span class="entry-tags">
         <span class="etag etag-nikkei">64,520</span>
       </span>
-      <span class="entry-note" style="display:block;font-size:10px;color:#7c879b;margin-top:4px;line-height:1.5;font-family:DM Mono,monospace">ATM64,500 MaxPain65,000　注目: C68,000 +748 P62,000 +518 P60,000 +365</span>
+      <span class="entry-note" style="display:block;font-size:10px;color:#555e6f;margin-top:4px;line-height:1.5;font-family:DM Mono,monospace">ATM64,500 MaxPain65,000　注目: C68,000 +748 P62,000 +518 P60,000 +365</span>
       <span class="entry-arrow">&rarr;</span>
     </a>
 
@@ -201,7 +201,7 @@ footer a{color:var(--accent);text-decoration:none;margin:0 8px}
       <span class="entry-tags">
         <span class="etag etag-nikkei">64,520</span>
       </span>
-      <span class="entry-note" style="display:block;font-size:10px;color:#7c879b;margin-top:4px;line-height:1.5;font-family:DM Mono,monospace">ATM64,500 MaxPain65,000　注目: P60,000 +282 P63,000 +227 JNET C68,000 400枚(3社)</span>
+      <span class="entry-note" style="display:block;font-size:10px;color:#555e6f;margin-top:4px;line-height:1.5;font-family:DM Mono,monospace">ATM64,500 MaxPain65,000　注目: P60,000 +282 P63,000 +227 JNET C68,000 400枚(3社)</span>
       <span class="entry-arrow">&rarr;</span>
     </a>
 
@@ -211,7 +211,7 @@ footer a{color:var(--accent);text-decoration:none;margin:0 8px}
       <span class="entry-tags">
         <span class="etag etag-nikkei">67,875</span>
       </span>
-      <span class="entry-note" style="display:block;font-size:10px;color:#7c879b;margin-top:4px;line-height:1.5;font-family:DM Mono,monospace">ATM68,000 MaxPain67,000　注目: C73,000 +435 C70,000 -364 P65,000 +315</span>
+      <span class="entry-note" style="display:block;font-size:10px;color:#555e6f;margin-top:4px;line-height:1.5;font-family:DM Mono,monospace">ATM68,000 MaxPain67,000　注目: C73,000 +435 C70,000 -364 P65,000 +315</span>
       <span class="entry-arrow">&rarr;</span>
     </a>
 
@@ -221,7 +221,7 @@ footer a{color:var(--accent);text-decoration:none;margin:0 8px}
       <span class="entry-tags">
         <span class="etag etag-nikkei">69,085</span>
       </span>
-      <span class="entry-note" style="display:block;font-size:10px;color:#7c879b;margin-top:4px;line-height:1.5;font-family:DM Mono,monospace">ATM69,000 MaxPain67,000　注目: P68,000 +1,286 C70,000 +1,007 C71,000 +777</span>
+      <span class="entry-note" style="display:block;font-size:10px;color:#555e6f;margin-top:4px;line-height:1.5;font-family:DM Mono,monospace">ATM69,000 MaxPain67,000　注目: P68,000 +1,286 C70,000 +1,007 C71,000 +777</span>
       <span class="entry-arrow">&rarr;</span>
     </a>
 </div>
@@ -241,7 +241,7 @@ footer a{color:var(--accent);text-decoration:none;margin:0 8px}
       <span class="entry-tags">
         <span class="etag etag-nikkei">69,270</span>
       </span>
-      <span class="entry-note" style="display:block;font-size:10px;color:#7c879b;margin-top:4px;line-height:1.5;font-family:DM Mono,monospace">ATM69,500 MaxPain67,000　注目: P69,000 +844 P68,000 +653 C72,000 +594 JNET P69,000 500枚(4社)</span>
+      <span class="entry-note" style="display:block;font-size:10px;color:#555e6f;margin-top:4px;line-height:1.5;font-family:DM Mono,monospace">ATM69,500 MaxPain67,000　注目: P69,000 +844 P68,000 +653 C72,000 +594 JNET P69,000 500枚(4社)</span>
       <span class="entry-arrow">&rarr;</span>
     </a>
 
@@ -251,7 +251,7 @@ footer a{color:var(--accent);text-decoration:none;margin:0 8px}
       <span class="entry-tags">
         <span class="etag etag-nikkei">71,260</span>
       </span>
-      <span class="entry-note" style="display:block;font-size:10px;color:#7c879b;margin-top:4px;line-height:1.5;font-family:DM Mono,monospace">ATM71,500 MaxPain68,000　注目: P68,000 +900 C72,000 +654 C75,000 -399</span>
+      <span class="entry-note" style="display:block;font-size:10px;color:#555e6f;margin-top:4px;line-height:1.5;font-family:DM Mono,monospace">ATM71,500 MaxPain68,000　注目: P68,000 +900 C72,000 +654 C75,000 -399</span>
       <span class="entry-arrow">&rarr;</span>
     </a>
 
@@ -261,7 +261,7 @@ footer a{color:var(--accent);text-decoration:none;margin:0 8px}
       <span class="entry-tags">
         <span class="etag etag-nikkei">70,145</span>
       </span>
-      <span class="entry-note" style="display:block;font-size:10px;color:#7c879b;margin-top:4px;line-height:1.5;font-family:DM Mono,monospace">ATM70,000 MaxPain67,000　注目: P65,000 -1,001 C70,000 -680 C71,000 -652</span>
+      <span class="entry-note" style="display:block;font-size:10px;color:#555e6f;margin-top:4px;line-height:1.5;font-family:DM Mono,monospace">ATM70,000 MaxPain67,000　注目: P65,000 -1,001 C70,000 -680 C71,000 -652</span>
       <span class="entry-arrow">&rarr;</span>
     </a>
 
@@ -271,7 +271,7 @@ footer a{color:var(--accent);text-decoration:none;margin:0 8px}
       <span class="entry-tags">
         <span class="etag etag-nikkei">69,895</span>
       </span>
-      <span class="entry-note" style="display:block;font-size:10px;color:#7c879b;margin-top:4px;line-height:1.5;font-family:DM Mono,monospace">ATM70,000 MaxPain66,500　注目: C74,000 +610 C73,000 +464 P66,000 +404</span>
+      <span class="entry-note" style="display:block;font-size:10px;color:#555e6f;margin-top:4px;line-height:1.5;font-family:DM Mono,monospace">ATM70,000 MaxPain66,500　注目: C74,000 +610 C73,000 +464 P66,000 +404</span>
       <span class="entry-arrow">&rarr;</span>
     </a>
 
@@ -281,7 +281,7 @@ footer a{color:var(--accent);text-decoration:none;margin:0 8px}
       <span class="entry-tags">
         <span class="etag etag-nikkei">68,005</span>
       </span>
-      <span class="entry-note" style="display:block;font-size:10px;color:#7c879b;margin-top:4px;line-height:1.5;font-family:DM Mono,monospace">ATM68,000 MaxPain66,000　注目: C71,000 +1,081 C73,000 +656 P65,000 +642 JNET C69,000 3,030枚(5社)</span>
+      <span class="entry-note" style="display:block;font-size:10px;color:#555e6f;margin-top:4px;line-height:1.5;font-family:DM Mono,monospace">ATM68,000 MaxPain66,000　注目: C71,000 +1,081 C73,000 +656 P65,000 +642 JNET C69,000 3,030枚(5社)</span>
       <span class="entry-arrow">&rarr;</span>
     </a>
 
@@ -291,7 +291,7 @@ footer a{color:var(--accent);text-decoration:none;margin:0 8px}
       <span class="entry-tags">
         <span class="etag etag-nikkei">67,630</span>
       </span>
-      <span class="entry-note" style="display:block;font-size:10px;color:#7c879b;margin-top:4px;line-height:1.5;font-family:DM Mono,monospace">ATM67,500 MaxPain66,000　注目: P65,000 -374 P64,000 +353 C72,000 -277 JNET C67,000 710枚(3社)</span>
+      <span class="entry-note" style="display:block;font-size:10px;color:#555e6f;margin-top:4px;line-height:1.5;font-family:DM Mono,monospace">ATM67,500 MaxPain66,000　注目: P65,000 -374 P64,000 +353 C72,000 -277 JNET C67,000 710枚(3社)</span>
       <span class="entry-arrow">&rarr;</span>
     </a>
 
@@ -301,7 +301,7 @@ footer a{color:var(--accent);text-decoration:none;margin:0 8px}
       <span class="entry-tags">
         <span class="etag etag-nikkei">65,840</span>
       </span>
-      <span class="entry-note" style="display:block;font-size:10px;color:#7c879b;margin-top:4px;line-height:1.5;font-family:DM Mono,monospace">ATM66,000 MaxPain65,500　注目: P64,000 +509 P65,000 +486 C67,000 +328</span>
+      <span class="entry-note" style="display:block;font-size:10px;color:#555e6f;margin-top:4px;line-height:1.5;font-family:DM Mono,monospace">ATM66,000 MaxPain65,500　注目: P64,000 +509 P65,000 +486 C67,000 +328</span>
       <span class="entry-arrow">&rarr;</span>
     </a>
 
@@ -311,7 +311,7 @@ footer a{color:var(--accent);text-decoration:none;margin:0 8px}
       <span class="entry-tags">
         <span class="etag etag-nikkei">65,750</span>
       </span>
-      <span class="entry-note" style="display:block;font-size:10px;color:#7c879b;margin-top:4px;line-height:1.5;font-family:DM Mono,monospace">ATM66,000 MaxPain66,000　注目: C66,000 +289 P66,000 +265 C66,500 +204 JNET P65,750 300枚(2社)</span>
+      <span class="entry-note" style="display:block;font-size:10px;color:#555e6f;margin-top:4px;line-height:1.5;font-family:DM Mono,monospace">ATM66,000 MaxPain66,000　注目: C66,000 +289 P66,000 +265 C66,500 +204 JNET P65,750 300枚(2社)</span>
       <span class="entry-arrow">&rarr;</span>
     </a>
 
@@ -321,7 +321,7 @@ footer a{color:var(--accent);text-decoration:none;margin:0 8px}
       <span class="entry-tags">
         <span class="etag etag-nikkei">66,445</span>
       </span>
-      <span class="entry-note" style="display:block;font-size:10px;color:#7c879b;margin-top:4px;line-height:1.5;font-family:DM Mono,monospace">ATM66,500 MaxPain66,000　注目: C70,000 -385 C67,000 +377 JNET C67,000 300枚(3社)</span>
+      <span class="entry-note" style="display:block;font-size:10px;color:#555e6f;margin-top:4px;line-height:1.5;font-family:DM Mono,monospace">ATM66,500 MaxPain66,000　注目: C70,000 -385 C67,000 +377 JNET C67,000 300枚(3社)</span>
       <span class="entry-arrow">&rarr;</span>
     </a>
 
@@ -331,7 +331,7 @@ footer a{color:var(--accent);text-decoration:none;margin:0 8px}
       <span class="entry-tags">
         <span class="etag etag-nikkei">65,225</span>
       </span>
-      <span class="entry-note" style="display:block;font-size:10px;color:#7c879b;margin-top:4px;line-height:1.5;font-family:DM Mono,monospace">ATM65,000 MaxPain65,000　注目: C70,000 +652 P60,000 +493 P61,000 +455</span>
+      <span class="entry-note" style="display:block;font-size:10px;color:#555e6f;margin-top:4px;line-height:1.5;font-family:DM Mono,monospace">ATM65,000 MaxPain65,000　注目: C70,000 +652 P60,000 +493 P61,000 +455</span>
       <span class="entry-arrow">&rarr;</span>
     </a>
 
@@ -341,7 +341,7 @@ footer a{color:var(--accent);text-decoration:none;margin:0 8px}
       <span class="entry-tags">
         <span class="etag etag-nikkei">64,915</span>
       </span>
-      <span class="entry-note" style="display:block;font-size:10px;color:#7c879b;margin-top:4px;line-height:1.5;font-family:DM Mono,monospace">ATM65,000 MaxPain65,000　注目: C66,000 +1,050 C65,000 +646 C68,000 +259</span>
+      <span class="entry-note" style="display:block;font-size:10px;color:#555e6f;margin-top:4px;line-height:1.5;font-family:DM Mono,monospace">ATM65,000 MaxPain65,000　注目: C66,000 +1,050 C65,000 +646 C68,000 +259</span>
       <span class="entry-arrow">&rarr;</span>
     </a>
 
@@ -351,7 +351,7 @@ footer a{color:var(--accent);text-decoration:none;margin:0 8px}
       <span class="entry-tags">
         <span class="etag etag-nikkei">64,785</span>
       </span>
-      <span class="entry-note" style="display:block;font-size:10px;color:#7c879b;margin-top:4px;line-height:1.5;font-family:DM Mono,monospace">ATM65,000 MaxPain65,000　注目: C64,000 +239 JNET C64,000 625枚(4社)</span>
+      <span class="entry-note" style="display:block;font-size:10px;color:#555e6f;margin-top:4px;line-height:1.5;font-family:DM Mono,monospace">ATM65,000 MaxPain65,000　注目: C64,000 +239 JNET C64,000 625枚(4社)</span>
       <span class="entry-arrow">&rarr;</span>
     </a>
 
@@ -361,7 +361,7 @@ footer a{color:var(--accent);text-decoration:none;margin:0 8px}
       <span class="entry-tags">
         <span class="etag etag-nikkei">64,315</span>
       </span>
-      <span class="entry-note" style="display:block;font-size:10px;color:#7c879b;margin-top:4px;line-height:1.5;font-family:DM Mono,monospace">ATM64,500 MaxPain65,000　注目: C69,000 +750 C68,000 +560 C66,000 +239</span>
+      <span class="entry-note" style="display:block;font-size:10px;color:#555e6f;margin-top:4px;line-height:1.5;font-family:DM Mono,monospace">ATM64,500 MaxPain65,000　注目: C69,000 +750 C68,000 +560 C66,000 +239</span>
       <span class="entry-arrow">&rarr;</span>
     </a>
 
@@ -371,7 +371,7 @@ footer a{color:var(--accent);text-decoration:none;margin:0 8px}
       <span class="entry-tags">
         <span class="etag etag-nikkei">63,770</span>
       </span>
-      <span class="entry-note" style="display:block;font-size:10px;color:#7c879b;margin-top:4px;line-height:1.5;font-family:DM Mono,monospace">ATM64,000 MaxPain65,000　注目: P60,000 +591 P59,500 +480 C66,000 -250 JNET P62,625 988枚(1社)</span>
+      <span class="entry-note" style="display:block;font-size:10px;color:#555e6f;margin-top:4px;line-height:1.5;font-family:DM Mono,monospace">ATM64,000 MaxPain65,000　注目: P60,000 +591 P59,500 +480 C66,000 -250 JNET P62,625 988枚(1社)</span>
       <span class="entry-arrow">&rarr;</span>
     </a>
 
@@ -381,7 +381,7 @@ footer a{color:var(--accent);text-decoration:none;margin:0 8px}
       <span class="entry-tags">
         <span class="etag etag-nikkei">63,030</span>
       </span>
-      <span class="entry-note" style="display:block;font-size:10px;color:#7c879b;margin-top:4px;line-height:1.5;font-family:DM Mono,monospace">ATM63,000 MaxPain64,000　注目: P58,000 +616 P60,000 +310 JNET P63,250 180枚(1社)</span>
+      <span class="entry-note" style="display:block;font-size:10px;color:#555e6f;margin-top:4px;line-height:1.5;font-family:DM Mono,monospace">ATM63,000 MaxPain64,000　注目: P58,000 +616 P60,000 +310 JNET P63,250 180枚(1社)</span>
       <span class="entry-arrow">&rarr;</span>
     </a>
 </div>
@@ -401,7 +401,7 @@ footer a{color:var(--accent);text-decoration:none;margin:0 8px}
       <span class="entry-tags">
         <span class="etag etag-nikkei">62,880</span>
       </span>
-      <span class="entry-note" style="display:block;font-size:10px;color:#7c879b;margin-top:4px;line-height:1.5;font-family:DM Mono,monospace">ATM63,000 MaxPain65,000　注目: P65,000 +1,094 P60,000 +1,038 P62,500 +885 JNET P65,000 1,440枚(4社)</span>
+      <span class="entry-note" style="display:block;font-size:10px;color:#555e6f;margin-top:4px;line-height:1.5;font-family:DM Mono,monospace">ATM63,000 MaxPain65,000　注目: P65,000 +1,094 P60,000 +1,038 P62,500 +885 JNET P65,000 1,440枚(4社)</span>
       <span class="entry-arrow">&rarr;</span>
     </a>
 
@@ -411,7 +411,7 @@ footer a{color:var(--accent);text-decoration:none;margin:0 8px}
       <span class="entry-tags">
         <span class="etag etag-nikkei">65,430</span>
       </span>
-      <span class="entry-note" style="display:block;font-size:10px;color:#7c879b;margin-top:4px;line-height:1.5;font-family:DM Mono,monospace">ATM65,500 MaxPain66,000　注目: P63,000 +605 C70,000 +469 C67,000 +375</span>
+      <span class="entry-note" style="display:block;font-size:10px;color:#555e6f;margin-top:4px;line-height:1.5;font-family:DM Mono,monospace">ATM65,500 MaxPain66,000　注目: P63,000 +605 C70,000 +469 C67,000 +375</span>
       <span class="entry-arrow">&rarr;</span>
     </a>
 
@@ -421,7 +421,7 @@ footer a{color:var(--accent);text-decoration:none;margin:0 8px}
       <span class="entry-tags">
         <span class="etag etag-nikkei">65,830</span>
       </span>
-      <span class="entry-note" style="display:block;font-size:10px;color:#7c879b;margin-top:4px;line-height:1.5;font-family:DM Mono,monospace">ATM66,000 MaxPain66,000　注目: C67,000 +614 P66,000 +502 C66,500 +496 JNET C67,000 960枚(3社)</span>
+      <span class="entry-note" style="display:block;font-size:10px;color:#555e6f;margin-top:4px;line-height:1.5;font-family:DM Mono,monospace">ATM66,000 MaxPain66,000　注目: C67,000 +614 P66,000 +502 C66,500 +496 JNET C67,000 960枚(3社)</span>
       <span class="entry-arrow">&rarr;</span>
     </a>
 
@@ -431,7 +431,7 @@ footer a{color:var(--accent);text-decoration:none;margin:0 8px}
       <span class="entry-tags">
         <span class="etag etag-nikkei">65,830</span>
       </span>
-      <span class="entry-note" style="display:block;font-size:10px;color:#7c879b;margin-top:4px;line-height:1.5;font-family:DM Mono,monospace">ATM66,000 MaxPain66,000　注目: C65,000 -430 P62,000 +271 JNET C66,000 200枚(2社)</span>
+      <span class="entry-note" style="display:block;font-size:10px;color:#555e6f;margin-top:4px;line-height:1.5;font-family:DM Mono,monospace">ATM66,000 MaxPain66,000　注目: C65,000 -430 P62,000 +271 JNET C66,000 200枚(2社)</span>
       <span class="entry-arrow">&rarr;</span>
     </a>
 
@@ -441,7 +441,7 @@ footer a{color:var(--accent);text-decoration:none;margin:0 8px}
       <span class="entry-tags">
         <span class="etag etag-nikkei">63,860</span>
       </span>
-      <span class="entry-note" style="display:block;font-size:10px;color:#7c879b;margin-top:4px;line-height:1.5;font-family:DM Mono,monospace">ATM64,000 MaxPain66,000　注目: P64,000 -1,248 C66,000 +613 P63,000 -466</span>
+      <span class="entry-note" style="display:block;font-size:10px;color:#555e6f;margin-top:4px;line-height:1.5;font-family:DM Mono,monospace">ATM64,000 MaxPain66,000　注目: P64,000 -1,248 C66,000 +613 P63,000 -466</span>
       <span class="entry-arrow">&rarr;</span>
     </a>
 
@@ -451,7 +451,7 @@ footer a{color:var(--accent);text-decoration:none;margin:0 8px}
       <span class="entry-tags">
         <span class="etag etag-nikkei">63,850</span>
       </span>
-      <span class="entry-note" style="display:block;font-size:10px;color:#7c879b;margin-top:4px;line-height:1.5;font-family:DM Mono,monospace">ATM64,000 MaxPain66,000　注目: P64,000 +1,318 P60,000 +504 C66,000 +456 JNET P64,000 1,400枚(4社)</span>
+      <span class="entry-note" style="display:block;font-size:10px;color:#555e6f;margin-top:4px;line-height:1.5;font-family:DM Mono,monospace">ATM64,000 MaxPain66,000　注目: P64,000 +1,318 P60,000 +504 C66,000 +456 JNET P64,000 1,400枚(4社)</span>
       <span class="entry-arrow">&rarr;</span>
     </a>
 
@@ -461,7 +461,7 @@ footer a{color:var(--accent);text-decoration:none;margin:0 8px}
       <span class="entry-tags">
         <span class="etag etag-nikkei">64,970</span>
       </span>
-      <span class="entry-note" style="display:block;font-size:10px;color:#7c879b;margin-top:4px;line-height:1.5;font-family:DM Mono,monospace">ATM65,000 MaxPain66,000　注目: C70,000 +293 P62,000 +244 JNET C66,000 200枚(2社)</span>
+      <span class="entry-note" style="display:block;font-size:10px;color:#555e6f;margin-top:4px;line-height:1.5;font-family:DM Mono,monospace">ATM65,000 MaxPain66,000　注目: C70,000 +293 P62,000 +244 JNET C66,000 200枚(2社)</span>
       <span class="entry-arrow">&rarr;</span>
     </a>
 
@@ -471,7 +471,7 @@ footer a{color:var(--accent);text-decoration:none;margin:0 8px}
       <span class="entry-tags">
         <span class="etag etag-nikkei">66,280</span>
       </span>
-      <span class="entry-note" style="display:block;font-size:10px;color:#7c879b;margin-top:4px;line-height:1.5;font-family:DM Mono,monospace">ATM66,500 MaxPain66,000　注目: P65,000 +591 P62,000 +277 C67,000 +271 JNET C67,000 1,600枚(6社)</span>
+      <span class="entry-note" style="display:block;font-size:10px;color:#555e6f;margin-top:4px;line-height:1.5;font-family:DM Mono,monospace">ATM66,500 MaxPain66,000　注目: P65,000 +591 P62,000 +277 C67,000 +271 JNET C67,000 1,600枚(6社)</span>
       <span class="entry-arrow">&rarr;</span>
     </a>
 
@@ -481,7 +481,7 @@ footer a{color:var(--accent);text-decoration:none;margin:0 8px}
       <span class="entry-tags">
         <span class="etag etag-nikkei">65,690</span>
       </span>
-      <span class="entry-note" style="display:block;font-size:10px;color:#7c879b;margin-top:4px;line-height:1.5;font-family:DM Mono,monospace">ATM65,500 MaxPain66,000　注目: C69,000 +1,417 C68,000 +597 P66,000 +586 JNET C67,000 500枚(3社)</span>
+      <span class="entry-note" style="display:block;font-size:10px;color:#555e6f;margin-top:4px;line-height:1.5;font-family:DM Mono,monospace">ATM65,500 MaxPain66,000　注目: C69,000 +1,417 C68,000 +597 P66,000 +586 JNET C67,000 500枚(3社)</span>
       <span class="entry-arrow">&rarr;</span>
     </a>
 
@@ -491,7 +491,7 @@ footer a{color:var(--accent);text-decoration:none;margin:0 8px}
       <span class="entry-tags">
         <span class="etag etag-nikkei">66,265</span>
       </span>
-      <span class="entry-note" style="display:block;font-size:10px;color:#7c879b;margin-top:4px;line-height:1.5;font-family:DM Mono,monospace">ATM66,500 MaxPain66,000　注目: P66,000 +1,668 C69,000 +1,103 C68,000 +531 JNET C66,500 1,000枚(2社)</span>
+      <span class="entry-note" style="display:block;font-size:10px;color:#555e6f;margin-top:4px;line-height:1.5;font-family:DM Mono,monospace">ATM66,500 MaxPain66,000　注目: P66,000 +1,668 C69,000 +1,103 C68,000 +531 JNET C66,500 1,000枚(2社)</span>
       <span class="entry-arrow">&rarr;</span>
     </a>
 
@@ -501,7 +501,7 @@ footer a{color:var(--accent);text-decoration:none;margin:0 8px}
       <span class="entry-tags">
         <span class="etag etag-nikkei">66,125</span>
       </span>
-      <span class="entry-note" style="display:block;font-size:10px;color:#7c879b;margin-top:4px;line-height:1.5;font-family:DM Mono,monospace">ATM66,000 MaxPain66,000　注目: C67,000 -501 C68,000 +315 JNET C67,000 1,500枚(5社)</span>
+      <span class="entry-note" style="display:block;font-size:10px;color:#555e6f;margin-top:4px;line-height:1.5;font-family:DM Mono,monospace">ATM66,000 MaxPain66,000　注目: C67,000 -501 C68,000 +315 JNET C67,000 1,500枚(5社)</span>
       <span class="entry-arrow">&rarr;</span>
     </a>
 
@@ -511,7 +511,7 @@ footer a{color:var(--accent);text-decoration:none;margin:0 8px}
       <span class="entry-tags">
         <span class="etag etag-nikkei">65,805</span>
       </span>
-      <span class="entry-note" style="display:block;font-size:10px;color:#7c879b;margin-top:4px;line-height:1.5;font-family:DM Mono,monospace">ATM66,000 MaxPain66,000　注目: P63,000 -485 JNET P66,000 716枚(4社)</span>
+      <span class="entry-note" style="display:block;font-size:10px;color:#555e6f;margin-top:4px;line-height:1.5;font-family:DM Mono,monospace">ATM66,000 MaxPain66,000　注目: P63,000 -485 JNET P66,000 716枚(4社)</span>
       <span class="entry-arrow">&rarr;</span>
     </a>
 
@@ -521,7 +521,7 @@ footer a{color:var(--accent);text-decoration:none;margin:0 8px}
       <span class="entry-tags">
         <span class="etag etag-nikkei">64,960</span>
       </span>
-      <span class="entry-note" style="display:block;font-size:10px;color:#7c879b;margin-top:4px;line-height:1.5;font-family:DM Mono,monospace">ATM65,000 MaxPain66,000　注目: P60,000 +353 P62,000 +226 JNET P65,000 600枚(4社)</span>
+      <span class="entry-note" style="display:block;font-size:10px;color:#555e6f;margin-top:4px;line-height:1.5;font-family:DM Mono,monospace">ATM65,000 MaxPain66,000　注目: P60,000 +353 P62,000 +226 JNET P65,000 600枚(4社)</span>
       <span class="entry-arrow">&rarr;</span>
     </a>
 
@@ -531,7 +531,7 @@ footer a{color:var(--accent);text-decoration:none;margin:0 8px}
       <span class="entry-tags">
         <span class="etag etag-nikkei">65,800</span>
       </span>
-      <span class="entry-note" style="display:block;font-size:10px;color:#7c879b;margin-top:4px;line-height:1.5;font-family:DM Mono,monospace">ATM66,000 MaxPain66,000　注目: P65,000 +287 C69,000 +205 JNET C67,000 600枚(5社)</span>
+      <span class="entry-note" style="display:block;font-size:10px;color:#555e6f;margin-top:4px;line-height:1.5;font-family:DM Mono,monospace">ATM66,000 MaxPain66,000　注目: P65,000 +287 C69,000 +205 JNET C67,000 600枚(5社)</span>
       <span class="entry-arrow">&rarr;</span>
     </a>
 
@@ -541,7 +541,7 @@ footer a{color:var(--accent);text-decoration:none;margin:0 8px}
       <span class="entry-tags">
         <span class="etag etag-nikkei">65,185</span>
       </span>
-      <span class="entry-note" style="display:block;font-size:10px;color:#7c879b;margin-top:4px;line-height:1.5;font-family:DM Mono,monospace">ATM65,000 MaxPain66,000　注目: C69,000 +735 P60,000 +495 C67,000 +489 JNET C66,750 2,000枚(3社)</span>
+      <span class="entry-note" style="display:block;font-size:10px;color:#555e6f;margin-top:4px;line-height:1.5;font-family:DM Mono,monospace">ATM65,000 MaxPain66,000　注目: C69,000 +735 P60,000 +495 C67,000 +489 JNET C66,750 2,000枚(3社)</span>
       <span class="entry-arrow">&rarr;</span>
     </a>
 
@@ -551,7 +551,7 @@ footer a{color:var(--accent);text-decoration:none;margin:0 8px}
       <span class="entry-tags">
         <span class="etag etag-nikkei">65,440</span>
       </span>
-      <span class="entry-note" style="display:block;font-size:10px;color:#7c879b;margin-top:4px;line-height:1.5;font-family:DM Mono,monospace">ATM65,500 MaxPain66,000　注目: P63,000 +280 C70,000 +217</span>
+      <span class="entry-note" style="display:block;font-size:10px;color:#555e6f;margin-top:4px;line-height:1.5;font-family:DM Mono,monospace">ATM65,500 MaxPain66,000　注目: P63,000 +280 C70,000 +217</span>
       <span class="entry-arrow">&rarr;</span>
     </a>
 
@@ -561,7 +561,7 @@ footer a{color:var(--accent);text-decoration:none;margin:0 8px}
       <span class="entry-tags">
         <span class="etag etag-nikkei">67,240</span>
       </span>
-      <span class="entry-note" style="display:block;font-size:10px;color:#7c879b;margin-top:4px;line-height:1.5;font-family:DM Mono,monospace">ATM67,000 MaxPain66,500　注目: P64,000 +402 P67,000 +339 C70,000 +295 JNET P67,000 1,000枚(4社)</span>
+      <span class="entry-note" style="display:block;font-size:10px;color:#555e6f;margin-top:4px;line-height:1.5;font-family:DM Mono,monospace">ATM67,000 MaxPain66,500　注目: P64,000 +402 P67,000 +339 C70,000 +295 JNET P67,000 1,000枚(4社)</span>
       <span class="entry-arrow">&rarr;</span>
     </a>
 
@@ -571,7 +571,7 @@ footer a{color:var(--accent);text-decoration:none;margin:0 8px}
       <span class="entry-tags">
         <span class="etag etag-nikkei">69,075</span>
       </span>
-      <span class="entry-note" style="display:block;font-size:10px;color:#7c879b;margin-top:4px;line-height:1.5;font-family:DM Mono,monospace">ATM69,000 MaxPain67,000　注目: C70,000 +614 P65,000 +226 P67,000 +213 JNET C70,250 1,216枚(1社)</span>
+      <span class="entry-note" style="display:block;font-size:10px;color:#555e6f;margin-top:4px;line-height:1.5;font-family:DM Mono,monospace">ATM69,000 MaxPain67,000　注目: C70,000 +614 P65,000 +226 P67,000 +213 JNET C70,250 1,216枚(1社)</span>
       <span class="entry-arrow">&rarr;</span>
     </a>
 
@@ -581,7 +581,7 @@ footer a{color:var(--accent);text-decoration:none;margin:0 8px}
       <span class="entry-tags">
         <span class="etag etag-nikkei">68,915</span>
       </span>
-      <span class="entry-note" style="display:block;font-size:10px;color:#7c879b;margin-top:4px;line-height:1.5;font-family:DM Mono,monospace">ATM69,000 MaxPain67,000　注目: P67,000 +367 P64,000 -344 P65,000 +201 JNET C69,750 1,264枚(1社)</span>
+      <span class="entry-note" style="display:block;font-size:10px;color:#555e6f;margin-top:4px;line-height:1.5;font-family:DM Mono,monospace">ATM69,000 MaxPain67,000　注目: P67,000 +367 P64,000 -344 P65,000 +201 JNET C69,750 1,264枚(1社)</span>
       <span class="entry-arrow">&rarr;</span>
     </a>
 </div>
@@ -601,7 +601,7 @@ footer a{color:var(--accent);text-decoration:none;margin:0 8px}
       <span class="entry-tags">
         <span class="etag etag-nikkei">68,285</span>
       </span>
-      <span class="entry-note" style="display:block;font-size:10px;color:#7c879b;margin-top:4px;line-height:1.5;font-family:DM Mono,monospace">ATM68,500 MaxPain67,000　注目: P68,000 +1,453 P67,000 +1,190 P64,000 +496 JNET C69,000 1,800枚(5社)</span>
+      <span class="entry-note" style="display:block;font-size:10px;color:#555e6f;margin-top:4px;line-height:1.5;font-family:DM Mono,monospace">ATM68,500 MaxPain67,000　注目: P68,000 +1,453 P67,000 +1,190 P64,000 +496 JNET C69,000 1,800枚(5社)</span>
       <span class="entry-arrow">&rarr;</span>
     </a>
 
@@ -611,7 +611,7 @@ footer a{color:var(--accent);text-decoration:none;margin:0 8px}
       <span class="entry-tags">
         <span class="etag etag-nikkei">68,560</span>
       </span>
-      <span class="entry-note" style="display:block;font-size:10px;color:#7c879b;margin-top:4px;line-height:1.5;font-family:DM Mono,monospace">ATM68,500 MaxPain66,500　注目: P65,000 +583 P66,000 +349 C69,000 +253 JNET C68,500 1,100枚(4社)</span>
+      <span class="entry-note" style="display:block;font-size:10px;color:#555e6f;margin-top:4px;line-height:1.5;font-family:DM Mono,monospace">ATM68,500 MaxPain66,500　注目: P65,000 +583 P66,000 +349 C69,000 +253 JNET C68,500 1,100枚(4社)</span>
       <span class="entry-arrow">&rarr;</span>
     </a>
 
@@ -621,7 +621,7 @@ footer a{color:var(--accent);text-decoration:none;margin:0 8px}
       <span class="entry-tags">
         <span class="etag etag-nikkei">66,180</span>
       </span>
-      <span class="entry-note" style="display:block;font-size:10px;color:#7c879b;margin-top:4px;line-height:1.5;font-family:DM Mono,monospace">ATM66,000 MaxPain66,000　注目: P61,000 +958 P62,000 +700 P66,000 +455 JNET C66,000 600枚(3社)</span>
+      <span class="entry-note" style="display:block;font-size:10px;color:#555e6f;margin-top:4px;line-height:1.5;font-family:DM Mono,monospace">ATM66,000 MaxPain66,000　注目: P61,000 +958 P62,000 +700 P66,000 +455 JNET C66,000 600枚(3社)</span>
       <span class="entry-arrow">&rarr;</span>
     </a>
 
@@ -631,7 +631,7 @@ footer a{color:var(--accent);text-decoration:none;margin:0 8px}
       <span class="entry-tags">
         <span class="etag etag-nikkei">64,265</span>
       </span>
-      <span class="entry-note" style="display:block;font-size:10px;color:#7c879b;margin-top:4px;line-height:1.5;font-family:DM Mono,monospace">ATM64,500 MaxPain65,000　注目: P60,000 +796 C69,000 +619 P59,500 +304 JNET P63,000 400枚(2社)</span>
+      <span class="entry-note" style="display:block;font-size:10px;color:#555e6f;margin-top:4px;line-height:1.5;font-family:DM Mono,monospace">ATM64,500 MaxPain65,000　注目: P60,000 +796 C69,000 +619 P59,500 +304 JNET P63,000 400枚(2社)</span>
       <span class="entry-arrow">&rarr;</span>
     </a>
 
@@ -641,7 +641,7 @@ footer a{color:var(--accent);text-decoration:none;margin:0 8px}
       <span class="entry-tags">
         <span class="etag etag-nikkei">62,590</span>
       </span>
-      <span class="entry-note" style="display:block;font-size:10px;color:#7c879b;margin-top:4px;line-height:1.5;font-family:DM Mono,monospace">ATM62,500 MaxPain65,000　注目: JNET P63,500 414枚(1社)</span>
+      <span class="entry-note" style="display:block;font-size:10px;color:#555e6f;margin-top:4px;line-height:1.5;font-family:DM Mono,monospace">ATM62,500 MaxPain65,000　注目: JNET P63,500 414枚(1社)</span>
       <span class="entry-arrow">&rarr;</span>
     </a>
 
@@ -651,7 +651,7 @@ footer a{color:var(--accent);text-decoration:none;margin:0 8px}
       <span class="entry-tags">
         <span class="etag etag-nikkei">63,995</span>
       </span>
-      <span class="entry-note" style="display:block;font-size:10px;color:#7c879b;margin-top:4px;line-height:1.5;font-family:DM Mono,monospace">ATM64,000 MaxPain65,000　注目: C67,000 +617 P59,500 +486 P60,000 +304 JNET C65,000 540枚(4社)</span>
+      <span class="entry-note" style="display:block;font-size:10px;color:#555e6f;margin-top:4px;line-height:1.5;font-family:DM Mono,monospace">ATM64,000 MaxPain65,000　注目: C67,000 +617 P59,500 +486 P60,000 +304 JNET C65,000 540枚(4社)</span>
       <span class="entry-arrow">&rarr;</span>
     </a>
 
@@ -661,7 +661,7 @@ footer a{color:var(--accent);text-decoration:none;margin:0 8px}
       <span class="entry-tags">
         <span class="etag etag-nikkei">62,730</span>
       </span>
-      <span class="entry-note" style="display:block;font-size:10px;color:#7c879b;margin-top:4px;line-height:1.5;font-family:DM Mono,monospace">ATM62,500 MaxPain65,000　注目: P61,000 +498 C66,000 +401 P60,000 -307 JNET P61,000 600枚(4社)</span>
+      <span class="entry-note" style="display:block;font-size:10px;color:#555e6f;margin-top:4px;line-height:1.5;font-family:DM Mono,monospace">ATM62,500 MaxPain65,000　注目: P61,000 +498 C66,000 +401 P60,000 -307 JNET P61,000 600枚(4社)</span>
       <span class="entry-arrow">&rarr;</span>
     </a>
 
@@ -671,7 +671,7 @@ footer a{color:var(--accent);text-decoration:none;margin:0 8px}
       <span class="entry-tags">
         <span class="etag etag-nikkei">62,520</span>
       </span>
-      <span class="entry-note" style="display:block;font-size:10px;color:#7c879b;margin-top:4px;line-height:1.5;font-family:DM Mono,monospace">ATM62,500 MaxPain65,000　注目: P59,000 -2,068 C65,000 +2,026 C63,000 +634 JNET P60,500 950枚(1社)</span>
+      <span class="entry-note" style="display:block;font-size:10px;color:#555e6f;margin-top:4px;line-height:1.5;font-family:DM Mono,monospace">ATM62,500 MaxPain65,000　注目: P59,000 -2,068 C65,000 +2,026 C63,000 +634 JNET P60,500 950枚(1社)</span>
       <span class="entry-arrow">&rarr;</span>
     </a>
 
@@ -681,7 +681,7 @@ footer a{color:var(--accent);text-decoration:none;margin:0 8px}
       <span class="entry-tags">
         <span class="etag etag-nikkei">62,465</span>
       </span>
-      <span class="entry-note" style="display:block;font-size:10px;color:#7c879b;margin-top:4px;line-height:1.5;font-family:DM Mono,monospace">ATM62,500 MaxPain65,000　注目: P65,000 -3,001 P60,000 +995 C65,000 +682 JNET C63,000 400枚(4社)</span>
+      <span class="entry-note" style="display:block;font-size:10px;color:#555e6f;margin-top:4px;line-height:1.5;font-family:DM Mono,monospace">ATM62,500 MaxPain65,000　注目: P65,000 -3,001 P60,000 +995 C65,000 +682 JNET C63,000 400枚(4社)</span>
       <span class="entry-arrow">&rarr;</span>
     </a>
 
@@ -691,7 +691,7 @@ footer a{color:var(--accent);text-decoration:none;margin:0 8px}
       <span class="entry-tags">
         <span class="etag etag-nikkei">65,155</span>
       </span>
-      <span class="entry-note" style="display:block;font-size:10px;color:#7c879b;margin-top:4px;line-height:1.5;font-family:DM Mono,monospace">ATM65,000 MaxPain67,000　注目: C70,000 +433</span>
+      <span class="entry-note" style="display:block;font-size:10px;color:#555e6f;margin-top:4px;line-height:1.5;font-family:DM Mono,monospace">ATM65,000 MaxPain67,000　注目: C70,000 +433</span>
       <span class="entry-arrow">&rarr;</span>
     </a>
 
@@ -701,7 +701,7 @@ footer a{color:var(--accent);text-decoration:none;margin:0 8px}
       <span class="entry-tags">
         <span class="etag etag-nikkei">65,090</span>
       </span>
-      <span class="entry-note" style="display:block;font-size:10px;color:#7c879b;margin-top:4px;line-height:1.5;font-family:DM Mono,monospace">ATM65,000 MaxPain67,000　注目: C67,000 -698 P65,000 -358 P60,000 +271 JNET C65,000 400枚(2社)</span>
+      <span class="entry-note" style="display:block;font-size:10px;color:#555e6f;margin-top:4px;line-height:1.5;font-family:DM Mono,monospace">ATM65,000 MaxPain67,000　注目: C67,000 -698 P65,000 -358 P60,000 +271 JNET C65,000 400枚(2社)</span>
       <span class="entry-arrow">&rarr;</span>
     </a>
 
@@ -711,7 +711,7 @@ footer a{color:var(--accent);text-decoration:none;margin:0 8px}
       <span class="entry-tags">
         <span class="etag etag-nikkei">65,455</span>
       </span>
-      <span class="entry-note" style="display:block;font-size:10px;color:#7c879b;margin-top:4px;line-height:1.5;font-family:DM Mono,monospace">ATM65,500 MaxPain67,000　注目: P65,000 -470 P64,000 +238</span>
+      <span class="entry-note" style="display:block;font-size:10px;color:#555e6f;margin-top:4px;line-height:1.5;font-family:DM Mono,monospace">ATM65,500 MaxPain67,000　注目: P65,000 -470 P64,000 +238</span>
       <span class="entry-arrow">&rarr;</span>
     </a>
 
@@ -721,7 +721,7 @@ footer a{color:var(--accent);text-decoration:none;margin:0 8px}
       <span class="entry-tags">
         <span class="etag etag-nikkei">66,080</span>
       </span>
-      <span class="entry-note" style="display:block;font-size:10px;color:#7c879b;margin-top:4px;line-height:1.5;font-family:DM Mono,monospace">ATM66,000 MaxPain67,000　注目: C70,000 +314 P64,000 +278 P65,000 -248 JNET P65,875 950枚(1社)</span>
+      <span class="entry-note" style="display:block;font-size:10px;color:#555e6f;margin-top:4px;line-height:1.5;font-family:DM Mono,monospace">ATM66,000 MaxPain67,000　注目: C70,000 +314 P64,000 +278 P65,000 -248 JNET P65,875 950枚(1社)</span>
       <span class="entry-arrow">&rarr;</span>
     </a>
 
@@ -731,7 +731,7 @@ footer a{color:var(--accent);text-decoration:none;margin:0 8px}
       <span class="entry-tags">
         <span class="etag etag-nikkei">66,125</span>
       </span>
-      <span class="entry-note" style="display:block;font-size:10px;color:#7c879b;margin-top:4px;line-height:1.5;font-family:DM Mono,monospace">ATM66,000 MaxPain67,000　注目: C67,000 +861 P65,000 -452 P61,000 +428 JNET P66,000 820枚(4社)</span>
+      <span class="entry-note" style="display:block;font-size:10px;color:#555e6f;margin-top:4px;line-height:1.5;font-family:DM Mono,monospace">ATM66,000 MaxPain67,000　注目: C67,000 +861 P65,000 -452 P61,000 +428 JNET P66,000 820枚(4社)</span>
       <span class="entry-arrow">&rarr;</span>
     </a>
 
@@ -741,7 +741,7 @@ footer a{color:var(--accent);text-decoration:none;margin:0 8px}
       <span class="entry-tags">
         <span class="etag etag-nikkei">64,610</span>
       </span>
-      <span class="entry-note" style="display:block;font-size:10px;color:#7c879b;margin-top:4px;line-height:1.5;font-family:DM Mono,monospace">ATM64,500 MaxPain66,000　注目: C67,000 +2,132 C65,000 +561 C68,000 +516 JNET C64,000 1,200枚(3社)</span>
+      <span class="entry-note" style="display:block;font-size:10px;color:#555e6f;margin-top:4px;line-height:1.5;font-family:DM Mono,monospace">ATM64,500 MaxPain66,000　注目: C67,000 +2,132 C65,000 +561 C68,000 +516 JNET C64,000 1,200枚(3社)</span>
       <span class="entry-arrow">&rarr;</span>
     </a>
 
@@ -751,7 +751,7 @@ footer a{color:var(--accent);text-decoration:none;margin:0 8px}
       <span class="entry-tags">
         <span class="etag etag-nikkei">65,805</span>
       </span>
-      <span class="entry-note" style="display:block;font-size:10px;color:#7c879b;margin-top:4px;line-height:1.5;font-family:DM Mono,monospace">ATM66,000 MaxPain67,500　注目: C70,000 +384 P62,000 -270 P66,000 +249 JNET C67,500 200枚(2社)</span>
+      <span class="entry-note" style="display:block;font-size:10px;color:#555e6f;margin-top:4px;line-height:1.5;font-family:DM Mono,monospace">ATM66,000 MaxPain67,500　注目: C70,000 +384 P62,000 -270 P66,000 +249 JNET C67,500 200枚(2社)</span>
       <span class="entry-arrow">&rarr;</span>
     </a>
 
@@ -761,7 +761,7 @@ footer a{color:var(--accent);text-decoration:none;margin:0 8px}
       <span class="entry-tags">
         <span class="etag etag-nikkei">68,395</span>
       </span>
-      <span class="entry-note" style="display:block;font-size:10px;color:#7c879b;margin-top:4px;line-height:1.5;font-family:DM Mono,monospace">ATM68,500 MaxPain68,000　注目: C70,000 +461 JNET C69,000 400枚(3社)</span>
+      <span class="entry-note" style="display:block;font-size:10px;color:#555e6f;margin-top:4px;line-height:1.5;font-family:DM Mono,monospace">ATM68,500 MaxPain68,000　注目: C70,000 +461 JNET C69,000 400枚(3社)</span>
       <span class="entry-arrow">&rarr;</span>
     </a>
 
@@ -771,7 +771,7 @@ footer a{color:var(--accent);text-decoration:none;margin:0 8px}
       <span class="entry-tags">
         <span class="etag etag-nikkei">67,780</span>
       </span>
-      <span class="entry-note" style="display:block;font-size:10px;color:#7c879b;margin-top:4px;line-height:1.5;font-family:DM Mono,monospace">ATM68,000 MaxPain68,000　注目: P64,000 +644 P68,000 -399 C70,000 -389 JNET P68,000 600枚(3社)</span>
+      <span class="entry-note" style="display:block;font-size:10px;color:#555e6f;margin-top:4px;line-height:1.5;font-family:DM Mono,monospace">ATM68,000 MaxPain68,000　注目: P64,000 +644 P68,000 -399 C70,000 -389 JNET P68,000 600枚(3社)</span>
       <span class="entry-arrow">&rarr;</span>
     </a>
 
@@ -781,7 +781,7 @@ footer a{color:var(--accent);text-decoration:none;margin:0 8px}
       <span class="entry-tags">
         <span class="etag etag-nikkei">67,680</span>
       </span>
-      <span class="entry-note" style="display:block;font-size:10px;color:#7c879b;margin-top:4px;line-height:1.5;font-family:DM Mono,monospace">ATM67,500 MaxPain68,000　注目: C70,000 +345 P66,000 +277 P64,000 +231 JNET C68,125 912枚(1社)</span>
+      <span class="entry-note" style="display:block;font-size:10px;color:#555e6f;margin-top:4px;line-height:1.5;font-family:DM Mono,monospace">ATM67,500 MaxPain68,000　注目: C70,000 +345 P66,000 +277 P64,000 +231 JNET C68,125 912枚(1社)</span>
       <span class="entry-arrow">&rarr;</span>
     </a>
 
@@ -791,7 +791,7 @@ footer a{color:var(--accent);text-decoration:none;margin:0 8px}
       <span class="entry-tags">
         <span class="etag etag-nikkei">68,820</span>
       </span>
-      <span class="entry-note" style="display:block;font-size:10px;color:#7c879b;margin-top:4px;line-height:1.5;font-family:DM Mono,monospace">ATM69,000 MaxPain68,000　注目: P68,000 -667 P65,000 +613 P64,000 +217 JNET P68,000 2,600枚(5社)</span>
+      <span class="entry-note" style="display:block;font-size:10px;color:#555e6f;margin-top:4px;line-height:1.5;font-family:DM Mono,monospace">ATM69,000 MaxPain68,000　注目: P68,000 -667 P65,000 +613 P64,000 +217 JNET P68,000 2,600枚(5社)</span>
       <span class="entry-arrow">&rarr;</span>
     </a>
 </div>
@@ -811,7 +811,7 @@ footer a{color:var(--accent);text-decoration:none;margin:0 8px}
       <span class="entry-tags">
         <span class="etag etag-nikkei">67,730</span>
       </span>
-      <span class="entry-note" style="display:block;font-size:10px;color:#7c879b;margin-top:4px;line-height:1.5;font-family:DM Mono,monospace">ATM67,500 MaxPain67,500　注目: P65,000 -758 C72,000 +357 P66,500 +324 JNET P68,000 846枚(2社)</span>
+      <span class="entry-note" style="display:block;font-size:10px;color:#555e6f;margin-top:4px;line-height:1.5;font-family:DM Mono,monospace">ATM67,500 MaxPain67,500　注目: P65,000 -758 C72,000 +357 P66,500 +324 JNET P68,000 846枚(2社)</span>
       <span class="entry-arrow">&rarr;</span>
     </a>
 
@@ -821,7 +821,7 @@ footer a{color:var(--accent);text-decoration:none;margin:0 8px}
       <span class="entry-tags">
         <span class="etag etag-nikkei">65,990</span>
       </span>
-      <span class="entry-note" style="display:block;font-size:10px;color:#7c879b;margin-top:4px;line-height:1.5;font-family:DM Mono,monospace">ATM66,000 MaxPain67,000　注目: P62,000 +1,809 P63,000 +461 C70,000 +451 JNET P66,000 2,794枚(4社)</span>
+      <span class="entry-note" style="display:block;font-size:10px;color:#555e6f;margin-top:4px;line-height:1.5;font-family:DM Mono,monospace">ATM66,000 MaxPain67,000　注目: P62,000 +1,809 P63,000 +461 C70,000 +451 JNET P66,000 2,794枚(4社)</span>
       <span class="entry-arrow">&rarr;</span>
     </a>
 
@@ -831,7 +831,7 @@ footer a{color:var(--accent);text-decoration:none;margin:0 8px}
       <span class="entry-tags">
         <span class="etag etag-nikkei">68,440</span>
       </span>
-      <span class="entry-note" style="display:block;font-size:10px;color:#7c879b;margin-top:4px;line-height:1.5;font-family:DM Mono,monospace">ATM68,500 MaxPain68,000　注目: P69,000 +802 JNET P68,000 450枚(3社)</span>
+      <span class="entry-note" style="display:block;font-size:10px;color:#555e6f;margin-top:4px;line-height:1.5;font-family:DM Mono,monospace">ATM68,500 MaxPain68,000　注目: P69,000 +802 JNET P68,000 450枚(3社)</span>
       <span class="entry-arrow">&rarr;</span>
     </a>
 
@@ -841,7 +841,7 @@ footer a{color:var(--accent);text-decoration:none;margin:0 8px}
       <span class="entry-tags">
         <span class="etag etag-nikkei">70,020</span>
       </span>
-      <span class="entry-note" style="display:block;font-size:10px;color:#7c879b;margin-top:4px;line-height:1.5;font-family:DM Mono,monospace">ATM70,000 MaxPain68,000　注目: C75,000 +426 P66,000 +381 C70,000 -347 JNET C70,000 600枚(4社)</span>
+      <span class="entry-note" style="display:block;font-size:10px;color:#555e6f;margin-top:4px;line-height:1.5;font-family:DM Mono,monospace">ATM70,000 MaxPain68,000　注目: C75,000 +426 P66,000 +381 C70,000 -347 JNET C70,000 600枚(4社)</span>
       <span class="entry-arrow">&rarr;</span>
     </a>
 
@@ -851,7 +851,7 @@ footer a{color:var(--accent);text-decoration:none;margin:0 8px}
       <span class="entry-tags">
         <span class="etag etag-nikkei">69,845</span>
       </span>
-      <span class="entry-note" style="display:block;font-size:10px;color:#7c879b;margin-top:4px;line-height:1.5;font-family:DM Mono,monospace">ATM70,000 MaxPain68,000　注目: C70,000 +682 P65,000 +665 P66,000 +328 JNET P69,250 1,000枚(2社)</span>
+      <span class="entry-note" style="display:block;font-size:10px;color:#555e6f;margin-top:4px;line-height:1.5;font-family:DM Mono,monospace">ATM70,000 MaxPain68,000　注目: C70,000 +682 P65,000 +665 P66,000 +328 JNET P69,250 1,000枚(2社)</span>
       <span class="entry-arrow">&rarr;</span>
     </a>
 
@@ -861,7 +861,7 @@ footer a{color:var(--accent);text-decoration:none;margin:0 8px}
       <span class="entry-tags">
         <span class="etag etag-nikkei">69,110</span>
       </span>
-      <span class="entry-note" style="display:block;font-size:10px;color:#7c879b;margin-top:4px;line-height:1.5;font-family:DM Mono,monospace">ATM69,000 MaxPain68,000　注目: C72,000 +467 P65,000 +444 P69,000 +389 JNET P69,000 1,750枚(6社)</span>
+      <span class="entry-note" style="display:block;font-size:10px;color:#555e6f;margin-top:4px;line-height:1.5;font-family:DM Mono,monospace">ATM69,000 MaxPain68,000　注目: C72,000 +467 P65,000 +444 P69,000 +389 JNET P69,000 1,750枚(6社)</span>
       <span class="entry-arrow">&rarr;</span>
     </a>
 
@@ -871,7 +871,7 @@ footer a{color:var(--accent);text-decoration:none;margin:0 8px}
       <span class="entry-tags">
         <span class="etag etag-nikkei">70,975</span>
       </span>
-      <span class="entry-note" style="display:block;font-size:10px;color:#7c879b;margin-top:4px;line-height:1.5;font-family:DM Mono,monospace">ATM71,000 MaxPain69,000　注目: P70,000 +708 P68,000 +510 P67,000 +499 JNET P70,000 1,200枚(2社)</span>
+      <span class="entry-note" style="display:block;font-size:10px;color:#555e6f;margin-top:4px;line-height:1.5;font-family:DM Mono,monospace">ATM71,000 MaxPain69,000　注目: P70,000 +708 P68,000 +510 P67,000 +499 JNET P70,000 1,200枚(2社)</span>
       <span class="entry-arrow">&rarr;</span>
     </a>
 
@@ -881,7 +881,7 @@ footer a{color:var(--accent);text-decoration:none;margin:0 8px}
       <span class="entry-tags">
         <span class="etag etag-nikkei">70,345</span>
       </span>
-      <span class="entry-note" style="display:block;font-size:10px;color:#7c879b;margin-top:4px;line-height:1.5;font-family:DM Mono,monospace">ATM70,500 MaxPain69,000　注目: P70,000 +537 P66,000 +490 JNET P70,000 950枚(3社)</span>
+      <span class="entry-note" style="display:block;font-size:10px;color:#555e6f;margin-top:4px;line-height:1.5;font-family:DM Mono,monospace">ATM70,500 MaxPain69,000　注目: P70,000 +537 P66,000 +490 JNET P70,000 950枚(3社)</span>
       <span class="entry-arrow">&rarr;</span>
     </a>
 
@@ -891,7 +891,7 @@ footer a{color:var(--accent);text-decoration:none;margin:0 8px}
       <span class="entry-tags">
         <span class="etag etag-nikkei">69,990</span>
       </span>
-      <span class="entry-note" style="display:block;font-size:10px;color:#7c879b;margin-top:4px;line-height:1.5;font-family:DM Mono,monospace">ATM70,000 MaxPain68,000　注目: C75,000 +1,611 C72,000 +360 P66,000 +281 JNET P69,000 400枚(3社)</span>
+      <span class="entry-note" style="display:block;font-size:10px;color:#555e6f;margin-top:4px;line-height:1.5;font-family:DM Mono,monospace">ATM70,000 MaxPain68,000　注目: C75,000 +1,611 C72,000 +360 P66,000 +281 JNET P69,000 400枚(3社)</span>
       <span class="entry-arrow">&rarr;</span>
     </a>
 
@@ -901,7 +901,7 @@ footer a{color:var(--accent);text-decoration:none;margin:0 8px}
       <span class="entry-tags">
         <span class="etag etag-nikkei">69,230</span>
       </span>
-      <span class="entry-note" style="display:block;font-size:10px;color:#7c879b;margin-top:4px;line-height:1.5;font-family:DM Mono,monospace">ATM69,000 MaxPain68,000　注目: P65,000 +2,712 P67,000 -757 P68,000 +676 JNET P69,000 400枚(3社)</span>
+      <span class="entry-note" style="display:block;font-size:10px;color:#555e6f;margin-top:4px;line-height:1.5;font-family:DM Mono,monospace">ATM69,000 MaxPain68,000　注目: P65,000 +2,712 P67,000 -757 P68,000 +676 JNET P69,000 400枚(3社)</span>
       <span class="entry-arrow">&rarr;</span>
     </a>
 
@@ -911,7 +911,7 @@ footer a{color:var(--accent);text-decoration:none;margin:0 8px}
       <span class="entry-tags">
         <span class="etag etag-nikkei">72,375</span>
       </span>
-      <span class="entry-note" style="display:block;font-size:10px;color:#7c879b;margin-top:4px;line-height:1.5;font-family:DM Mono,monospace">ATM72,500 MaxPain69,500　注目: P70,000 +363 JNET C73,000 900枚(2社)</span>
+      <span class="entry-note" style="display:block;font-size:10px;color:#555e6f;margin-top:4px;line-height:1.5;font-family:DM Mono,monospace">ATM72,500 MaxPain69,500　注目: P70,000 +363 JNET C73,000 900枚(2社)</span>
       <span class="entry-arrow">&rarr;</span>
     </a>
 
@@ -921,7 +921,7 @@ footer a{color:var(--accent);text-decoration:none;margin:0 8px}
       <span class="entry-tags">
         <span class="etag etag-nikkei">69,630</span>
       </span>
-      <span class="entry-note" style="display:block;font-size:10px;color:#7c879b;margin-top:4px;line-height:1.5;font-family:DM Mono,monospace">ATM69,500 MaxPain68,000　注目: P66,000 +215 JNET C69,500 200枚(2社)</span>
+      <span class="entry-note" style="display:block;font-size:10px;color:#555e6f;margin-top:4px;line-height:1.5;font-family:DM Mono,monospace">ATM69,500 MaxPain68,000　注目: P66,000 +215 JNET C69,500 200枚(2社)</span>
       <span class="entry-arrow">&rarr;</span>
     </a>
 
@@ -931,7 +931,7 @@ footer a{color:var(--accent);text-decoration:none;margin:0 8px}
       <span class="entry-tags">
         <span class="etag etag-nikkei">69,360</span>
       </span>
-      <span class="entry-note" style="display:block;font-size:10px;color:#7c879b;margin-top:4px;line-height:1.5;font-family:DM Mono,monospace">ATM69,500 MaxPain68,000　注目: P70,000 +6,112 P65,000 +5,645 C72,000 -495 JNET P69,000 1,000枚(4社)</span>
+      <span class="entry-note" style="display:block;font-size:10px;color:#555e6f;margin-top:4px;line-height:1.5;font-family:DM Mono,monospace">ATM69,500 MaxPain68,000　注目: P70,000 +6,112 P65,000 +5,645 C72,000 -495 JNET P69,000 1,000枚(4社)</span>
       <span class="entry-arrow">&rarr;</span>
     </a>
 
@@ -941,7 +941,7 @@ footer a{color:var(--accent);text-decoration:none;margin:0 8px}
       <span class="entry-tags">
         <span class="etag etag-nikkei">73,465</span>
       </span>
-      <span class="entry-note" style="display:block;font-size:10px;color:#7c879b;margin-top:4px;line-height:1.5;font-family:DM Mono,monospace">ATM73,500 MaxPain69,000　注目: C75,000 +222 JNET C73,000 100枚(1社)</span>
+      <span class="entry-note" style="display:block;font-size:10px;color:#555e6f;margin-top:4px;line-height:1.5;font-family:DM Mono,monospace">ATM73,500 MaxPain69,000　注目: C75,000 +222 JNET C73,000 100枚(1社)</span>
       <span class="entry-arrow">&rarr;</span>
     </a>
 
@@ -951,7 +951,7 @@ footer a{color:var(--accent);text-decoration:none;margin:0 8px}
       <span class="entry-tags">
         <span class="etag etag-nikkei">71,745</span>
       </span>
-      <span class="entry-note" style="display:block;font-size:10px;color:#7c879b;margin-top:4px;line-height:1.5;font-family:DM Mono,monospace">ATM71,500 MaxPain68,000　注目: C75,000 +277 P67,000 +216 JNET C72,000 600枚(5社)</span>
+      <span class="entry-note" style="display:block;font-size:10px;color:#555e6f;margin-top:4px;line-height:1.5;font-family:DM Mono,monospace">ATM71,500 MaxPain68,000　注目: C75,000 +277 P67,000 +216 JNET C72,000 600枚(5社)</span>
       <span class="entry-arrow">&rarr;</span>
     </a>
 
@@ -961,7 +961,7 @@ footer a{color:var(--accent);text-decoration:none;margin:0 8px}
       <span class="entry-tags">
         <span class="etag etag-nikkei">71,430</span>
       </span>
-      <span class="entry-note" style="display:block;font-size:10px;color:#7c879b;margin-top:4px;line-height:1.5;font-family:DM Mono,monospace">ATM71,500 MaxPain68,000　注目: C75,000 +1,205 C72,000 +588 C69,000 -416 JNET C72,000 2,080枚(3社)</span>
+      <span class="entry-note" style="display:block;font-size:10px;color:#555e6f;margin-top:4px;line-height:1.5;font-family:DM Mono,monospace">ATM71,500 MaxPain68,000　注目: C75,000 +1,205 C72,000 +588 C69,000 -416 JNET C72,000 2,080枚(3社)</span>
       <span class="entry-arrow">&rarr;</span>
     </a>
 
@@ -971,7 +971,7 @@ footer a{color:var(--accent);text-decoration:none;margin:0 8px}
       <span class="entry-tags">
         <span class="etag etag-nikkei">70,050</span>
       </span>
-      <span class="entry-note" style="display:block;font-size:10px;color:#7c879b;margin-top:4px;line-height:1.5;font-family:DM Mono,monospace">ATM70,000 MaxPain66,000　注目: P65,000 +647 C75,000 -476 C70,000 -333 JNET C70,000 540枚(4社)</span>
+      <span class="entry-note" style="display:block;font-size:10px;color:#555e6f;margin-top:4px;line-height:1.5;font-family:DM Mono,monospace">ATM70,000 MaxPain66,000　注目: P65,000 +647 C75,000 -476 C70,000 -333 JNET C70,000 540枚(4社)</span>
       <span class="entry-arrow">&rarr;</span>
     </a>
 
@@ -981,7 +981,7 @@ footer a{color:var(--accent);text-decoration:none;margin:0 8px}
       <span class="entry-tags">
         <span class="etag etag-nikkei">69,815</span>
       </span>
-      <span class="entry-note" style="display:block;font-size:10px;color:#7c879b;margin-top:4px;line-height:1.5;font-family:DM Mono,monospace">ATM70,000 MaxPain65,500　注目: C75,000 +1,138 C72,000 +427 P65,000 +396 JNET C69,250 4,000枚(1社)</span>
+      <span class="entry-note" style="display:block;font-size:10px;color:#555e6f;margin-top:4px;line-height:1.5;font-family:DM Mono,monospace">ATM70,000 MaxPain65,500　注目: C75,000 +1,138 C72,000 +427 P65,000 +396 JNET C69,250 4,000枚(1社)</span>
       <span class="entry-arrow">&rarr;</span>
     </a>
 
@@ -991,7 +991,7 @@ footer a{color:var(--accent);text-decoration:none;margin:0 8px}
       <span class="entry-tags">
         <span class="etag etag-nikkei">69,395</span>
       </span>
-      <span class="entry-note" style="display:block;font-size:10px;color:#7c879b;margin-top:4px;line-height:1.5;font-family:DM Mono,monospace">ATM69,500 MaxPain65,000　注目: P65,000 +308 C69,000 -202 JNET C70,000 500枚(3社)</span>
+      <span class="entry-note" style="display:block;font-size:10px;color:#555e6f;margin-top:4px;line-height:1.5;font-family:DM Mono,monospace">ATM69,500 MaxPain65,000　注目: P65,000 +308 C69,000 -202 JNET C70,000 500枚(3社)</span>
       <span class="entry-arrow">&rarr;</span>
     </a>
 
@@ -1002,7 +1002,7 @@ footer a{color:var(--accent);text-decoration:none;margin:0 8px}
         <span class="etag etag-nikkei">66,970</span>
         <span class="etag etag-vi high">VI 38.22</span>
       </span>
-      <span class="entry-note" style="display:block;font-size:10px;color:#7c879b;margin-top:4px;line-height:1.5;font-family:DM Mono,monospace">ATM67,000 MaxPain64,000　注目: C72,000 +2,502 C69,000 +2,217 P62,000 +338 JNET P65,500 400枚(4社)</span>
+      <span class="entry-note" style="display:block;font-size:10px;color:#555e6f;margin-top:4px;line-height:1.5;font-family:DM Mono,monospace">ATM67,000 MaxPain64,000　注目: C72,000 +2,502 C69,000 +2,217 P62,000 +338 JNET P65,500 400枚(4社)</span>
       <span class="entry-arrow">&rarr;</span>
     </a>
 </div>
@@ -1025,7 +1025,7 @@ footer a{color:var(--accent);text-decoration:none;margin:0 8px}
         <span class="etag etag-nikkei">64,640</span>
         <span class="etag etag-vi">VI -</span>
       </span>
-      <span class="entry-note" style="display:block;font-size:10px;color:#7c879b;margin-top:4px;line-height:1.5;font-family:DM Mono,monospace">ATM64,500 MaxPain62,500　注目: C69,000 +1,056 C65,000 +527 P65,000 -435 JNET C64,500 1,400枚(5社)</span>
+      <span class="entry-note" style="display:block;font-size:10px;color:#555e6f;margin-top:4px;line-height:1.5;font-family:DM Mono,monospace">ATM64,500 MaxPain62,500　注目: C69,000 +1,056 C65,000 +527 P65,000 -435 JNET C64,500 1,400枚(5社)</span>
       <span class="entry-arrow">&rarr;</span>
     </a>
 

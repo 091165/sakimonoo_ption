@@ -1,25 +1,25 @@
 <!DOCTYPE html>
 <html lang="ja">
-<head>
+<head><!--theme:warm-->
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>JPX Market Analysis 2026-03-13</title>
 <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700&family=Noto+Sans+JP:wght@400;500;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
 :root{
---bg:#06060f;--panel:#0c0c1d;--card:#111128;--card-hover:#161638;
---border:#1e1e3a;--text:#e2e2f0;--muted:#8888aa;--accent:#818cf8;
---red:#f87171;--green:#4ade80;--blue:#60a5fa;--yellow:#fbbf24;
---put:#f87171;--call:#60a5fa;
---us:#93c5fd;--eu:#c4b5fd;--hf:#fbbf24;--dom:#f87171;
+--bg:#f9f5ee;--panel:#f2efeb;--card:#eae8e7;--card-hover:#dcdbdf;
+--border:#d5d4d9;--text:#0d0d19;--muted:#484865;--accent:#060f6b;
+--red:#790606;--green:#146f35;--blue:#043f87;--yellow:#745402;
+--put:#790606;--call:#043f87;
+--us:#022c5c;--eu:#0e023f;--hf:#745402;--dom:#790606;
 }
 *{margin:0;padding:0;box-sizing:border-box}
 body{background:var(--bg);color:var(--text);font-family:'Noto Sans JP',sans-serif;font-size:13px;line-height:1.6}
-.topbar{position:sticky;top:0;z-index:100;background:rgba(6,6,15,.92);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);padding:8px 16px;display:flex;align-items:center;justify-content:space-between}
+.topbar{position:sticky;top:0;z-index:100;background:rgba(249,245,238,.92);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);padding:8px 16px;display:flex;align-items:center;justify-content:space-between}
 .topbar .logo{font-family:Outfit;font-weight:700;font-size:15px;color:var(--accent)}
 .topbar nav a{color:var(--muted);text-decoration:none;font-size:12px;margin-left:16px;font-family:Outfit}
 .topbar nav a:hover,.topbar nav a.active{color:var(--accent)}
-.hero{text-align:center;padding:24px 16px 12px;background:radial-gradient(ellipse at 50% 0%,rgba(129,140,248,.08),transparent 70%)}
+.hero{text-align:center;padding:24px 16px 12px;background:radial-gradient(ellipse at 50% 0%,rgba(6,15,107,.08),transparent 70%)}
 .hero h1{font-family:Outfit;font-size:18px;font-weight:700;color:var(--text)}
 .hero .sub{font-family:'DM Mono';font-size:11px;color:var(--muted);margin-top:4px}
 .kpi-strip{display:flex;justify-content:center;gap:16px;padding:8px 16px 16px;flex-wrap:wrap}
@@ -46,11 +46,11 @@ body{background:var(--bg);color:var(--text);font-family:'Noto Sans JP',sans-seri
 .mm .ml{font-size:10px;color:var(--muted)}
 .mm .mv{font-family:'DM Mono';font-size:14px;font-weight:600}
 .tag{display:inline-block;padding:2px 8px;border:1px solid var(--border);border-radius:4px;font-size:10px;font-family:'DM Mono';margin:2px}
-.insight{background:rgba(129,140,248,.06);border:1px solid rgba(129,140,248,.15);border-radius:8px;padding:10px;margin-top:12px;font-size:12px;color:var(--muted)}
+.insight{background:rgba(6,15,107,.06);border:1px solid rgba(6,15,107,.15);border-radius:8px;padding:10px;margin-top:12px;font-size:12px;color:var(--muted)}
 .insight b{color:var(--text)}
 table{width:100%;border-collapse:collapse;font-size:12px;margin:8px 0}
 th{text-align:left;color:var(--muted);font-size:10px;text-transform:uppercase;padding:4px 8px;border-bottom:1px solid var(--border)}
-td{padding:4px 8px;border-bottom:1px solid rgba(30,30,58,.5)}
+td{padding:4px 8px;border-bottom:1px solid rgba(213,212,217,.5)}
 td.num{font-family:'DM Mono';text-align:right}
 .pos{color:var(--green)}.neg{color:var(--red)}
 .bf-row{display:flex;align-items:center;gap:4px;margin:2px 0}
@@ -63,14 +63,14 @@ td.num{font-family:'DM Mono';text-align:right}
 .bf-atm .bf-strike{color:var(--yellow);font-weight:700}
 .bar-h{display:flex;align-items:center;gap:4px;margin:3px 0}
 .bar-h .bar-label{width:90px;font-size:10px;text-align:right;color:var(--muted)}
-.bar-h .bar-track{flex:1;height:14px;background:rgba(255,255,255,.03);border-radius:3px;position:relative;overflow:hidden}
+.bar-h .bar-track{flex:1;height:14px;background:rgba(0,0,0,.03);border-radius:3px;position:relative;overflow:hidden}
 .bar-h .bar-fill{height:100%;border-radius:3px;position:absolute}
 .bar-h .bar-num{font-family:'DM Mono';font-size:10px;width:60px;text-align:right}
-.sim-btn{display:inline-block;padding:10px 24px;background:var(--accent);color:#fff;border-radius:8px;text-decoration:none;font-family:Outfit;font-weight:600;font-size:13px}
+.sim-btn{display:inline-block;padding:10px 24px;background:var(--accent);color:#000000;border-radius:8px;text-decoration:none;font-family:Outfit;font-weight:600;font-size:13px}
 footer{text-align:center;padding:24px;color:var(--muted);font-size:11px;border-top:1px solid var(--border);margin-top:20px}
 footer a{color:var(--accent);text-decoration:none}
 </style>
-</head>
+<style>.wt-cell-pos-strong,.wt-cell-neg-strong,.latest-btn,.btn:not(.btn-outline),a[style*="background:var(--accent)"]{color:#fff!important}</style></head>
 <body>
 <div class="topbar">
 <div class="logo">JPX Dashboard</div>
@@ -140,12 +140,12 @@ footer a{color:var(--accent);text-decoration:none}
 <!-- Card 4: Significant Changes -->
 <div class="card" onclick="toggle(this)" id="c4">
 <div class="card-head"><span class="icon">⚡</span><span class="title">重要建玉変化</span></div>
-<div class="card-preview"><span class="tag" style="border-color:#60a5fa">C56k +2,043</span>
-<span class="tag" style="border-color:#f87171">P44k +1,102</span>
-<span class="tag" style="border-color:#f87171">P36k +827</span>
-<span class="tag" style="border-color:#f87171">P47k +815</span>
-<span class="tag" style="border-color:#60a5fa">C56k +768</span>
-<span class="tag" style="border-color:#60a5fa">C58k +729</span>
+<div class="card-preview"><span class="tag" style="border-color:#043f87">C56k +2,043</span>
+<span class="tag" style="border-color:#790606">P44k +1,102</span>
+<span class="tag" style="border-color:#790606">P36k +827</span>
+<span class="tag" style="border-color:#790606">P47k +815</span>
+<span class="tag" style="border-color:#043f87">C56k +768</span>
+<span class="tag" style="border-color:#043f87">C58k +729</span>
 </div>
 <div class="card-detail" id="d4"></div>
 </div>
@@ -310,13 +310,13 @@ function buildDetail(card){
       break;
     case 'd7':
       h='<div style="display:flex;gap:12px;flex-wrap:wrap;margin-bottom:12px">';
-      h+='<div style="flex:1;min-width:200px;background:rgba(74,222,128,.05);border:1px solid rgba(74,222,128,.15);border-radius:8px;padding:10px">';
+      h+='<div style="flex:1;min-width:200px;background:rgba(20,111,53,.05);border:1px solid rgba(20,111,53,.15);border-radius:8px;padding:10px">';
       h+='<div style="font-size:10px;color:var(--green)">サポート</div>';
       h+='<div style="font-family:DM Mono;font-size:14px">S1: 53,000 / S2: 50,000 / S3: 48,500</div></div>';
-      h+='<div style="flex:1;min-width:200px;background:rgba(248,113,113,.05);border:1px solid rgba(248,113,113,.15);border-radius:8px;padding:10px">';
+      h+='<div style="flex:1;min-width:200px;background:rgba(121,6,6,.05);border:1px solid rgba(121,6,6,.15);border-radius:8px;padding:10px">';
       h+='<div style="font-size:10px;color:var(--red)">レジスタンス</div>';
       h+='<div style="font-family:DM Mono;font-size:14px">R1: 55,000 / R2: 56,000 / R3: 58,000</div></div></div>';
-      h+='<div style="background:rgba(129,140,248,.06);border:1px solid rgba(129,140,248,.15);border-radius:8px;padding:10px;margin-bottom:10px">';
+      h+='<div style="background:rgba(6,15,107,.06);border:1px solid rgba(6,15,107,.15);border-radius:8px;padding:10px;margin-bottom:10px">';
       h+='<div style="font-size:10px;color:var(--accent)">予想レンジ（来週）</div>';
       h+='<div style="font-family:DM Mono;font-size:18px;font-weight:700">51,500 ～ 55,000</div></div>';
       h+='<div class="insight"><b>中東リスク最大警戒</b>。ホルムズ海峡封鎖継続・WTI 98ドル。VI=45.80は危機水準。FOMC(3/18-19)控えスタグフレーション懸念。プット壁53,000が第一防衛線。週末ギャップリスクに注意。</div>';

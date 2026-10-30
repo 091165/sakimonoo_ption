@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="ja">
-<head>
+<head><!--theme:warm-->
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>JPX Market Analysis — 2026.03.03</title>
@@ -8,23 +8,23 @@
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 :root{
---bg:#06060f;--panel:#0c0c1d;--card:#111128;--card2:#0e0e24;--card-hover:#16163a;
---put:#f87171;--call:#60a5fa;--atm:#fbbf24;--up:#4ade80;--dn:#ef4444;
---foreign:#60a5fa;--domestic:#f87171;
---txt:#e2e8f0;--txt2:#94a3b8;--txt3:#64748b;--border:#1e1e48;--border2:#2a2a5a;
---accent:#818cf8;--accent2:#a78bfa;--glow:rgba(129,140,248,.08);
+--bg:#f9f5ee;--panel:#f2efeb;--card:#eae8e7;--card2:#eeebe9;--card-hover:#dad9de;
+--put:#790606;--call:#043f87;--atm:#745402;--up:#146f35;--dn:#9f0e0e;
+--foreign:#043f87;--domestic:#790606;
+--txt:#0d1219;--txt2:#3c495b;--txt3:#546174;--border:#b7b7e1;--border2:#a5a5d5;
+--accent:#060f6b;--accent2:#1c0463;--glow:rgba(6,15,107,.08);
 }
 body{background:var(--bg);color:var(--txt);font-family:'Noto Sans JP','Outfit',sans-serif;line-height:1.6;overflow-x:hidden;-webkit-font-smoothing:antialiased}
 .mono{font-family:'DM Mono',monospace}
 ::-webkit-scrollbar{width:6px;height:6px}::-webkit-scrollbar-track{background:var(--bg)}::-webkit-scrollbar-thumb{background:var(--border2);border-radius:3px}
-.topbar{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(6,6,15,.88);backdrop-filter:blur(16px);border-bottom:1px solid var(--border);padding:0 24px;height:48px;display:flex;align-items:center;justify-content:space-between}
+.topbar{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(249,245,238,.88);backdrop-filter:blur(16px);border-bottom:1px solid var(--border);padding:0 24px;height:48px;display:flex;align-items:center;justify-content:space-between}
 .topbar .logo{font-family:'Outfit';font-weight:800;font-size:16px;background:linear-gradient(135deg,var(--accent),var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
 .topbar nav a{color:var(--txt3);text-decoration:none;margin-left:20px;font-size:12px;font-weight:500;transition:.2s;letter-spacing:.5px}
 .topbar nav a:hover{color:var(--txt)}
 @media(max-width:768px){.topbar nav{display:none}}
 .hero{margin-top:48px;padding:32px 24px 20px;text-align:center;position:relative;overflow:hidden}
-.hero::before{content:'';position:absolute;top:0;left:50%;transform:translateX(-50%);width:600px;height:600px;background:radial-gradient(circle,rgba(129,140,248,.06) 0%,transparent 70%);pointer-events:none}
-.hero h1{font-family:'Outfit';font-size:clamp(20px,3.5vw,28px);font-weight:800;color:#fff;position:relative;letter-spacing:-1px}
+.hero::before{content:'';position:absolute;top:0;left:50%;transform:translateX(-50%);width:600px;height:600px;background:radial-gradient(circle,rgba(6,15,107,.06) 0%,transparent 70%);pointer-events:none}
+.hero h1{font-family:'Outfit';font-size:clamp(20px,3.5vw,28px);font-weight:800;color:#000000;position:relative;letter-spacing:-1px}
 .hero .date{color:var(--txt3);font-size:12px;margin-top:2px;position:relative;font-family:'DM Mono';letter-spacing:1px}
 .kpi-strip{display:flex;justify-content:center;gap:6px;flex-wrap:wrap;margin-top:16px;position:relative}
 .kpi-chip{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:8px 14px;display:flex;align-items:center;gap:8px}
@@ -73,14 +73,14 @@ body{background:var(--bg);color:var(--txt);font-family:'Noto Sans JP','Outfit',s
 .bf-row{display:flex;align-items:center;margin-bottom:2px}
 .bf-left{width:34%;display:flex;justify-content:flex-end;align-items:center;gap:3px}
 .bf-strike{width:62px;text-align:center;font-family:'DM Mono';font-size:10px;flex-shrink:0;padding:1px 3px;border-radius:3px}
-.bf-strike.atm{background:var(--atm);color:#000;font-weight:700}
+.bf-strike.atm{background:var(--atm);color:#fcf7ed;font-weight:700}
 .bf-right{width:34%;display:flex;align-items:center;gap:3px}
 .bf-bar{height:14px;border-radius:2px;transition:width .4s}
 .bf-num{font-family:'DM Mono';font-size:9px;color:var(--txt3);min-width:36px}
 .bf-left .bf-num{text-align:right}.bf-right .bf-num{text-align:left}
 .tbl{width:100%;border-collapse:collapse;font-size:11px}
 .tbl th{background:var(--card2);padding:7px 8px;text-align:left;font-weight:500;color:var(--txt3);border-bottom:1px solid var(--border)}
-.tbl td{padding:5px 8px;border-bottom:1px solid rgba(30,30,72,.5)}.tbl tr:hover{background:rgba(129,140,248,.03)}
+.tbl td{padding:5px 8px;border-bottom:1px solid rgba(183,183,225,.5)}.tbl tr:hover{background:rgba(6,15,107,.03)}
 .level-line{display:flex;align-items:center;gap:8px;padding:8px 0}
 .level-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
 .level-bar{height:2px;flex:1;opacity:.4;border-radius:1px}
@@ -99,16 +99,16 @@ body{background:var(--bg);color:var(--txt);font-family:'Noto Sans JP','Outfit',s
 .ocard .oc-icon{font-size:18px;margin-bottom:6px}.ocard h4{font-size:13px;font-weight:600;margin-bottom:6px}
 .ocard p{font-size:11px;color:var(--txt2);line-height:1.7}
 .tag{display:inline-block;padding:1px 6px;border-radius:3px;font-size:9px;font-family:'DM Mono';font-weight:500}
-.tag-put{background:rgba(248,113,113,.12);color:var(--put)}.tag-call{background:rgba(96,165,250,.12);color:var(--call)}
-.tag-foreign{background:rgba(96,165,250,.12);color:var(--foreign)}.tag-domestic{background:rgba(248,113,113,.12);color:var(--domestic)}
-.tag-us{background:rgba(96,165,250,.15);color:#93c5fd}.tag-eu{background:rgba(167,139,250,.15);color:#c4b5fd}.tag-hf{background:rgba(251,191,36,.12);color:var(--atm)}
-.strategy-tag{display:inline-block;background:rgba(129,140,248,.15);color:var(--accent);border-radius:4px;padding:2px 8px;font-size:10px;margin-top:4px}
+.tag-put{background:rgba(121,6,6,.12);color:var(--put)}.tag-call{background:rgba(4,63,135,.12);color:var(--call)}
+.tag-foreign{background:rgba(4,63,135,.12);color:var(--foreign)}.tag-domestic{background:rgba(121,6,6,.12);color:var(--domestic)}
+.tag-us{background:rgba(4,63,135,.15);color:#022c5c}.tag-eu{background:rgba(28,4,99,.15);color:#0e023f}.tag-hf{background:rgba(116,84,2,.12);color:var(--atm)}
+.strategy-tag{display:inline-block;background:rgba(6,15,107,.15);color:var(--accent);border-radius:4px;padding:2px 8px;font-size:10px;margin-top:4px}
 .insight{background:var(--card2);border-left:3px solid var(--atm);border-radius:0 8px 8px 0;padding:12px 14px;margin-top:14px;font-size:11px;color:var(--txt2);line-height:1.8}
 .section-divider{height:1px;background:var(--border);margin:14px 0}
 .footer{text-align:center;padding:24px;color:var(--txt3);font-size:11px;border-top:1px solid var(--border)}
 .footer a{color:var(--accent);text-decoration:none}
 </style>
-</head>
+<style>.wt-cell-pos-strong,.wt-cell-neg-strong,.latest-btn,.btn:not(.btn-outline),a[style*="background:var(--accent)"]{color:#fff!important}</style></head>
 <body>
 <div class="topbar"><div class="logo">JPX Derivatives</div><nav><a href="#hero">ホーム</a><a href="#dash">ダッシュボード</a><a href="archive.html">📂 アーカイブ</a></nav></div>
 <section class="hero" id="hero">
