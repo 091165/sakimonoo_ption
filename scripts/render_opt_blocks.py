@@ -35,9 +35,21 @@ def build(store, s03=None):
     for x in log:
         x['repeat'] = seen[x['key']] >= 2
     large = (s03 or {}).get('large') or {}
+    # Puts normally out-trade calls in large options; a call-heavy day is the
+    # exception worth flagging (2 of 26 sessions from mid-Sep to end-Oct).
+    pcs = [{'date': d, 'put': store['days'][d]['pc']['put'], 'call': store['days'][d]['pc']['call']}
+           for d in dates if (store['days'][d].get('pc') or {}).get('put')]
+    for x in pcs:
+        x['special'] = x['call'] > x['put']
     return {
+        'pc_hist': pcs[-20:], 'pc_n': len(pcs), 'pc_special': [x['date'] for x in pcs if x['special']],
+        'today_special': bool(pcs and pcs[-1]['date'] == today and pcs[-1]['special']),
         'date': today, 'blocks': day['blocks'], 'top_volume': day.get('top_volume', []),
-        'summary': {k: large.get(k) for k in ('put_volume', 'call_volume', 'jnet_ratio')} if large else None,
+        # Put/call from the same store as the special-day flag, so the two
+        # can never disagree; the J-NET share comes from data.json.
+        'summary': ({'put_volume': day['pc']['put'], 'call_volume': day['pc']['call'],
+                     'jnet_ratio': large.get('jnet_ratio')} if day.get('pc') else
+                    {k: large.get(k) for k in ('put_volume', 'call_volume', 'jnet_ratio')} if large else None),
         'log': list(reversed(log)), 'log_days': min(LOG_DAYS, len(dates)),
         'kind': KIND, 'cat': CAT_JA,
     }
@@ -54,9 +66,11 @@ def preview(store, s03=None):
         return None
     if not d['blocks']:
         return '<span class="mm-label">本日の大口（50枚以上）なし</span>'
+    flag = ('<div class="ob-flag" style="margin-bottom:6px">特異日：コールの取引高がプットを上回った</div>'
+            if d['today_special'] else '')
     b = d['blocks'][0]
     singles = sum(1 for x in d['blocks'] if x['kind'] == 'single')
-    return ('<div class="mini-metrics">'
+    return (flag + '<div class="mini-metrics">'
             '<div class="mini-metric"><div class="mm-label">本日最大の大口</div>'
             '<div class="mm-value" style="font-size:14px;color:%s">%s%s %s枚</div></div>'
             '<div class="mini-metric"><div class="mm-label">大口の件数（うち単独クロス）</div>'
@@ -69,6 +83,11 @@ OB_CARD_CSS = r"""
 .ob-sec{font-family:Outfit;font-weight:600;color:var(--sub);font-size:13px;margin:14px 2px 6px}
 .ob-sec:first-child{margin-top:0}
 .ob-sum{font-size:13px;color:var(--text);line-height:1.7;margin:0 2px}
+.ob-flag{font-size:13px;font-weight:600;color:#fbbf24;background:rgba(251,191,36,.12);border:1px solid rgba(251,191,36,.45);border-radius:8px;padding:6px 10px;margin:6px 0}
+.ob-pcs{display:flex;align-items:flex-end;gap:2px;height:34px;margin:8px 0 2px}
+.ob-pcs i{flex:1;background:#5b647a;border-radius:2px 2px 0 0;min-height:2px}
+.ob-pcs i.sp{background:#fbbf24}
+.ob-pcl{display:flex;justify-content:space-between;font-size:11px;color:var(--sub)}
 .ob-tv{display:flex;flex-wrap:wrap;gap:6px;margin:6px 0 0}
 .ob-tvi{font-family:'DM Mono',monospace;font-size:12px;padding:3px 8px;border-radius:6px;background:rgba(255,255,255,.04);border:1px solid var(--border)}
 .ob-blk{border:1px solid var(--border);border-radius:10px;padding:10px 12px;margin:8px 0;background:#141822}
@@ -127,6 +146,17 @@ function obBuild(){
     var s=D.summary;
     h+='<div class="ob-sum">プット <b>'+obN(s.put_volume)+'</b>枚 ／ コール <b>'+obN(s.call_volume)+'</b>枚'
       +(s.call_volume?'（PCR '+(s.put_volume/s.call_volume).toFixed(2)+'）':'')+' ／ J-NET比率 '+(s.jnet_ratio===null||s.jnet_ratio===undefined?'—':s.jnet_ratio+'%')+'</div>';
+  }
+  if(D.today_special) h+='<div class="ob-flag">特異日：コールの取引高がプットを上回った（普段はプットの方が多い）</div>';
+  if(D.pc_hist&&D.pc_hist.length>2){
+    var mx=0;for(var i=0;i<D.pc_hist.length;i++)mx=Math.max(mx,D.pc_hist[i].put/D.pc_hist[i].call);
+    h+='<div class="ob-pcs">';
+    for(var i=0;i<D.pc_hist.length;i++){var x=D.pc_hist[i],r=x.put/x.call;
+      h+='<i class="'+(x.special?'sp':'')+'" style="height:'+(r/mx*100).toFixed(0)+'%" title="'+x.date+' PCR '+r.toFixed(2)+'"></i>';}
+    var f=D.pc_hist[0].date,l=D.pc_hist[D.pc_hist.length-1].date;
+    h+='</div><div class="ob-pcl"><span>'+(+f.slice(4,6))+'/'+(+f.slice(6))+'</span><span>プット÷コール（PCR）の推移・黄＝コールが多かった日</span><span>'+(+l.slice(4,6))+'/'+(+l.slice(6))+'</span></div>';
+    h+='<div class="ob-sum" style="margin-top:4px;color:var(--sub)">直近'+D.pc_n+'営業日でコールが多かった日は<b style="color:var(--text)">'+D.pc_special.length+'日</b>'
+      +(D.pc_special.length?'（'+D.pc_special.map(function(d){return (+d.slice(4,6))+'/'+(+d.slice(6));}).join('、')+'）':'')+'。</div>';
   }
   if(D.top_volume&&D.top_volume.length){
     h+='<div class="ob-sum" style="margin-top:6px;color:var(--sub)">取引の多い銘柄（建玉の前日比）</div><div class="ob-tv">';

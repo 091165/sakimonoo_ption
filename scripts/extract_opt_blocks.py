@@ -36,6 +36,21 @@ PAIR_TOL = 0.15      # rest within ±15% of the top leg -> the two sides pair up
 KEEP = 30
 _CONTRACT = re.compile(r'([PC])(\d{4})-(\d+)$')
 JNET_FILES = ('_volume_by_participant_whole_day_J-NET.xlsx', '_volume_by_participant_night_J-NET.xlsx')
+MARKET_FILE = '_derivatives_market_data_whole_day.xlsx'
+
+
+def put_call_volume(src):
+    """{'put', 'call'} day + night volume of Nikkei 225 large options.
+
+    Puts normally out-trade calls (26 Sep-Oct sessions: 24 of 26); a day with
+    more calls is the exception the card flags.
+    """
+    import extract  # heavy module, only needed here
+    wb = openpyxl.load_workbook(io.BytesIO(src) if isinstance(src, bytes) else src, data_only=True)
+    large = (extract.extract_s03(wb) or {}).get('large') or {}
+    if large.get('put_volume') is None:
+        return None
+    return {'put': int(large['put_volume']), 'call': int(large['call_volume'])}
 
 
 def _wb(src):
@@ -177,6 +192,13 @@ def _backfill_git(store, repo_root):
     ois = _git_files(repo_root, 'open_interest.xlsx')
     day = _git_files(repo_root, JNET_FILES[0])
     night = _git_files(repo_root, JNET_FILES[1])
+    market = _git_files(repo_root, MARKET_FILE)
+    for dt, sp in market.items():
+        if dt in store['days'] and 'pc' not in store['days'][dt]:
+            try:
+                store['days'][dt]['pc'] = put_call_volume(show(sp))
+            except Exception as e:
+                print('[opt_blocks] put/call backfill %s failed: %s' % (dt, e))
     for dt in sorted(set(ois) & set(day)):
         if dt in store['days']:
             continue
@@ -185,6 +207,8 @@ def _backfill_git(store, repo_root):
             if dt in night:
                 _merge(jn, parse_jnet(show(night[dt]), 'night'))
             store['days'][dt] = build_day(parse_oi(show(ois[dt])), jn)
+            if dt in market:
+                store['days'][dt]['pc'] = put_call_volume(show(market[dt]))
         except Exception as e:
             print('[opt_blocks] backfill %s failed: %s' % (dt, e))
 
@@ -200,12 +224,16 @@ def main():
 
     oi_dates = [m.group(1) for m in (re.fullmatch(r'(\d{8})open_interest\.xlsx', f) for f in os.listdir(a.data_dir)) if m]
     for dt in sorted(oi_dates)[-1:]:
+        stored = dt in store['days']
+        md = os.path.join(a.data_dir, dt + MARKET_FILE)
+        if os.path.exists(md):
+            store['days'].setdefault(dt, {'blocks': [], 'top_volume': []})['pc'] = put_call_volume(md)
         day = os.path.join(a.data_dir, dt + JNET_FILES[0])
         if not os.path.exists(day):
             print('[opt_blocks] %s: day J-NET file missing; history unchanged' % dt)
             continue
         night = os.path.join(a.data_dir, dt + JNET_FILES[1])
-        if not os.path.exists(night) and dt in store['days']:
+        if not os.path.exists(night) and stored:
             # Re-runs after the workflow's cleanup see only the day file; keep
             # the entry that was built with both sessions.
             print('[opt_blocks] %s: night J-NET file missing; keeping stored entry' % dt)
@@ -213,7 +241,10 @@ def main():
         jn = parse_jnet(day, 'day')
         if os.path.exists(night):
             _merge(jn, parse_jnet(night, 'night'))
+        pc = store['days'].get(dt, {}).get('pc')
         store['days'][dt] = build_day(parse_oi(os.path.join(a.data_dir, dt + 'open_interest.xlsx')), jn)
+        if pc:
+            store['days'][dt]['pc'] = pc
 
     if a.backfill_git:
         _backfill_git(store, os.path.dirname(os.path.abspath(a.data_dir)))
