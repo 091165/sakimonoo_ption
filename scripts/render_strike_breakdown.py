@@ -20,9 +20,15 @@ VENUE_JA = {'day_auction': '日中立会', 'day_jnet': '日中J-NET',
 CAT_JA = {'domestic': '国内', 'us': '米系', 'eu': '欧系', 'hf': 'HF代理', 'other': ''}
 
 
-def _verdict(oi_chg, rel):
+def _verdict(oi_chg, rel, vol=None):
     if oi_chg is None or rel is None:
         return None
+    # A direction only means something when a real amount of OI stayed open:
+    # at least 50 lots and 20% of the day's volume. Otherwise the trades were
+    # mostly opened and closed intraday or changed hands (C64,000 on 10/30:
+    # 202 lots traded, OI +13 -- not "買われた").
+    if abs(oi_chg) < 50 or (vol and abs(oi_chg) < 0.2 * vol):
+        return ('建玉ほぼ不変（付け替え・日計り）', 'sb-weak') if (vol or 0) >= 100 else None
     TH = 0.003
     if oi_chg > 0:
         if rel > TH:
@@ -66,7 +72,7 @@ def sb_data_script(greeks, venue_flow, indicators=None):
                 continue
             if vf is None and chg is None:
                 continue
-            v = _verdict(chg, rel)
+            v = _verdict(chg, rel, vf['total'] if vf else None)
             rows.append({
                 'side': side, 'strike': k,
                 'oi': round(r.get(oi_key, 0) or 0),
@@ -90,25 +96,25 @@ def sb_data_script(greeks, venue_flow, indicators=None):
 
 
 SB_CARD_CSS = r"""
-.sb-intro{font-size:11.5px;color:var(--sub);line-height:1.6;margin:2px 2px 10px}
+.sb-intro{font-size:13px;color:var(--sub);line-height:1.6;margin:2px 2px 10px}
 .sb-row{border:1px solid var(--border);border-radius:10px;padding:10px 12px;margin:8px 0;background:#141822}
 .sb-hd{display:flex;align-items:baseline;gap:8px;margin-bottom:7px;flex-wrap:wrap}
-.sb-k{font-family:'DM Mono',monospace;font-weight:600;font-size:13.5px}
+.sb-k{font-family:'DM Mono',monospace;font-weight:600;font-size:15px}
 .sb-p{color:#fca5a5}.sb-c{color:#93c5fd}
-.sb-tag{font-size:10.5px;padding:1px 7px;border-radius:6px;white-space:nowrap}
+.sb-tag{font-size:12px;padding:1px 7px;border-radius:6px;white-space:nowrap}
 .sb-buy{background:rgba(34,197,94,.16);color:#86efac}
 .sb-sell{background:rgba(248,113,113,.16);color:#fca5a5}
 .sb-weak{background:rgba(139,147,167,.15);color:var(--sub)}
-.sb-layer{display:flex;gap:8px;font-size:11px;margin-top:4px;align-items:flex-start}
-.sb-lb{min-width:52px;color:var(--sub);font-size:10px;padding-top:1px}
-.sb-val{font-family:'DM Mono',monospace;font-size:11.5px}
+.sb-layer{display:flex;gap:8px;font-size:13px;margin-top:4px;align-items:flex-start}
+.sb-lb{min-width:60px;color:var(--sub);font-size:12px;padding-top:1px}
+.sb-val{font-family:'DM Mono',monospace;font-size:13px}
 .sb-pos{color:#86efac}.sb-neg{color:#fca5a5}.sb-ze{color:var(--sub)}
 .sb-bar{height:6px;border-radius:3px;background:#0f131b;overflow:hidden;margin-top:4px;display:flex}
 .sb-bar i{display:block;height:100%}
 .sb-jnet{background:#818cf8}.sb-auc{background:#3f4655}
-.sb-bro{display:inline-block;padding:1px 6px;border-radius:6px;font-size:10.5px;margin:1px 2px 1px 0;background:rgba(129,140,248,.12);color:#c7cbf5}
+.sb-bro{display:inline-block;padding:1px 6px;border-radius:6px;font-size:12px;margin:1px 2px 1px 0;background:rgba(129,140,248,.12);color:#c7cbf5}
 .sb-bro.dom{background:rgba(248,113,113,.13);color:#fca5a5}
-.sb-note{font-size:11px;color:var(--sub);line-height:1.55;margin:10px 2px 2px}
+.sb-note{font-size:12px;color:var(--sub);line-height:1.55;margin:10px 2px 2px}
 """
 
 SB_CARD_JS = r"""
@@ -159,7 +165,7 @@ function sbBuild(){
   }
   h+='<div class="sb-note">手口は日中・夜間の立会／J-NETを合算。<span class="sb-bro dom">赤=国内</span> '
     +'<span class="sb-bro">青=海外/HF</span>。J-NET比率が高いほど大口の相対取引が主体。'
-    +'手口には売買区分がないため、向きは③相対IVと建玉の増減から推定しています（断定不可）。</div>';
+    +'手口には売買区分がないため、向きは③相対IVと建玉の増減から推定しています（断定不可）。建玉の増減が50枚未満、または手口の2割未満の日は向きを判定しません。</div>';
   return h;
 }
 """

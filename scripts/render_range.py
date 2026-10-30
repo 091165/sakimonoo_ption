@@ -39,6 +39,8 @@ RANGE_CARD_CSS = r"""
 .rg-out{color:var(--sub)}
 .rg-far{color:#fca5a5}
 .rg-note{font-size:11px;color:var(--sub);line-height:1.55;margin:10px 2px 2px}
+.rg-lvl{display:flex;gap:10px;align-items:center;font-size:13px;line-height:1.7;color:var(--text);border:1px solid var(--border);border-radius:9px;padding:9px 11px;margin:0 0 12px;background:#141822}
+.rg-lvl svg{flex:none}
 .rg-warn{font-size:11px;color:#fcd34d;line-height:1.55;margin:8px 2px 2px}
 """
 
@@ -49,7 +51,20 @@ function rgPct(x){ return (x===null||x===undefined)?'—':(Number(x).toFixed(1)+
 function rgBuild(){
   var D = window.RANGE_DATA || null;
   if(!D || !D.spot || !D.iv){ return '<div class="insight">IVデータ未取込</div>'; }
-  var h = '<div class="rg-sec">'+D.expiry_label+'のATM IV '+rgPct(D.iv)+' から見た想定レンジ（現値 '+rgNum(D.spot)+'）</div>';
+  var h = '';
+  if(D.iv_hist && D.iv_hist.length >= 5 && D.iv_hi > D.iv_lo){
+    var pos = (D.iv - D.iv_lo) / (D.iv_hi - D.iv_lo);
+    var lvl = pos >= 0.67 ? '<b class="rg-far">高め</b>' : (pos <= 0.33 ? '<b class="rg-in">低め</b>' : '<b>中ほど</b>');
+    var gap = (D.hv ? D.iv - D.hv : null), edge = '';
+    if(gap !== null){ edge = gap >= 2 ? '実際の値動きより<b class="rg-far">割高</b>（売り手に有利）' : (gap <= -2 ? '実際の値動きより<b class="rg-in">割安</b>（売り手に不利）' : '実際の値動きと<b>ほぼ同じ</b>（売りの優位は薄い）'); }
+    var n = D.iv_hist.length, W = 120, H = 30, pts = [];
+    for(var q=0;q<n;q++){ pts.push((q*(W-4)/(n-1)+2).toFixed(1)+','+(H-3-(D.iv_hist[q]-D.iv_lo)/(D.iv_hi-D.iv_lo)*(H-6)).toFixed(1)); }
+    h += '<div class="rg-lvl"><svg width="'+W+'" height="'+H+'" viewBox="0 0 '+W+' '+H+'"><polyline points="'+pts.join(' ')+'" fill="none" stroke="#818cf8" stroke-width="1.6"/>'
+       + '<circle cx="'+pts[n-1].split(',')[0]+'" cy="'+pts[n-1].split(',')[1]+'" r="2.6" fill="#fbbf24"/></svg>'
+       + '<div>IVの水準：<b>'+rgPct(D.iv)+'</b>は直近'+n+'日（'+rgPct(D.iv_lo)+'〜'+rgPct(D.iv_hi)+'）の中で'+lvl+'。'
+       + (edge ? '実現ボラ'+rgPct(D.hv)+'との差は'+(gap>=0?'+':'')+gap.toFixed(1)+'ptで、'+edge+'。' : '') + '</div></div>';
+  }
+  h += '<div class="rg-sec">'+D.expiry_label+'のATM IV '+rgPct(D.iv)+' から見た想定レンジ（現値 '+rgNum(D.spot)+'）</div>';
   h += '<table class="rg-tbl"><thead><tr><th>期間</th><th>±1σ</th><th>下限</th><th>上限</th><th>±2σ</th></tr></thead><tbody>';
   for(var i=0;i<D.rows.length;i++){
     var r = D.rows[i];
@@ -131,8 +146,9 @@ def build_range(greeks, ivts, oi_ts, ghist=None, top_n=8):
     e = greeks['expiries'][0]
     spot = greeks.get('spot')
     iv = None
+    series = []
     try:
-        series = (ivts or {}).get('atm_iv', {}).get(e.get('expiry'))
+        series = [x for x in ((ivts or {}).get('atm_iv', {}).get(e.get('expiry')) or []) if x]
         if series:
             iv = series[-1]
     except Exception:
@@ -177,8 +193,13 @@ def build_range(greeks, ivts, oi_ts, ghist=None, top_n=8):
                             'dist': dist, 'sigma': dist / sq_pct})
 
     hv, hv_n = _hv(_close_series(greeks, oi_ts, ghist))
+    # Where today's IV sits in its own recent range: this replaces the
+    # separate IV推移 card, whose only trading use was "is IV high or low now".
+    recent = series[-20:]
     return {
         'spot': spot, 'iv': iv, 'hv': hv, 'hv_n': hv_n,
+        'iv_hist': recent, 'iv_lo': min(recent) if recent else None,
+        'iv_hi': max(recent) if recent else None,
         'expiry_label': e.get('label') or '',
         'rows': rows, 'strikes': strikes,
     }
