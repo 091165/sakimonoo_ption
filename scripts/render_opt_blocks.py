@@ -14,7 +14,8 @@ import json
 KIND = {'pair': '相対', 'single': '単独クロス', 'multi': '複数'}
 CAT_JA = {'domestic': '国内', 'us': '米系', 'eu': '欧系', 'hf': 'HF代理', 'other': ''}
 LOG_DAYS = 10
-LOG_MIN_LOTS = 300   # the 10-day log keeps only the large blocks
+LOG_MIN_LOTS = 300   # older days in the 10-day log keep only the large blocks;
+                     # the latest day lists every block (50+ lots)
 
 
 def _name(b):
@@ -30,7 +31,7 @@ def build(store, s03=None):
     log, seen = [], {}
     for d in dates[-LOG_DAYS:]:
         for b in store['days'][d]['blocks']:
-            if b['lots'] < LOG_MIN_LOTS:
+            if d != today and b['lots'] < LOG_MIN_LOTS:
                 continue
             key = '%s%s-%d' % (b['side'], b['exp'], b['k'])
             seen[key] = seen.get(key, 0) + 1
@@ -195,7 +196,7 @@ function obBuild(){
   h+='<div class="ob-sec" style="margin-top:0">今日の大口（J-NET・50枚以上）</div>';
   if(!D.blocks.length) h+='<div class="ob-sum">該当なし</div>';
   for(var i=0;i<D.blocks.length;i++) h+=obBlock(D.blocks[i]);
-  h+='<div class="ob-sec">直近'+D.log_days+'営業日の大口（300枚以上）</div>';
+  h+='<div class="ob-sec">直近'+D.log_days+'営業日の大口</div><div class="ob-sum" style="color:var(--sub);margin-bottom:4px">最新日（'+(+D.date.slice(4,6))+'/'+(+D.date.slice(6))+'）は50枚以上すべて、それより前は300枚以上</div>';
   if(!D.log.length) h+='<div class="ob-sum">該当なし</div>';
   else{
   h+='<table class="ob-log"><thead><tr><th>日付</th><th>銘柄</th><th style="text-align:right">枚数</th><th>種類</th><th>建玉</th></tr></thead><tbody>';

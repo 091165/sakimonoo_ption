@@ -58,6 +58,10 @@ try:
     import render_opt_blocks as _ob
 except Exception:
     _ob = None
+try:
+    import render_technical as _tc
+except Exception:
+    _tc = None
 import sys
 import copy
 
@@ -1629,7 +1633,7 @@ def build_dashboard_html(data, oi_ts=None, wt=None, iv=None, ivts=None, greeks=N
     h += '<meta name="viewport" content="width=device-width,initial-scale=1">\n'
     h += '<title>JPX Market Analysis %s</title>\n' % esc(meta.get('date_formatted', ''))
     h += '<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700&family=Noto+Sans+JP:wght@400;500;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">\n'
-    h += '<style>\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n</style>\n' % (DASHBOARD_CSS, OI_CHART_CSS, WEEKLY_TREND_CSS, IV_CARD_CSS, IV_TREND_CSS, (_rg.GREEKS_CARD_CSS if _rg else ''), (_rj.JNET_CARD_CSS if _rj else ''), (_ow.OPTW_CARD_CSS if _ow else ''), (_ps.POS_CARD_CSS if _ps else ''), (_oc.OPCROSS_CARD_CSS if _oc else ''), FLOW_VERDICT_CSS, (_bw.BW_CARD_CSS if _bw else ''), (_sb.SB_CARD_CSS if _sb else ''), (_rr.RANGE_CARD_CSS if _rr else ''), (_ft.FUT_CARD_CSS if _ft else ''), (_fb.FB_CARD_CSS if _fb else ''), (_ds.DIST_CARD_CSS if _ds else ''), (_ob.OB_CARD_CSS if _ob else ''), READABILITY_CSS)
+    h += '<style>\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n</style>\n' % (DASHBOARD_CSS, OI_CHART_CSS, WEEKLY_TREND_CSS, IV_CARD_CSS, IV_TREND_CSS, (_rg.GREEKS_CARD_CSS if _rg else ''), (_rj.JNET_CARD_CSS if _rj else ''), (_ow.OPTW_CARD_CSS if _ow else ''), (_ps.POS_CARD_CSS if _ps else ''), (_oc.OPCROSS_CARD_CSS if _oc else ''), FLOW_VERDICT_CSS, (_bw.BW_CARD_CSS if _bw else ''), (_sb.SB_CARD_CSS if _sb else ''), (_rr.RANGE_CARD_CSS if _rr else ''), (_ft.FUT_CARD_CSS if _ft else ''), (_fb.FB_CARD_CSS if _fb else ''), (_ds.DIST_CARD_CSS if _ds else ''), (_ob.OB_CARD_CSS if _ob else ''), (_tc.TECH_CARD_CSS if _tc else ''), READABILITY_CSS)
     h += '</head>\n<body>\n'
 
     h += '<div class="topbar">\n  <span class="logo">JPX Dashboard</span>\n  <nav>\n'
@@ -1779,12 +1783,11 @@ def build_dashboard_html(data, oi_ts=None, wt=None, iv=None, ivts=None, greeks=N
         ] + ([
             ('fut_brokers', '🏛', '先物の大口（参加者別）', _fb.preview(fut_brokers), _fb.detail_js(fut_brokers), DB),
         ] if (_fb and fut_brokers) else [])),
-        # オプションの大口 leads the group: block crosses are what this
-        # dashboard is read for. It replaces the strike card (建玉×手口×相対IV),
-        # kept only as a fallback when opt_blocks.json is missing.
+        # The volume card and オプションの大口 (at the end of the group) replace
+        # the strike card (建玉×手口×相対IV), kept only as a fallback when
+        # opt_blocks.json is missing.
         ('オプション', ([
-            ('opt_blocks', '🔎', 'オプションの大口（J-NET）', _ob.preview(opt_blocks, s03), "return obBuild();", DB),
-            ('opt_volume', '📊', 'オプションの取引高と建玉の変化',
+            ('opt_volume', '📊', 'オプション（取引高・建玉変化）',
              _ob.preview_volume(opt_blocks, s03) or '<span class="mm-label">データなし</span>', "return obVolBuild();", DB),
         ] if (_ob and opt_blocks) else [
             ('strike_breakdown', '🔬', 'オプションの手口と建玉（行使価格別）',
@@ -1795,10 +1798,17 @@ def build_dashboard_html(data, oi_ts=None, wt=None, iv=None, ivts=None, greeks=N
             ('dist', '🦋', 'オプション建玉の分布',
              (_ds and _ds.preview(s06, _spot)) or _preview_dist(s06),
              ("return dsBuild();" if (_ds and _ds.build(s06, _spot)) else _detail_dist_js(s06, ind)), DB),
+        # 大口 last in each group, as in 先物: overall first, then who moved.
+        ] + ([
+            ('opt_blocks', '🔎', 'オプションの大口（行使価格別）', _ob.preview(opt_blocks, s03), "return obBuild();", DB),
+        ] if (_ob and opt_blocks) else [])),
+        ('テクニカル', [
             ('range', '📐', 'IVから見た想定レンジ',
              (_rr.preview_range(greeks, ivts, oi_ts) if _rr else '<span class="mm-label">データ待ち</span>'),
              (_rr.detail_range_js(greeks) if _rr else "return '<div class=\\'insight\\'>データなし</div>';"), DB),
-        ]),
+        ] + ([
+            ('technical', '📏', 'テクニカル指標', _tc.preview(futures_flow), "return tcBuild();", DB),
+        ] if (_tc and futures_flow and _tc.build(futures_flow)) else [])),
         # The old combined 大口手口 card is only kept as a fallback: its futures
         # half is replaced by 先物の大口 and its option half duplicates the
         # 行使価格別 card above.
@@ -1869,6 +1879,9 @@ def build_dashboard_html(data, oi_ts=None, wt=None, iv=None, ivts=None, greeks=N
         _closes = [futures_flow['rows'][d].get('close') for d in (futures_flow or {}).get('dates', [])]
         h += _rr.range_data_script(greeks, ivts, oi_ts, greeks_hist, closes=[c for c in _closes if c] or None)
         h += _rr.RANGE_CARD_JS
+    if _tc and futures_flow:
+        h += _tc.data_script(futures_flow)
+        h += _tc.TECH_CARD_JS
     if _ob and opt_blocks:
         h += _ob.data_script(opt_blocks, s03, data.get('s05'))
         h += _ob.OB_CARD_JS
