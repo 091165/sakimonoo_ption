@@ -848,6 +848,8 @@ WEEKLY_TREND_CSS = r"""
 .wt-cell-neg{background:rgba(239,68,68,.18);color:#f87171}
 .wt-cell-neg-strong{background:rgba(239,68,68,.55);color:#fff;font-weight:600}
 .wt-dot-macro{background:#f59e0b}.wt-dot-longterm{background:#3b82f6}.wt-dot-cta{background:#ec4899}
+.wt-catl{display:block;font-size:11px;color:var(--sub);margin-top:2px}
+.wt-catl .wt-dot{display:inline-block;width:7px;height:7px;border-radius:50%;margin-right:4px;vertical-align:middle}
 .wt-dot-arb{background:#14b8a6}.wt-dot-domins{background:#10b981}.wt-dot-domret{background:#84cc16}.wt-dot-other{background:#6b7280}
 """
 
@@ -864,7 +866,6 @@ WEEKLY_TREND_JS = r"""
     'トレンドフォロー（CTA）':'トレンドフォロー（CTA）','アービトラージ（裁定取引）':'アービトラージ（裁定取引）',
     '国内機関投資家':'国内機関投資家','国内個人投資家（ネットトレーダー）':'国内個人投資家','-':'ー（分類外）'
   };
-  var CAT_ORDER = ['グローバルマクロ','長期投資志向','トレンドフォロー（CTA）','アービトラージ（裁定取引）','国内機関投資家','国内個人投資家（ネットトレーダー）','-'];
   var SECTION_LABELS = { 'n225_large':'日経225先物', 'n225_mini':'日経225mini', 'topix':'TOPIX先物' };
 
   function fmt(n, signed) {
@@ -907,7 +908,11 @@ WEEKLY_TREND_JS = r"""
       content.innerHTML = '<div class="oi-empty">週次データなし — data/weekly_trend.json 未生成、または週次ファイル未配置</div>';
       return;
     }
-    var rows = D.sections[st.tab] || [];
+    // Top 10 by open position size: the full list (~35 brokers) was too long
+    // to read on a phone, and the small accounts rarely move the market.
+    var rows = (D.sections[st.tab] || []).slice().sort(function (a, b) {
+      return Math.abs(b.oi_current || 0) - Math.abs(a.oi_current || 0);
+    }).slice(0, 10);
     var weeks = D.weeks || [];
     var lim = (D.limgetsu || {})[st.tab] || '';
 
@@ -918,14 +923,8 @@ WEEKLY_TREND_JS = r"""
         if (w[j] !== null && Math.abs(w[j]) > maxAbs) maxAbs = Math.abs(w[j]);
       }
     }
-    var byCat = {};
-    for (var k = 0; k < rows.length; k++) {
-      var c = rows[k].category || '-';
-      if (!byCat[c]) byCat[c] = [];
-      byCat[c].push(rows[k]);
-    }
     var h = '';
-    h += '<div class="wt-title"><b>' + (SECTION_LABELS[st.tab] || '') + '</b> · ' + lim + ' · 前週比増減・売り越しはマイナス</div>';
+    h += '<div class="wt-title"><b>' + (SECTION_LABELS[st.tab] || '') + '</b> · ' + lim + ' · 建玉残高の大きい上位10社 · 前週比増減・売り越しはマイナス</div>';
     h += '<div class="wt-scroll"><table class="wt-table"><thead><tr>';
     h += '<th>証券会社</th>';
     for (var wk = 0; wk < weeks.length; wk++) {
@@ -935,24 +934,20 @@ WEEKLY_TREND_JS = r"""
       h += '<th>' + fmtDate(weeks[weeks.length - 1]) + '<span class="wt-sub">建玉残高</span></th>';
     }
     h += '</tr></thead><tbody>';
-    var colspan = 2 + weeks.length;
-    for (var ci = 0; ci < CAT_ORDER.length; ci++) {
-      var cat = CAT_ORDER[ci];
-      var catRows = byCat[cat];
-      if (!catRows || !catRows.length) continue;
-      var dotClass = CAT_DOTS[cat] || 'other';
-      h += '<tr class="wt-cat"><td colspan="' + colspan + '"><span class="wt-dot wt-dot-' + dotClass + '"></span>' + CAT_LABELS[cat] + ' (' + catRows.length + ')</td></tr>';
-      for (var ri = 0; ri < catRows.length; ri++) {
-        var row = catRows[ri];
-        h += '<tr><td class="wt-broker">' + row.broker + '</td>';
-        var wow = row.wow || [];
-        for (var wi = 0; wi < wow.length; wi++) {
-          var v = wow[wi];
-          if (v === null || v === undefined) h += '<td class="wt-dim">—</td>';
-          else h += '<td class="' + cellClass(v, maxAbs) + '">' + fmt(v, true) + '</td>';
-        }
-        h += '<td class="wt-oi">' + fmt(row.oi_current) + '</td></tr>';
+    // Flat list in size order; the category is a small label next to the
+    // name (the old group header rows were cut off in the scrolling table).
+    for (var ri = 0; ri < rows.length; ri++) {
+      var row = rows[ri];
+      var cat = row.category || '-';
+      h += '<tr><td class="wt-broker">' + row.broker.replace('証券', '')
+        + (CAT_LABELS[cat] && cat !== '-' ? '<span class="wt-catl"><span class="wt-dot wt-dot-' + (CAT_DOTS[cat] || 'other') + '"></span>' + CAT_LABELS[cat] + '</span>' : '') + '</td>';
+      var wow = row.wow || [];
+      for (var wi = 0; wi < wow.length; wi++) {
+        var v = wow[wi];
+        if (v === null || v === undefined) h += '<td class="wt-dim">—</td>';
+        else h += '<td class="' + cellClass(v, maxAbs) + '">' + fmt(v, true) + '</td>';
       }
+      h += '<td class="wt-oi">' + fmt(row.oi_current) + '</td></tr>';
     }
     h += '</tbody></table></div>';
     content.innerHTML = h;

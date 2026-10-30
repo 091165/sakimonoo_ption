@@ -174,7 +174,7 @@ function bwBuild(){
   var h='<div class="bw-intro">主要大口の先物の<b>週次ネット建玉</b>（売買区分あり＝確定値）の推移を、直近'+dates.length+'週のミニ棒グラフで表示。'
     +'<span class="bw-pos">緑＝買い持ち</span>／<span class="bw-neg">赤＝売り持ち</span>。'
     +'右端が最新（'+dates[dates.length-1]+'）、▲▼は前週差。</div>';
-  var rows=D.rows.slice(0,14);
+  var rows=D.rows.slice(0,10);
   for(var i=0;i<rows.length;i++){
     var r=rows[i];
     h+='<div class="bw-row">';
