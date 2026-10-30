@@ -204,8 +204,13 @@ def main():
         if not os.path.exists(day):
             print('[opt_blocks] %s: day J-NET file missing; history unchanged' % dt)
             continue
-        jn = parse_jnet(day, 'day')
         night = os.path.join(a.data_dir, dt + JNET_FILES[1])
+        if not os.path.exists(night) and dt in store['days']:
+            # Re-runs after the workflow's cleanup see only the day file; keep
+            # the entry that was built with both sessions.
+            print('[opt_blocks] %s: night J-NET file missing; keeping stored entry' % dt)
+            continue
+        jn = parse_jnet(day, 'day')
         if os.path.exists(night):
             _merge(jn, parse_jnet(night, 'night'))
         store['days'][dt] = build_day(parse_oi(os.path.join(a.data_dir, dt + 'open_interest.xlsx')), jn)
