@@ -1083,9 +1083,9 @@ def _preview_op_oi_timeseries(oi_ts):
     top_p = (oi_ts.get('options') or {}).get('top_puts', []) or []
     top_c = (oi_ts.get('options') or {}).get('top_calls', []) or []
     if top_p:
-        h += '<div class="mini-metric"><div class="mm-label">Top P</div><div class="mm-value">%s</div></div>' % esc(top_p[0].get('short_label', ''))
+        h += '<div class="mini-metric"><div class="mm-label">最大のプット</div><div class="mm-value">%s</div></div>' % esc(top_p[0].get('short_label', ''))
     if top_c:
-        h += '<div class="mini-metric"><div class="mm-label">Top C</div><div class="mm-value">%s</div></div>' % esc(top_c[0].get('short_label', ''))
+        h += '<div class="mini-metric"><div class="mm-label">最大のコール</div><div class="mm-value">%s</div></div>' % esc(top_c[0].get('short_label', ''))
 
     h += '</div>'
     return h
@@ -1116,11 +1116,11 @@ def _detail_op_oi_timeseries_js(oi_ts):
     Chart drawn by init_op_oi_timeseries() (same generic logic, OI_CHART_JS).
     """
     if not oi_ts or oi_ts.get('error'):
-        return "var h='';h+='<div class=\"oi-empty\">OP建玉推移データなし — `*open_interest.xlsx` の蓄積が不足</div>';return h;"
+        return "var h='';h+='<div class=\"oi-empty\">オプション建玉の推移データなし — `*open_interest.xlsx` の蓄積が不足</div>';return h;"
     js = "var h='';"
     js += "h+='<div class=\"oi-tabs\">';"
-    js += "h+='<button class=\"oi-tab oi-tab-active\" data-oi-tab=\"top_puts\" type=\"button\">Pストライク</button>';"
-    js += "h+='<button class=\"oi-tab\" data-oi-tab=\"top_calls\" type=\"button\">Cストライク</button>';"
+    js += "h+='<button class=\"oi-tab oi-tab-active\" data-oi-tab=\"top_puts\" type=\"button\">プット</button>';"
+    js += "h+='<button class=\"oi-tab\" data-oi-tab=\"top_calls\" type=\"button\">コール</button>';"
     js += "h+='</div>';"
     js += "h+='<div class=\"oi-chart-wrap\"><canvas class=\"oi-canvas\"></canvas></div>';"
     js += "h+='<div class=\"oi-meta\"></div>';"
@@ -1781,11 +1781,11 @@ def build_dashboard_html(data, oi_ts=None, wt=None, iv=None, ivts=None, greeks=N
             ('fut_brokers', '🏛', '先物の大口（参加者別）', _fb.preview(fut_brokers), _fb.detail_js(fut_brokers), DB),
         ] if (_fb and fut_brokers) else [])),
         ('オプション', [
-            ('op_oi_timeseries', '📉', 'OP建玉推移', _preview_op_oi_timeseries(oi_ts), _detail_op_oi_timeseries_js(oi_ts), DB),
+            ('op_oi_timeseries', '📉', 'オプション建玉の推移', _preview_op_oi_timeseries(oi_ts), _detail_op_oi_timeseries_js(oi_ts), DB),
             ('strike_breakdown', '🔬', 'オプションの手口と建玉（行使価格別）',
              (_sb.preview_strike_breakdown(greeks, venue_flow) if _sb else '<span class="mm-label">データ待ち</span>'),
              (_sb.SB_CARD_JS + "return sbBuild();" if (_sb and greeks) else "return '<div class=\\'insight\\'>データなし</div>';"), DB),
-            ('dist', '🦋', 'OP建玉分布',
+            ('dist', '🦋', 'オプション建玉の分布',
              (_ds and _ds.preview(s06, _spot)) or _preview_dist(s06),
              ("return dsBuild();" if (_ds and _ds.build(s06, _spot)) else _detail_dist_js(s06, ind)), DB),
             ('range', '📐', 'IVから見た想定レンジ',
@@ -1799,7 +1799,6 @@ def build_dashboard_html(data, oi_ts=None, wt=None, iv=None, ivts=None, greeks=N
             ('jnet', '🏛', '大口手口（日次・先物＋オプション）',
              (_rj.preview_jnet(jnet) if (_rj and jnet) else _preview_jnet(s07)), _big_js, DB),
         ]) + [
-            ('positions', '🧩', '大口ポジション統合（週次 先物＋OP建玉）', (_ps.preview_positions(positions) if (_ps and positions) else '<span class="mm-label">統合ポジション 未取込</span>'), (_ps.detail_positions_js(positions) if (_ps and positions) else "return '<div class=\\'insight\\'>週次データ未取込</div>';"), DB),
             ('weekly_trend', '📅', '週次手口（先物の推移＋大口動向）', _preview_weekly_trend(wt), _week_js, WB),
         ]),
     ]

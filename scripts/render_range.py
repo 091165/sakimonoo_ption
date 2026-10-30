@@ -85,7 +85,7 @@ function rgBuild(){
   }
   h += '</tbody></table>';
   if(D.strikes && D.strikes.length){
-    h += '<div class="rg-sec">主要ストライクはSQまでで何σか（建玉の大きい順）</div>';
+    h += '<div class="rg-sec">建玉の大きい行使価格はSQまでで何σか（建玉の大きい順）</div>';
     for(var j=0;j<D.strikes.length;j++){
       var s = D.strikes[j];
       var cls = (Math.abs(s.sigma) <= 1) ? 'rg-in' : (Math.abs(s.sigma) <= 2 ? 'rg-out' : 'rg-far');

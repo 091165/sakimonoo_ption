@@ -18,19 +18,13 @@ def _short(n):
 
 def bw_data_script(hist):
     dates = sorted(hist.keys())
-    # union of brokers, ranked by footprint (|fut| + 20*|put|+|call|)
-    # Rank by footprint, but score futures and options on separate scales so a
-    # futures-only house (GS, HSBC) is not pushed out by option-heavy ones.
-    # A broker that is large in EITHER arena should surface.
+    # Rank by futures footprint only. The weekly option file covers just the
+    # five strikes around that week's ATM, which change as the index moves, so
+    # per-broker put/call "nets" are not a series and are not charted here.
     foot = {}
     for d in dates:
         for b, v in hist[d].items():
-            fut = abs(v.get('fut', 0) or 0)
-            opt = abs(v.get('put', 0) or 0) + abs(v.get('call', 0) or 0)
-            # normalise: 10,000 futures contracts ≈ 500 option contracts in
-            # terms of "this broker matters", then take the stronger side.
-            f = max(fut / 500.0, opt / 50.0)
-            foot[b] = max(foot.get(b, 0), f)
+            foot[b] = max(foot.get(b, 0), abs(v.get('fut', 0) or 0))
     order = [b for b, _ in sorted(foot.items(), key=lambda x: -x[1])]
 
     def series(b, field):
@@ -53,19 +47,26 @@ def bw_data_script(hist):
 
 
 BW_CARD_CSS = r"""
-.bw-intro{font-size:11.5px;color:var(--sub);line-height:1.6;margin:2px 2px 10px}
+.bw-intro{font-size:13px;color:var(--sub);line-height:1.6;margin:2px 2px 10px}
 .bw-row{border:1px solid var(--border);border-radius:10px;padding:10px 12px;margin:8px 0;background:#141822}
-.bw-name{font-family:Outfit;font-weight:700;font-size:13.5px;margin-bottom:8px}
-.bw-cat{font-size:10px;color:var(--sub);font-weight:400;margin-left:6px}
+.bw-name{font-family:Outfit;font-weight:700;font-size:15px;margin-bottom:8px}
+.bw-cat{font-size:12px;color:var(--sub);font-weight:400;margin-left:6px}
 .bw-metrics{display:flex;gap:10px}
 .bw-metric{flex:1;min-width:0}
-.bw-mlabel{font-size:10px;color:var(--sub);margin-bottom:3px}
+.bw-mlabel{font-size:12px;color:var(--sub);margin-bottom:3px}
 .bw-spark{background:#0f131b;border-radius:5px;padding:2px 3px}
-.bw-mval{font-family:'DM Mono',monospace;font-size:12px;font-weight:600;margin-top:3px;white-space:nowrap}
-.bw-wow{font-size:9.5px;margin-left:2px;opacity:.85}
+.bw-mval{font-family:'DM Mono',monospace;font-size:14px;font-weight:600;margin-top:3px;white-space:nowrap}
+.bw-wow{font-size:12px;margin-left:2px;opacity:.85}
 .bw-pos{color:#86efac}.bw-neg{color:#fca5a5}.bw-ze{color:var(--sub)}
-.bw-read{font-size:10.5px;color:#cbd5e1;line-height:1.45;margin-top:8px;border-top:1px solid rgba(38,44,58,.6);padding-top:6px}
-.bw-note{font-size:11px;color:var(--sub);line-height:1.55;margin:10px 2px 2px}
+.bw-read{font-size:13px;color:#cbd5e1;line-height:1.45;margin-top:8px;border-top:1px solid rgba(38,44,58,.6);padding-top:6px}
+.bw-det{margin:14px 0 0;border:1px solid var(--border);border-radius:10px;padding:8px 10px}
+.bw-det summary{cursor:pointer;color:var(--accent);font-size:13px;font-weight:600}
+.bw-k{font-family:'DM Mono',monospace;font-size:13px;font-weight:600;color:var(--text);margin:10px 0 4px}
+.bw-ln{display:flex;gap:6px;align-items:flex-start;font-size:12px;margin:2px 0}
+.bw-tag{flex:none;min-width:34px;color:var(--sub)}
+.bw-t{display:inline-block;padding:1px 6px;border-radius:5px;margin:1px 3px 1px 0;white-space:nowrap}
+.bw-tb{background:rgba(74,222,128,.12);color:#86efac}.bw-ts{background:rgba(248,113,113,.12);color:#fca5a5}
+.bw-note{font-size:12px;color:var(--sub);line-height:1.55;margin:10px 2px 2px}
 """
 
 BW_CARD_JS = r"""
@@ -98,13 +99,6 @@ function bwReadFut(r){
   if(last===undefined) return '';
   var side = last>0?'買い越し（ロング）':'売り越し（ショート）';
   return '先物は'+side+'で'+(t||'推移')+'。'+l+'。';
-}
-function bwReadOpt(r){
-  var pl=bwLean(r.put,'プット'), cl=bwLean(r.call,'コール');
-  var out=[];
-  if(pl) out.push(pl);
-  if(cl) out.push(cl);
-  return out.join('／');
 }
 function bwSpark(arr, w, hgt){
   // mini bar chart centered on zero. positive=green up, negative=red down.
@@ -150,11 +144,35 @@ function bwChip(arr, label){
     +'<div class="bw-spark">'+bwSpark(arr)+'</div>'
     +'<div class="bw-mval '+cls+'">'+s+' '+wow+'</div></div>';
 }
+function bwOptSnap(){
+  // Weekly option holdings by participant. JPX publishes them for only the
+  // five strikes around that week's ATM, so this is a snapshot, not a trend,
+  // and the large walls (e.g. P60,000) are not covered.
+  var OW=window.OPTW_DATA||{}, st=OW.strikes||{};
+  var ks=Object.keys(st).map(Number).sort(function(a,b){return b-a;});
+  if(!ks.length) return '';
+  function cell(list,buy){
+    if(!list||!list.length) return '<span class="bw-ze">—</span>';
+    return list.slice(0,3).map(function(x){
+      return '<span class="bw-t '+(buy?'bw-tb':'bw-ts')+'">'+String(x[0]).replace('証券','').replace('クリアリン','')+' '+Math.round(x[1]).toLocaleString()+'</span>';
+    }).join('');
+  }
+  var h='<details class="bw-det" onclick="event.stopPropagation()"><summary>参考：オプションの買い持ち・売り持ち（週次・'+(OW.as_of||'')+'）</summary>';
+  h+='<div class="bw-note" style="margin-top:8px">取引所が参加者別に公表しているのは、その週のATM付近の<b>5本の行使価格だけ</b>です。壁になっている遠い行使価格（P60,000など）の持ち主は公表されず、5本も毎週入れ替わるため、推移ではなくその週の断面として見てください。</div>';
+  for(var i=0;i<ks.length;i++){var sd=st[String(ks[i])];
+    h+='<div class="bw-k">'+ks[i].toLocaleString()+'</div>';
+    h+='<div class="bw-ln"><span class="bw-tag">P買</span><span>'+cell(sd.put.buyers,true)+'</span></div>';
+    h+='<div class="bw-ln"><span class="bw-tag">P売</span><span>'+cell(sd.put.sellers,false)+'</span></div>';
+    h+='<div class="bw-ln"><span class="bw-tag">C買</span><span>'+cell(sd.call.buyers,true)+'</span></div>';
+    h+='<div class="bw-ln"><span class="bw-tag">C売</span><span>'+cell(sd.call.sellers,false)+'</span></div>';
+  }
+  return h+'</details>';
+}
 function bwBuild(){
   var D=window.BW_DATA||{}; if(!D.rows) return '<div>データなし</div>';
   var dates=D.dates||[];
-  var h='<div class="bw-intro">主要大口の<b>週次ネット建玉</b>（売買区分あり＝確定値）の推移を、直近'+dates.length+'週のミニ棒グラフで表示。'
-    +'<span class="bw-pos">緑＝買い持ち</span>／<span class="bw-neg">赤＝売り持ち</span>。先物は方向観、オプション（P/C）は壁・受け皿を映す。'
+  var h='<div class="bw-intro">主要大口の先物の<b>週次ネット建玉</b>（売買区分あり＝確定値）の推移を、直近'+dates.length+'週のミニ棒グラフで表示。'
+    +'<span class="bw-pos">緑＝買い持ち</span>／<span class="bw-neg">赤＝売り持ち</span>。'
     +'右端が最新（'+dates[dates.length-1]+'）、▲▼は前週差。</div>';
   var rows=D.rows.slice(0,14);
   for(var i=0;i<rows.length;i++){
@@ -162,16 +180,14 @@ function bwBuild(){
     h+='<div class="bw-row">';
     h+='<div class="bw-name">'+r.broker.replace('ＪＰモルガン','JPモルガン')+'<span class="bw-cat">'+(r.cat||'')+'</span></div>';
     h+='<div class="bw-metrics">';
-    h+=bwChip(r.fut,'先物');
-    h+=bwChip(r.put,'プット');
-    h+=bwChip(r.call,'コール');
+    h+=bwChip(r.fut,'先物（日経225ラージ）');
     h+='</div>';
-    var read=[bwReadFut(r), bwReadOpt(r)].filter(function(x){return x;}).join(' ');
+    var read=bwReadFut(r);
     if(read) h+='<div class="bw-read">↳ '+read+'</div>';
     h+='</div>';
   }
-  h+='<div class="bw-note">週次建玉は売買区分のある確報値。過去の傾向であり将来を保証しない。'
-    +'「先物で方向を出す社（GS・HSBC・CTA）」と「オプションで壁を作る社（ABN・BNP・JPM）」を両面で追える。</div>';
+  h+='<div class="bw-note">週次建玉は売買区分のある確報値。過去の傾向であり将来を保証しない。</div>';
+  h+=bwOptSnap();
   return h;
 }
 """
