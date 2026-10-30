@@ -1784,6 +1784,8 @@ def build_dashboard_html(data, oi_ts=None, wt=None, iv=None, ivts=None, greeks=N
         # kept only as a fallback when opt_blocks.json is missing.
         ('オプション', ([
             ('opt_blocks', '🔎', 'オプションの大口（J-NET）', _ob.preview(opt_blocks, s03), "return obBuild();", DB),
+            ('opt_volume', '📊', 'オプションの取引高と建玉の変化',
+             _ob.preview_volume(opt_blocks, s03) or '<span class="mm-label">データなし</span>', "return obVolBuild();", DB),
         ] if (_ob and opt_blocks) else [
             ('strike_breakdown', '🔬', 'オプションの手口と建玉（行使価格別）',
              (_sb.preview_strike_breakdown(greeks, venue_flow) if _sb else '<span class="mm-label">データ待ち</span>'),
@@ -1868,7 +1870,7 @@ def build_dashboard_html(data, oi_ts=None, wt=None, iv=None, ivts=None, greeks=N
         h += _rr.range_data_script(greeks, ivts, oi_ts, greeks_hist, closes=[c for c in _closes if c] or None)
         h += _rr.RANGE_CARD_JS
     if _ob and opt_blocks:
-        h += _ob.data_script(opt_blocks, s03)
+        h += _ob.data_script(opt_blocks, s03, data.get('s05'))
         h += _ob.OB_CARD_JS
     if _ds:
         h += _ds.dist_data_script(s06, _spot, ind)

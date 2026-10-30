@@ -14,6 +14,7 @@ import json
 KIND = {'pair': '相対', 'single': '単独クロス', 'multi': '複数'}
 CAT_JA = {'domestic': '国内', 'us': '米系', 'eu': '欧系', 'hf': 'HF代理', 'other': ''}
 LOG_DAYS = 10
+LOG_MIN_LOTS = 300   # the 10-day log keeps only the large blocks
 
 
 def _name(b):
@@ -29,6 +30,8 @@ def build(store, s03=None):
     log, seen = [], {}
     for d in dates[-LOG_DAYS:]:
         for b in store['days'][d]['blocks']:
+            if b['lots'] < LOG_MIN_LOTS:
+                continue
             key = '%s%s-%d' % (b['side'], b['exp'], b['k'])
             seen[key] = seen.get(key, 0) + 1
             log.append(dict(b, date=d, key=key))
@@ -55,9 +58,31 @@ def build(store, s03=None):
     }
 
 
-def data_script(store, s03=None):
+def data_script(store, s03=None, s05=None):
     d = build(store, s03)
-    return ('window.OB_DATA = %s;\n' % json.dumps(d, ensure_ascii=False, separators=(',', ':'))) if d else ''
+    if not d:
+        return ''
+    # ±300 OI changes for the volume card (data.json s05, all expiries)
+    d['moves'] = sorted((m for m in (s05 or []) if isinstance(m, dict) and m.get('change')),
+                        key=lambda m: -abs(m['change']))
+    return 'window.OB_DATA = %s;\n' % json.dumps(d, ensure_ascii=False, separators=(',', ':'))
+
+
+def preview_volume(store, s03=None):
+    """Card: オプションの取引高 — today's put/call volume, flagged when calls lead."""
+    d = build(store, s03)
+    if not d or not d.get('summary') or not d['summary'].get('call_volume'):
+        return None
+    sm = d['summary']
+    flag = ('<div class="ob-flag" style="margin-bottom:6px">特異日：コールの取引高がプットを上回った</div>'
+            if d['today_special'] else '')
+    return (flag + '<div class="mini-metrics">'
+            '<div class="mini-metric"><div class="mm-label">プット / コール（ラージ）</div>'
+            '<div class="mm-value" style="font-size:14px">%s / %s</div></div>'
+            '<div class="mini-metric"><div class="mm-label">PCR（出来高）</div>'
+            '<div class="mm-value" style="font-size:14px">%.2f</div></div></div>'
+            % (format(sm['put_volume'], ','), format(sm['call_volume'], ','),
+               sm['put_volume'] / sm['call_volume']))
 
 
 def preview(store, s03=None):
@@ -66,11 +91,9 @@ def preview(store, s03=None):
         return None
     if not d['blocks']:
         return '<span class="mm-label">本日の大口（50枚以上）なし</span>'
-    flag = ('<div class="ob-flag" style="margin-bottom:6px">特異日：コールの取引高がプットを上回った</div>'
-            if d['today_special'] else '')
     b = d['blocks'][0]
     singles = sum(1 for x in d['blocks'] if x['kind'] == 'single')
-    return (flag + '<div class="mini-metrics">'
+    return ('<div class="mini-metrics">'
             '<div class="mini-metric"><div class="mm-label">本日最大の大口</div>'
             '<div class="mm-value" style="font-size:14px;color:%s">%s%s %s枚</div></div>'
             '<div class="mini-metric"><div class="mm-label">大口の件数（うち単独クロス）</div>'
@@ -139,7 +162,7 @@ function obBlock(b){
     +' ／ '+b.sessions.map(function(s){return s==='day'?'日中':'夜間';}).join('・')+'</div></div>';
   return h;
 }
-function obBuild(){
+function obVolBuild(){
   var D=window.OB_DATA;if(!D)return '<div class="insight">データなし</div>';
   var h='<div class="ob-sec">今日のオプション取引高（ラージ）</div>';
   if(D.summary&&D.summary.put_volume!==undefined){
@@ -158,16 +181,23 @@ function obBuild(){
     h+='<div class="ob-sum" style="margin-top:4px;color:var(--sub)">直近'+D.pc_n+'営業日でコールが多かった日は<b style="color:var(--text)">'+D.pc_special.length+'日</b>'
       +(D.pc_special.length?'（'+D.pc_special.map(function(d){return (+d.slice(4,6))+'/'+(+d.slice(6));}).join('、')+'）':'')+'。</div>';
   }
-  if(D.top_volume&&D.top_volume.length){
-    h+='<div class="ob-sum" style="margin-top:6px;color:var(--sub)">取引の多い銘柄（建玉の前日比）</div><div class="ob-tv">';
-    for(var i=0;i<D.top_volume.length;i++){var t=D.top_volume[i];
-      h+='<span class="ob-tvi"><span class="'+(t.side==='P'?'ob-p':'ob-c')+'">'+t.side+obN(t.k)+'</span> '+(+t.exp.slice(2))+'月 '+obN(t.vol)+'枚（'+obS(t.chg)+'）</span>';}
-    h+='</div>';
-  }
-  h+='<div class="ob-sec">今日の大口（J-NET・50枚以上）</div>';
+  h+='<div class="ob-sec">建玉が前日比±300枚以上動いた銘柄</div>';
+  if(!D.moves||!D.moves.length) h+='<div class="ob-sum">該当なし</div>';
+  else{h+='<div class="ob-tv">';
+    for(var i=0;i<D.moves.length;i++){var m=D.moves[i];
+      h+='<span class="ob-tvi"><span class="'+(m.type==='P'?'ob-p':'ob-c')+'">'+m.type+obN(m.strike)+'</span> '+(+String(m.expiry).slice(2))+'月限 <span class="'+(m.change>0?'ob-up':'ob-dn')+'">'+obS(m.change)+'</span>（建玉 '+obN(m.oi)+'）</span>';}
+    h+='</div>';}
+  return h;
+}
+function obBuild(){
+  var D=window.OB_DATA;if(!D)return '<div class="insight">データなし</div>';
+  var h='';
+  h+='<div class="ob-sec" style="margin-top:0">今日の大口（J-NET・50枚以上）</div>';
   if(!D.blocks.length) h+='<div class="ob-sum">該当なし</div>';
   for(var i=0;i<D.blocks.length;i++) h+=obBlock(D.blocks[i]);
-  h+='<div class="ob-sec">直近'+D.log_days+'営業日の大口</div>';
+  h+='<div class="ob-sec">直近'+D.log_days+'営業日の大口（300枚以上）</div>';
+  if(!D.log.length) h+='<div class="ob-sum">該当なし</div>';
+  else{
   h+='<table class="ob-log"><thead><tr><th>日付</th><th>銘柄</th><th style="text-align:right">枚数</th><th>種類</th><th>建玉</th></tr></thead><tbody>';
   for(var i=0;i<D.log.length;i++){var x=D.log[i];
     h+='<tr><td class="n" style="text-align:left">'+(+x.date.slice(4,6))+'/'+(+x.date.slice(6))+'</td>'
@@ -176,6 +206,7 @@ function obBuild(){
       +'<td>'+D.kind[x.kind]+'<br><span style="color:var(--sub)">'+(x.kind==='single'?obNm(x.a[0].broker):x.kind==='pair'?obNm(x.a[0].broker)+'⟷'+x.b.map(function(y){return obNm(y.broker);}).join('・'):x.a.slice(0,2).map(function(y){return obNm(y.broker);}).join('・')+'…')+'</span></td>'
       +'<td class="n" style="text-align:left">'+obS(x.chg)+'<br><span style="color:var(--sub)">'+(x.verdict||'')+'</span></td></tr>';}
   h+='</tbody></table>';
+  }
   h+='<div class="ob-note"><b>相対</b>＝一番多い社が片側、残りの社がもう片側（枚数がほぼ一致）。<b>単独クロス</b>＝1社しか出てこない取引で、その社の中で顧客同士または自社と顧客の売りと買いを付け合わせたもの（出来高は枚数の2倍で載る）。'
     +'<b>新規建て</b>＝建玉が大口の枚数の7割以上増えた、<b>決済</b>＝7割以上減った、<b>付け替え</b>＝増減が3割以内（玉が持ち主を移っただけ）。'
     +'★＝期間中に同じ銘柄で2回以上の大口。手口には売り買いの区別がないため、どちらが買ったかは分かりません。</div>';
