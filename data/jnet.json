@@ -209,11 +209,10 @@
       "strike": 63000,
       "expiry": "2611",
       "size": 250,
-      "total": 504,
+      "total": 502,
       "is_cross": true,
       "domestic_vs_overseas": true,
       "sessions": [
-        "夜間",
         "日中"
       ],
       "legs": [
@@ -242,11 +241,10 @@
       "strike": 64000,
       "expiry": "2611",
       "size": 100,
-      "total": 204,
+      "total": 202,
       "is_cross": true,
       "domestic_vs_overseas": false,
       "sessions": [
-        "夜間",
         "日中"
       ],
       "legs": [

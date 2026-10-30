@@ -21,11 +21,11 @@
     "atm_weekly_proxy": 63000,
     "atm_oi_center": 53000,
     "atm_warning": null,
-    "nikkei_close": 62980.0,
+    "nikkei_close": 63025.0,
     "vi": null
   },
   "s01": {
-    "nikkei_close": 62980.0,
+    "nikkei_close": 63025.0,
     "vi": null
   },
   "s02": {
@@ -3806,7 +3806,7 @@
           "call_total_delta": 0
         }
       ],
-      "prev_date": "20261029"
+      "prev_date": "20261030"
     }
   },
   "s10": {
