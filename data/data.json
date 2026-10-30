@@ -15,17 +15,17 @@
       "fut_participants": "20261023_indexfut_oi_by_tp.xlsx",
       "stock_vol": "stock_val_1_260402.xls"
     },
-    "atm": 63000,
+    "atm": 63500,
     "ohlc": {},
     "atm_source": "nikkei_close",
     "atm_weekly_proxy": 63000,
     "atm_oi_center": 53000,
     "atm_warning": null,
-    "nikkei_close": 63025.0,
+    "nikkei_close": 63290.11,
     "vi": null
   },
   "s01": {
-    "nikkei_close": 63025.0,
+    "nikkei_close": 63290.11,
     "vi": null
   },
   "s02": {
@@ -413,19 +413,11 @@
     }
   ],
   "s06": {
-    "atm": 63000,
-    "atm_round": 63000,
+    "atm": 63500,
+    "atm_round": 63500,
     "max_pain_front": 67000,
     "max_pain_expiry": "2611",
     "distribution": [
-      {
-        "strike": 58000,
-        "put_oi": 6233,
-        "put_change": 14,
-        "call_oi": 2604,
-        "call_change": 0,
-        "is_atm": false
-      },
       {
         "strike": 58500,
         "put_oi": 2182,
@@ -504,7 +496,7 @@
         "put_change": 8,
         "call_oi": 1747,
         "call_change": 6,
-        "is_atm": true
+        "is_atm": false
       },
       {
         "strike": 63500,
@@ -512,7 +504,7 @@
         "put_change": -20,
         "call_oi": 588,
         "call_change": 106,
-        "is_atm": false
+        "is_atm": true
       },
       {
         "strike": 64000,
@@ -585,22 +577,22 @@
         "call_oi": 7195,
         "call_change": -568,
         "is_atm": false
+      },
+      {
+        "strike": 68500,
+        "put_oi": 634,
+        "put_change": 0,
+        "call_oi": 918,
+        "call_change": 4,
+        "is_atm": false
       }
     ],
     "by_expiry": [
       {
         "expiry": "2611",
         "label": "2026年11月限",
-        "total_oi": 49751,
+        "total_oi": 47566,
         "distribution": [
-          {
-            "strike": 58000,
-            "put_oi": 2815,
-            "put_change": 6,
-            "call_oi": 0,
-            "call_change": 0,
-            "is_atm": false
-          },
           {
             "strike": 58500,
             "put_oi": 814,
@@ -679,7 +671,7 @@
             "put_change": -102,
             "call_oi": 181,
             "call_change": 2,
-            "is_atm": true
+            "is_atm": false
           },
           {
             "strike": 63500,
@@ -687,7 +679,7 @@
             "put_change": -21,
             "call_oi": 186,
             "call_change": 7,
-            "is_atm": false
+            "is_atm": true
           },
           {
             "strike": 64000,
@@ -760,6 +752,14 @@
             "call_oi": 3213,
             "call_change": -63,
             "is_atm": false
+          },
+          {
+            "strike": 68500,
+            "put_oi": 380,
+            "put_change": 0,
+            "call_oi": 250,
+            "call_change": 2,
+            "is_atm": false
           }
         ],
         "top_puts": [
@@ -810,16 +810,8 @@
       {
         "expiry": "2612",
         "label": "2026年12月限",
-        "total_oi": 90316,
+        "total_oi": 85591,
         "distribution": [
-          {
-            "strike": 58000,
-            "put_oi": 2988,
-            "put_change": 8,
-            "call_oi": 2603,
-            "call_change": 0,
-            "is_atm": false
-          },
           {
             "strike": 58500,
             "put_oi": 1366,
@@ -898,7 +890,7 @@
             "put_change": 110,
             "call_oi": 1566,
             "call_change": 4,
-            "is_atm": true
+            "is_atm": false
           },
           {
             "strike": 63500,
@@ -906,7 +898,7 @@
             "put_change": 1,
             "call_oi": 402,
             "call_change": 99,
-            "is_atm": false
+            "is_atm": true
           },
           {
             "strike": 64000,
@@ -979,6 +971,14 @@
             "call_oi": 3562,
             "call_change": -505,
             "is_atm": false
+          },
+          {
+            "strike": 68500,
+            "put_oi": 203,
+            "put_change": 0,
+            "call_oi": 663,
+            "call_change": 2,
+            "is_atm": false
           }
         ],
         "top_puts": [
@@ -1029,16 +1029,8 @@
       {
         "expiry": "2701",
         "label": "2027年01月限",
-        "total_oi": 7219,
+        "total_oi": 6844,
         "distribution": [
-          {
-            "strike": 58000,
-            "put_oi": 430,
-            "put_change": 0,
-            "call_oi": 1,
-            "call_change": 0,
-            "is_atm": false
-          },
           {
             "strike": 58500,
             "put_oi": 2,
@@ -1117,7 +1109,7 @@
             "put_change": 0,
             "call_oi": 0,
             "call_change": 0,
-            "is_atm": true
+            "is_atm": false
           },
           {
             "strike": 63500,
@@ -1125,7 +1117,7 @@
             "put_change": 0,
             "call_oi": 0,
             "call_change": 0,
-            "is_atm": false
+            "is_atm": true
           },
           {
             "strike": 64000,
@@ -1196,6 +1188,14 @@
             "put_oi": 100,
             "put_change": 0,
             "call_oi": 420,
+            "call_change": 0,
+            "is_atm": false
+          },
+          {
+            "strike": 68500,
+            "put_oi": 51,
+            "put_change": 0,
+            "call_oi": 5,
             "call_change": 0,
             "is_atm": false
           }
@@ -2720,8 +2720,8 @@
     "source": "live",
     "data_date": "20261030",
     "strike_matrix": {
-      "atm": 63000,
-      "atm_round": 63000,
+      "atm": 63500,
+      "atm_round": 63500,
       "strikes": [
         62500,
         62625,
@@ -4874,11 +4874,11 @@
     "pcr_volume": 1.57,
     "pcr_oi": 1.97,
     "pcr_signal": "強い弱気（逆張り買いシグナル）",
-    "max_pain_all_window": 64500,
+    "max_pain_all_window": 65000,
     "max_pain_expiry": "2611",
     "max_pain": 67000,
-    "max_pain_total": 119408500,
-    "max_pain_diff": 4000,
+    "max_pain_total": 104160000,
+    "max_pain_diff": 3500,
     "basis": null,
     "basis_signal": null,
     "walls_reinforced": [

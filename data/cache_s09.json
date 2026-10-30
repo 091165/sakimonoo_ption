@@ -1397,8 +1397,8 @@
   "source": "live",
   "data_date": "20261030",
   "strike_matrix": {
-    "atm": 63000,
-    "atm_round": 63000,
+    "atm": 63500,
+    "atm_round": 63500,
     "strikes": [
       62500,
       62625,
