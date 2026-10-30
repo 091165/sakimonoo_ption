@@ -260,6 +260,16 @@ def main():
         print('[WARN] extract_futures_flow.py failed (先物 card falls back to OI only)', file=sys.stderr)
         print(result.stderr, file=sys.stderr)
 
+    # Step 2.987: futures volume by participant, all four sessions, with
+    # history (先物の大口 card: each broker vs its own 20-day baseline).
+    fb_cmd = [sys.executable, os.path.join(scripts_dir, 'extract_fut_brokers.py'),
+              '--data-dir', datadir, '--out', os.path.join(datadir, 'fut_brokers.json')]
+    result = subprocess.run(fb_cmd, capture_output=True, text=True)
+    print(result.stdout)
+    if result.returncode != 0:
+        print('[WARN] extract_fut_brokers.py failed (先物の大口 card may be stale)', file=sys.stderr)
+        print(result.stderr, file=sys.stderr)
+
     # Step 2.99: accumulate weekly per-broker nets into broker_history.json
     # (persistent across weeks; powers the 大口動向 card). Runs only when
     # weekly files are present, otherwise leaves the existing history intact.
