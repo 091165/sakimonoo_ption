@@ -66,6 +66,10 @@ try:
     import theme as _theme
 except Exception:
     _theme = None
+try:
+    import render_study as _st
+except Exception:
+    _st = None
 import sys
 import copy
 
@@ -1613,7 +1617,7 @@ def _detail_ivtrend_js(ivts):
 
 
 
-def build_dashboard_html(data, oi_ts=None, wt=None, iv=None, ivts=None, greeks=None, jnet=None, optw=None, positions=None, broker_hist=None, venue_flow=None, greeks_hist=None, futures_flow=None, fut_brokers=None, opt_blocks=None):
+def build_dashboard_html(data, oi_ts=None, wt=None, iv=None, ivts=None, greeks=None, jnet=None, optw=None, positions=None, broker_hist=None, venue_flow=None, greeks_hist=None, futures_flow=None, fut_brokers=None, opt_blocks=None, study=None):
     meta = data['metadata']
     s01 = data.get('s01', {})
     s02 = data.get('s02', {})
@@ -1637,7 +1641,7 @@ def build_dashboard_html(data, oi_ts=None, wt=None, iv=None, ivts=None, greeks=N
     h += '<meta name="viewport" content="width=device-width,initial-scale=1">\n'
     h += '<title>JPX Market Analysis %s</title>\n' % esc(meta.get('date_formatted', ''))
     h += '<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700&family=Noto+Sans+JP:wght@400;500;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">\n'
-    h += '<style>\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n</style>\n' % (DASHBOARD_CSS, OI_CHART_CSS, WEEKLY_TREND_CSS, IV_CARD_CSS, IV_TREND_CSS, (_rg.GREEKS_CARD_CSS if _rg else ''), (_rj.JNET_CARD_CSS if _rj else ''), (_ow.OPTW_CARD_CSS if _ow else ''), (_ps.POS_CARD_CSS if _ps else ''), (_oc.OPCROSS_CARD_CSS if _oc else ''), FLOW_VERDICT_CSS, (_bw.BW_CARD_CSS if _bw else ''), (_sb.SB_CARD_CSS if _sb else ''), (_rr.RANGE_CARD_CSS if _rr else ''), (_ft.FUT_CARD_CSS if _ft else ''), (_fb.FB_CARD_CSS if _fb else ''), (_ds.DIST_CARD_CSS if _ds else ''), (_ob.OB_CARD_CSS if _ob else ''), (_tc.TECH_CARD_CSS if _tc else ''), READABILITY_CSS)
+    h += '<style>\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n</style>\n' % (DASHBOARD_CSS, OI_CHART_CSS, WEEKLY_TREND_CSS, IV_CARD_CSS, IV_TREND_CSS, (_rg.GREEKS_CARD_CSS if _rg else ''), (_rj.JNET_CARD_CSS if _rj else ''), (_ow.OPTW_CARD_CSS if _ow else ''), (_ps.POS_CARD_CSS if _ps else ''), (_oc.OPCROSS_CARD_CSS if _oc else ''), FLOW_VERDICT_CSS, (_bw.BW_CARD_CSS if _bw else ''), (_sb.SB_CARD_CSS if _sb else ''), (_rr.RANGE_CARD_CSS if _rr else ''), (_ft.FUT_CARD_CSS if _ft else ''), (_fb.FB_CARD_CSS if _fb else ''), (_ds.DIST_CARD_CSS if _ds else ''), (_ob.OB_CARD_CSS if _ob else ''), (_tc.TECH_CARD_CSS if _tc else ''), (_st.STUDY_CARD_CSS if _st else ''), READABILITY_CSS)
     h += '</head>\n<body>\n'
 
     h += '<div class="topbar">\n  <span class="logo">JPX Dashboard</span>\n  <nav>\n'
@@ -1813,6 +1817,11 @@ def build_dashboard_html(data, oi_ts=None, wt=None, iv=None, ivts=None, greeks=N
         ] + ([
             ('technical', '📏', 'テクニカル指標', _tc.preview(futures_flow), "return tcBuild();", DB),
         ] if (_tc and futures_flow and _tc.build(futures_flow)) else [])),
+    ] + ([
+        ('検証', [
+            ('study', '🧪', '検証：大きな動きの起きやすさ', _st.preview(study), "return sdBuild();", DB),
+        ]),
+    ] if (_st and study) else []) + [
         # The old combined 大口手口 card is only kept as a fallback: its futures
         # half is replaced by 先物の大口 and its option half duplicates the
         # 行使価格別 card above.
@@ -1883,6 +1892,9 @@ def build_dashboard_html(data, oi_ts=None, wt=None, iv=None, ivts=None, greeks=N
         _closes = [futures_flow['rows'][d].get('close') for d in (futures_flow or {}).get('dates', [])]
         h += _rr.range_data_script(greeks, ivts, oi_ts, greeks_hist, closes=[c for c in _closes if c] or None)
         h += _rr.RANGE_CARD_JS
+    if _st and study:
+        h += _st.data_script(study)
+        h += _st.STUDY_CARD_JS
     if _tc and futures_flow:
         h += _tc.data_script(futures_flow)
         h += _tc.TECH_CARD_JS
@@ -3088,6 +3100,16 @@ def run(args):
         except Exception as e:
             print('[render.py] futures_flow.json load error: %s' % e)
 
+    study = None
+    _stpath = os.path.join(data_dir, 'study.json')
+    if os.path.exists(_stpath):
+        try:
+            with open(_stpath, encoding='utf-8') as f:
+                study = json.load(f)
+            print('[render.py] Loaded study: %d conditions' % len(study.get('conds', [])))
+        except Exception as e:
+            print('[render.py] study.json load error: %s' % e)
+
     opt_blocks = None
     _obpath = os.path.join(data_dir, 'opt_blocks.json')
     if os.path.exists(_obpath):
@@ -3141,7 +3163,7 @@ def run(args):
         f.write(build_markdown(data))
     print('[render.py] Markdown: %s (%.1f KB)' % (md_path, os.path.getsize(md_path) / 1024))
     html_path = os.path.join(outdir, 'index.html')
-    html = build_dashboard_html(data, oi_ts=oi_ts, wt=wt, iv=iv, ivts=ivts, greeks=greeks, jnet=jnet, optw=optw, positions=positions, broker_hist=broker_hist, venue_flow=venue_flow, greeks_hist=greeks_hist, futures_flow=futures_flow, fut_brokers=fut_brokers, opt_blocks=opt_blocks)
+    html = build_dashboard_html(data, oi_ts=oi_ts, wt=wt, iv=iv, ivts=ivts, greeks=greeks, jnet=jnet, optw=optw, positions=positions, broker_hist=broker_hist, venue_flow=venue_flow, greeks_hist=greeks_hist, futures_flow=futures_flow, fut_brokers=fut_brokers, opt_blocks=opt_blocks, study=study)
     if _theme:
         html = _theme.warm(html)
     with open(html_path, 'w', encoding='utf-8') as f:

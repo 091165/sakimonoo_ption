@@ -280,6 +280,16 @@ def main():
         print('[WARN] extract_opt_blocks.py failed (オプションの大口 card may be stale)', file=sys.stderr)
         print(result.stderr, file=sys.stderr)
 
+    # Step 2.989: 検証 — after each kind of day, how often the index moved
+    # beyond 1σ of its IV. Needs futures_flow.json and iv_timeseries.json
+    # from the steps above; keeps its own history in study_base.json.
+    st_cmd = [sys.executable, os.path.join(scripts_dir, 'extract_study.py'), '--data-dir', datadir]
+    result = subprocess.run(st_cmd, capture_output=True, text=True)
+    print(result.stdout)
+    if result.returncode != 0:
+        print('[WARN] extract_study.py failed (検証 card may be stale)', file=sys.stderr)
+        print(result.stderr, file=sys.stderr)
+
     # Step 2.99: accumulate weekly per-broker nets into broker_history.json
     # (persistent across weeks; powers the 大口動向 card). Runs only when
     # weekly files are present, otherwise leaves the existing history intact.
