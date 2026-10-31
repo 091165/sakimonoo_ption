@@ -195,6 +195,8 @@ def conditions(rows):
     pcr_hi, pcr_lo = _pct(pcr, 0.8), _pct(pcr, 0.2)
     mini_hi = _pct([abs(r['fut_mini']) for r in rows if r.get('fut_mini') is not None], 0.8)
     mv_hi = _pct([r.get('moves300') for r in rows if r.get('moves300') is not None], 0.8)
+    sk = [r.get('skew') for r in rows if r.get('skew') is not None]
+    sk_hi, sk_lo = _pct(sk, 0.8), _pct(sk, 0.2)
 
     def fut(r):
         if r.get('fut_large') is None or r.get('r0') is None or _is_sq(r['d']):
@@ -211,6 +213,10 @@ def conditions(rows):
         ('iv_up', 'IVが前日比+2pt以上', lambda r: (r.get('div') or 0) >= 2),
         ('iv_dn', 'IVが前日比−2pt以下', lambda r: (r.get('div') or 0) <= -2),
         ('skew_up', 'スキューが前日比+1.5pt以上', lambda r: (r.get('dsk') or 0) >= 1.5),
+        ('skew_hi', 'スキューが高い（%.1fpt以上・上位20%%）' % (sk_hi or 0),
+            lambda r: r.get('skew') is not None and r['skew'] >= (sk_hi or 1e9)),
+        ('skew_lo', 'スキューが低い（%.1fpt以下・下位20%%）' % (sk_lo or 0),
+            lambda r: r.get('skew') is not None and r['skew'] <= (sk_lo if sk_lo is not None else -1e9)),
         ('iv_rich', 'IVが実現ボラより+4pt以上高い', lambda r: (gap(r) or 0) >= 4),
         ('iv_cheap', 'IVが実現ボラより低い', lambda r: gap(r) is not None and gap(r) < 0),
         ('moved', '当日すでに1σ以上動いた', lambda r: r.get('r0') is not None and r.get('iv') and
