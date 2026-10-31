@@ -165,7 +165,7 @@ def evaluate(levels, base):
             for s, e, k, chg in lv.get('builds') or []:
                 add('build_' + s, dt, k, k < spot, h)
             for s, e, k, lots in lv.get('blocks') or []:
-                add('block', dt, k, k < spot, h)
+                add('block_' + s, dt, k, k < spot, h)
     return groups
 
 
@@ -175,7 +175,8 @@ LABELS = {
     'call_wall': ('上値の壁（最大のコール建玉）を終値で超えた', '超え'),
     'build_P': ('建玉が+300枚以上増えたプットの行使価格に届いた', '届き'),
     'build_C': ('建玉が+300枚以上増えたコールの行使価格に届いた', '届き'),
-    'block': ('大口（J-NET・100枚以上）の新規建ての行使価格に届いた', '届き'),
+    'block_P': ('大口（J-NET・100枚以上）がプットを新規建てした行使価格に届いた', '届き'),
+    'block_C': ('大口（J-NET・100枚以上）がコールを新規建てした行使価格に届いた', '届き'),
 }
 
 

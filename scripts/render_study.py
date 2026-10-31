@@ -125,11 +125,11 @@ function swN(n){return Math.round(n).toLocaleString();}
 function swRow(r,verb){
   var tag='';
   if(r.p!==null&&r.p<__P__&&r.n>=20){tag=r.rate<r.exp?'<span class="sd-tag up">理論より'+verb+'にくい</span>':'<span class="sd-tag dn">理論より'+verb+'やすい</span>';}
-  var w=Math.min(100,r.rate*100),e=Math.min(100,r.exp*100);
-  // two labelled bars on the same 0-100% scale: what happened vs what IV implied
-  return '<div class="sd-l"><span class="sd-h">'+r.h+'日以内</span><span class="sd-b">（'+r.n+'件中'+r.hit+'件、p='+r.p.toFixed(2)+'）</span>'+tag+'</div>'
-    +'<div class="sw-row"><span class="sw-lab">実際</span><span class="sw-bar"><i style="width:'+w.toFixed(1)+'%"></i></span><span class="sw-pct">'+Math.round(r.rate*100)+'%</span></div>'
-    +'<div class="sw-row"><span class="sw-lab">理論</span><span class="sw-bar th"><i style="width:'+e.toFixed(1)+'%"></i></span><span class="sw-pct th">'+Math.round(r.exp*100)+'%</span></div>';
+  var w=Math.min(100,r.rate*100),e=Math.min(100,r.exp*100),d=Math.round(r.rate*100)-Math.round(r.exp*100);
+  // one bar for what happened; the IV-implied rate is a labelled marker on it
+  return '<div class="sd-l"><span class="sd-h">'+r.h+'日以内</span><span class="sd-r">'+Math.round(r.rate*100)+'%</span>'
+    +'<span class="sd-b">理論'+Math.round(r.exp*100)+'%より'+(d===0?'差なし':(d<0?Math.abs(d)+'pt低い':d+'pt高い'))+'（'+r.n+'件中'+r.hit+'件、p='+r.p.toFixed(2)+'）</span>'+tag+'</div>'
+    +'<div class="sw-bar"><i style="width:'+w.toFixed(1)+'%"></i><b style="left:'+e.toFixed(1)+'%"></b><em style="left:'+e.toFixed(1)+'%">理論'+Math.round(r.exp*100)+'%</em></div>';
 }
 function swBuild(){
   var D=window.WALLS_DATA;if(!D)return '<div class="insight">データなし</div>';
@@ -143,7 +143,7 @@ function swBuild(){
     if(!x.by_h.length)return;
     h+='<div class="sd-c"><div class="sd-n">'+x.name+'</div>'+x.by_h.map(function(r){return swRow(r,x.verb);}).join('')+'</div>';
   });
-  h+='<div class="sw-leg"><b>実際</b>＝実際に届いた（割った・超えた）割合　<b>理論</b>＝壁や建玉が無くてもIVの値動きから届く確率。実際が理論より短ければ止まりやすい、長ければ引き寄せられやすい。</div>';
+  h+='<div class="sw-leg">棒＝実際に届いた（割った・超えた）割合。<b>│理論</b>の印＝壁や建玉が無くてもIVの値動きから届く確率。棒が印に届かなければ止まりやすい、印を越えていれば引き寄せられやすい。</div>';
   h+='<div class="sd-note">壁は、SQまで7日以上ある一番近い限月で、現値から±10%以内の最大建玉。理論はその日のIV（6/12より前は20日実現ボラ）で日々の終値を4,000通り試算した確率。'
     +'印は20件以上・p＜__P__のときだけ。同じ壁が何日も続いたり、同じ日に複数の行使価格が積まれたりするため件数は独立ではなく、pは実際より良く見えやすい点に注意。</div>';
   return h;
@@ -151,14 +151,10 @@ function swBuild(){
 """.replace('__P__', str(P_FLAG))
 
 WALLS_CARD_CSS = r"""
-.sw-row{display:flex;align-items:center;gap:8px;margin:3px 0}
-.sw-row:last-child{margin-bottom:6px}
-.sw-lab{flex:none;width:30px;font-size:12px;color:var(--sub)}
-.sw-bar{flex:1;height:10px;background:rgba(255,255,255,.06);border-radius:5px;overflow:hidden}
+.sw-bar{position:relative;height:10px;background:rgba(255,255,255,.06);border-radius:5px;margin:20px 0 10px}
 .sw-bar i{display:block;height:100%;background:#818cf8;border-radius:5px}
-.sw-bar.th i{background:#fbbf24}
-.sw-pct{flex:none;width:40px;text-align:right;font-family:'DM Mono',monospace;font-size:13px;font-weight:600;color:var(--text)}
-.sw-pct.th{color:var(--sub);font-weight:500}
+.sw-bar b{position:absolute;top:-4px;width:2px;height:18px;background:#fbbf24}
+.sw-bar em{position:absolute;bottom:15px;transform:translateX(-50%);font-style:normal;font-size:11px;color:#fbbf24;white-space:nowrap;font-weight:600}
 .sw-leg{font-size:12px;color:var(--sub);line-height:1.7;margin:6px 2px 0}
 .sw-leg b{color:var(--text)}
 """
