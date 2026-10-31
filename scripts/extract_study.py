@@ -106,6 +106,38 @@ def _closes(base, data_dir):
             base.setdefault(dt, {})['close'] = r['close']
 
 
+def _max_pain(oi):
+    """Max Pain of the front monthly (nearest expiry with 5,000+ lots), as extract.py."""
+    by = {}
+    for (s, e, k), v in oi.items():
+        by.setdefault(e, {}).setdefault(k, [0, 0])[0 if s == 'P' else 1] += v[1]
+    for e in sorted(by):
+        st = by[e]
+        if sum(p + c for p, c in st.values()) < 5000:
+            continue
+        return min(st, key=lambda K: sum(max(x - K, 0) * p + max(K - x, 0) * c for x, (p, c) in st.items()))
+    return None
+
+
+def _mp_rows(base, data_dir, repo=None):
+    """Max Pain per day from the OI files: today's in data/, the past from git.
+    Recomputed from the files rather than taken from data.json, whose figure
+    was once an all-expiry one."""
+    from extract_opt_blocks import parse_oi, _git_files
+    for f in sorted(os.listdir(data_dir)):
+        if f.endswith('open_interest.xlsx'):
+            base.setdefault(f[:8], {})['mp'] = _max_pain(parse_oi(os.path.join(data_dir, f)))
+    if repo:
+        for dt, (sha, path) in sorted(_git_files(repo, 'open_interest.xlsx').items()):
+            if 'mp' in base.get(dt, {}):
+                continue
+            try:
+                raw = subprocess.check_output(['git', '-C', repo, 'show', '%s:%s' % (sha, path)])
+                base.setdefault(dt, {})['mp'] = _max_pain(parse_oi(raw))
+            except Exception as e:
+                print('[study] max pain %s failed: %s' % (dt, e))
+
+
 def _backfill_git(base, repo):
     git = lambda *a: subprocess.check_output(['git', '-C', repo] + list(a))
     # closes: every committed OHLC history, then the tp.csv underlying (authoritative)
@@ -183,6 +215,8 @@ def build_rows(base):
         ivs = [v for v in ivs if v]
         if r.get('iv') and len(ivs) >= 10 and max(ivs) > min(ivs):
             r['iv_pos'] = (r['iv'] - min(ivs)) / (max(ivs) - min(ivs))
+        if r.get('mp'):
+            r['mp_d'] = r['mp'] / closes[i] - 1   # + : Max Pain above the close
         prev = base[days[i - 1]] if i else {}
         if r.get('iv') and prev.get('iv') and r.get('front') == prev.get('front'):
             r['div'] = r['iv'] - prev['iv']
@@ -204,6 +238,9 @@ def conditions(rows):
     mv_hi = _pct([r.get('moves300') for r in rows if r.get('moves300') is not None], 0.8)
     po = [r.get('pcr_oi') for r in rows if r.get('pcr_oi')]
     po_hi, po_lo = _pct(po, 0.8), _pct(po, 0.2)
+    md = [r.get('mp_d') for r in rows if r.get('mp_d') is not None]
+    md_hi, md_lo = _pct(md, 0.8), _pct(md, 0.2)
+    md_near = _pct([abs(x) for x in md], 0.2)
     sk = [r.get('skew') for r in rows if r.get('skew') is not None]
     sk_hi, sk_lo = _pct(sk, 0.8), _pct(sk, 0.2)
 
@@ -245,6 +282,12 @@ def conditions(rows):
             lambda r: r.get('pcr_oi') and r['pcr_oi'] >= (po_hi or 1e9)),
         ('pcr_oi_lo', 'PCR（建玉）が低い（%.2f以下・下位20%%）' % (po_lo or 0),
             lambda r: r.get('pcr_oi') and r['pcr_oi'] <= (po_lo or -1)),
+        ('mp_above', 'MaxPainが現値より上に離れている（%+.1f%%以上・上位20%%）' % ((md_hi or 0) * 100),
+            lambda r: r.get('mp_d') is not None and r['mp_d'] >= (md_hi if md_hi is not None else 1e9)),
+        ('mp_below', 'MaxPainが現値より下に離れている（%+.1f%%以下・下位20%%）' % ((md_lo or 0) * 100),
+            lambda r: r.get('mp_d') is not None and r['mp_d'] <= (md_lo if md_lo is not None else -1e9)),
+        ('mp_near', 'MaxPainが現値のすぐ近く（±%.1f%%以内・近い方から20%%）' % ((md_near or 0) * 100),
+            lambda r: r.get('mp_d') is not None and abs(r['mp_d']) <= (md_near if md_near is not None else -1)),
         ('oi_moves', '建玉±300枚以上の銘柄が多い（%d件以上）' % (mv_hi or 0), lambda r: (r.get('moves300') or 0) >= (mv_hi or 1e9)),
         ('blk_put', '大口（J-NET・100枚以上）がプットを新規建て', lambda r: (r.get('blk_P') or 0) > 0),
         ('blk_call', '大口（J-NET・100枚以上）がコールを新規建て', lambda r: (r.get('blk_C') or 0) > 0),
@@ -299,6 +342,7 @@ def main():
     _iv_rows(base, a.data_dir)
     _closes(base, a.data_dir)
     _blocks(base, a.data_dir)
+    _mp_rows(base, a.data_dir, os.path.dirname(os.path.abspath(a.data_dir)) if a.backfill_git else None)
     d = _load(os.path.join(a.data_dir, 'data.json'), {})
     dt = (d.get('metadata') or {}).get('date')
     if dt:
