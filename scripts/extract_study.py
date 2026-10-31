@@ -35,7 +35,8 @@ from math import comb
 
 SIGMA_K = 1.0
 BIG_K = 1.5
-HORIZONS = ((1, '翌日'), (5, '5日後'))
+HORIZONS = ((1, '翌日'), (5, '5日後'), (10, '10日後'))
+SIMILAR_MIN = (2, 3)   # 「似た日」: at least this many of today's conditions also held
 FUT_FLAT_OI = 170          # large OI changes under this are noise
 PRICE_FLAT = 0.0015
 
@@ -320,13 +321,30 @@ def study(base):
         conds.append({'key': key, 'name': name, 'stats': st, 'last': hits[-1] if hits else None})
     today = rows[-1] if rows else {}
     applies = [c['key'] for c, (_, _, f) in zip(conds, conditions(rows)) if today and f(today)]
+    # 似た日: past days on which several of today's conditions held at once.
+    # Conditions overlap (a high-IV day is often a big-move day), so their
+    # separate rates are not multiplied; the matching days are just counted.
+    fs = [f for c, (_, _, f) in zip(conds, conditions(rows)) if c['key'] in applies]
+    similar = []
+    for m in SIMILAR_MIN:
+        if len(fs) < m:
+            continue
+        sub = [r for r in out_rows if r['d'] != today.get('d') and sum(1 for f in fs if f(r)) >= m]
+        st = {}
+        for h, _ in HORIZONS:
+            c = _count(sub, h)
+            b = base_stats[str(h)]
+            bu = b['up'] / (b['up'] + b['dn']) if (b['up'] + b['dn']) else 0.5
+            c['p_dir'] = _binom_p(c['up'], c['up'] + c['dn'], bu)
+            st[str(h)] = c
+        similar.append({'m': m, 'days': [r['d'] for r in sub], 'stats': st})
     first = next((r['d'] for r in out_rows), None)
     iv_from = next((r['d'] for r in out_rows if r.get('vol_src') == 'iv'), None)
     return {
         'as_of': today.get('d'), 'period': [first, out_rows[-1]['d'] if out_rows else None],
         'iv_from': iv_from, 'sigma_k': SIGMA_K, 'big_k': BIG_K,
         'horizons': [{'h': h, 'label': lab} for h, lab in HORIZONS],
-        'base': base_stats, 'conds': conds, 'applies_today': applies,
+        'base': base_stats, 'conds': conds, 'applies_today': applies, 'similar': similar,
     }
 
 

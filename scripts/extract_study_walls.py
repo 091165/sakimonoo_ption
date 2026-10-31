@@ -34,7 +34,7 @@ from extract_opt_blocks import parse_oi, parse_jnet, build_day, _git_files, _mer
 WALL_RANGE = 0.10
 MIN_MOVE = 300
 MIN_BLOCK = 100
-HORIZONS = (5, 10)
+HORIZONS = (1, 5, 10)
 PATHS = 4000
 
 

@@ -75,15 +75,34 @@ function sdLine(D,c,h){
 }
 function sdCard(D,c,today){
   return '<div class="sd-c'+(today?' today':'')+'"><div class="sd-n">'+c.name+(c.last?'<span>直近 '+sdD(c.last)+'</span>':'')+'</div>'
-    +sdLine(D,c,'1')+sdLine(D,c,'5')+'</div>';
+    +D.horizons.map(function(x){return sdLine(D,c,String(x.h));}).join('')+'</div>';
+}
+// 似た日: today's conditions are not multiplied together (they overlap), the
+// past days on which several of them held at once are counted instead
+function sdSimilar(D){
+  var n=D.applies_today.length,S=D.similar||[];
+  var h='<div class="sd-sec">総合：今日と似た日のその後</div>';
+  if(!S.length) return h+'<div class="sd-base">今日あてはまる条件が'+n+'件で、似た日を選べません。</div>';
+  h+='<div class="sd-def" style="margin-bottom:4px">今日あてはまる'+n+'条件のうち、いくつかが同じ日に重なった過去の日を集め、その後に大きく動いた回数を数えたもの。条件どうしは重なり合う（IVが高い日は大きく動いた日でもある等）ため、条件ごとの確率は掛け合わせていません。</div>';
+  S.forEach(function(g){
+    var ev=0;D.horizons.forEach(function(x){var s=g.stats[String(x.h)];ev=Math.max(ev,s.up+s.dn);});
+    h+='<div class="sd-c today"><div class="sd-n">'+n+'条件のうち'+g.m+'つ以上が重なった日<span>'+g.days.length+'日'
+      +(g.days.length?'・直近 '+g.days.slice(-3).map(sdD).join('、'):'')+'</span></div>';
+    if(g.days.length<__MIN__) h+='<div class="sd-base">データ不足（'+g.days.length+'日）</div>';
+    else h+=D.horizons.map(function(x){return sdLine(D,g,String(x.h));}).join('')
+      +(ev<__MIN__?'<div class="sd-b">大きな動きが__MIN__回未満のため、偏りの判定はしていません（データ不足）。</div>':'');
+    h+='</div>';
+  });
+  return h;
 }
 function sdBuild(){
   var D=window.STUDY_DATA;if(!D)return '<div class="insight">データなし</div>';
-  var h='<div class="sd-def"><b>大きな動き</b>＝その日のIVが想定した値幅（'+D.sigma_k+'σ）を超えた終値の変化。翌日は ±IV÷√250、5日後は ±IV×√(5/250)。'
+  var h='<div class="sd-def"><b>大きな動き</b>＝その日のIVが想定した値幅（'+D.sigma_k+'σ）を超えた終値の変化。翌日は ±IV÷√250、5日後は ±IV×√(5/250)、10日後は ±IV×√(10/250)。'
     +'期間 '+sdD(D.period[0])+'〜'+sdD(D.period[1])+'（'+sdD(D.iv_from)+'より前はIVの代わりに20日実現ボラ）。</div>';
-  var b1=D.base['1'],b5=D.base['5'];
   h+='<div class="sd-leg"><span><i class="u"></i>上昇</span><span><i class="d"></i>下落</span><span><b></b>普段の確率</span>　棒の長さ＝その条件の日に大きな動きが起きた割合（上昇・下落の内訳つき）</div>';
-  h+='<div class="sd-base">普段の確率：翌日 <b>'+Math.round((b1.up+b1.dn)/b1.n*100)+'%</b>（'+b1.n+'日中'+(b1.up+b1.dn)+'回：上昇'+b1.up+'回・下落'+b1.dn+'回）／ 5日後 <b>'+Math.round((b5.up+b5.dn)/b5.n*100)+'%</b>（'+b5.n+'日中'+(b5.up+b5.dn)+'回：上昇'+b5.up+'回・下落'+b5.dn+'回）</div>';
+  h+='<div class="sd-base">普段の確率：'+D.horizons.map(function(x){var b=D.base[String(x.h)];
+    return x.label+' <b>'+Math.round((b.up+b.dn)/b.n*100)+'%</b>（'+b.n+'日中'+(b.up+b.dn)+'回：上昇'+b.up+'回・下落'+b.dn+'回）';}).join('<br>')+'</div>';
+  h+=sdSimilar(D);
   var by={};D.conds.forEach(function(c){by[c.key]=c;});
   h+='<div class="sd-sec">今日（'+sdD(D.as_of)+'）あてはまる条件</div>';
   if(!D.applies_today.length) h+='<div class="sd-base">なし</div>';
@@ -91,7 +110,7 @@ function sdBuild(){
   h+='<div class="sd-sec">すべての条件</div>';
   D.conds.forEach(function(c){if(D.applies_today.indexOf(c.key)<0)h+=sdCard(D,c,false);});
   h+='<div class="sd-note">印は大きな動きが__MIN__回以上ある条件だけに付けています。<b>上に偏り／下に偏り</b>＝大きな動きの上下の比率が普段と違う度合い（p＝偶然でもこれだけ偏る確率、0.1未満で表示）。'
-    +'<b>普段の○倍</b>＝大きな動きの起きやすさ。5日後の集計は期間が重なり合うため、偏りは実際より強く見えやすい点に注意。'
+    +'<b>普段の○倍</b>＝大きな動きの起きやすさ。5日後・10日後の集計は期間が重なり合うため、偏りは実際より強く見えやすい点に注意。'
     +'数か月分の結果で、相場の局面（上昇相場など）にも左右されます。データが増えるほど確かになります。</div>';
   return h;
 }
@@ -127,9 +146,9 @@ function swRow(r,verb){
   if(r.p!==null&&r.p<__P__&&r.n>=20){tag=r.rate<r.exp?'<span class="sd-tag up">理論より'+verb+'にくい</span>':'<span class="sd-tag dn">理論より'+verb+'やすい</span>';}
   var w=Math.min(100,r.rate*100),e=Math.min(100,r.exp*100),d=Math.round(r.rate*100)-Math.round(r.exp*100);
   // one bar for what happened; the IV-implied rate is a labelled marker on it
-  return '<div class="sd-l"><span class="sd-h">'+r.h+'日以内</span><span class="sd-r">'+Math.round(r.rate*100)+'%</span>'
+  return '<div class="sd-l"><span class="sd-h">'+(r.h===1?'翌日':r.h+'日以内')+'</span><span class="sd-r">'+Math.round(r.rate*100)+'%</span>'
     +'<span class="sd-b">理論'+Math.round(r.exp*100)+'%より'+(d===0?'差なし':(d<0?Math.abs(d)+'pt低い':d+'pt高い'))+'（'+r.n+'件中'+r.hit+'件、p='+r.p.toFixed(2)+'）</span>'+tag+'</div>'
-    +'<div class="sw-bar"><i style="width:'+w.toFixed(1)+'%"></i><b style="left:'+e.toFixed(1)+'%"></b><em style="left:'+e.toFixed(1)+'%">理論'+Math.round(r.exp*100)+'%</em></div>';
+    +'<div class="sw-bar"><i style="width:'+w.toFixed(1)+'%"></i><b style="left:'+e.toFixed(1)+'%"></b><em style="'+(e<6?'left:0;transform:none':(e>94?'left:auto;right:0;transform:none':'left:'+e.toFixed(1)+'%'))+'">理論'+Math.round(r.exp*100)+'%</em></div>';
 }
 function swBuild(){
   var D=window.WALLS_DATA;if(!D)return '<div class="insight">データなし</div>';
