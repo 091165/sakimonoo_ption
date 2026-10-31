@@ -70,6 +70,34 @@ def _iv_rows(base, data_dir):
             row.update({'iv': e['atm_iv'], 'skew': e.get('skew_10pct'), 'front': sn.get('front')})
 
 
+BLOCK_MIN = 100      # J-NET block size that counts as 大口
+BLOCK_RANGE = 0.10   # strikes within this distance of the close
+
+
+def _blocks(base, data_dir):
+    """blk_P / blk_C: lots of new-OI J-NET blocks (100+) within 10% that day.
+
+    History comes from the walls study's daily levels (4/1 onward); recent
+    days from opt_blocks.json, which this step runs before the walls step
+    has added today.
+    """
+    levels = _load(os.path.join(data_dir, 'study_walls_base.json'), {}) or {}
+    for dt, lv in levels.items():
+        row = base.setdefault(dt, {})
+        for side in ('P', 'C'):
+            row['blk_' + side] = sum(b[3] for b in lv.get('blocks') or [] if b[0] == side)
+    days = (_load(os.path.join(data_dir, 'opt_blocks.json'), {}) or {}).get('days') or {}
+    for dt, day in days.items():
+        close = (base.get(dt) or {}).get('close')
+        if not close:
+            continue
+        row = base[dt]
+        for side in ('P', 'C'):
+            row['blk_' + side] = sum(b['lots'] for b in day.get('blocks') or []
+                                     if b['side'] == side and b.get('verdict') == '新規建て'
+                                     and b['lots'] >= BLOCK_MIN and abs(b['k'] / close - 1) <= BLOCK_RANGE)
+
+
 def _closes(base, data_dir):
     flow = _load(os.path.join(data_dir, 'futures_flow.json'), {}) or {}
     for dt, r in (flow.get('rows') or {}).items():
@@ -197,6 +225,8 @@ def conditions(rows):
         ('pcr_hi', 'PCR（出来高）が高い（%.2f以上）' % (pcr_hi or 0), lambda r: (pcr_of(r) or 0) >= (pcr_hi or 1e9)),
         ('pcr_lo', 'PCR（出来高）が低い（%.2f以下）' % (pcr_lo or 0), lambda r: pcr_of(r) is not None and pcr_of(r) <= (pcr_lo or -1)),
         ('oi_moves', '建玉±300枚以上の銘柄が多い（%d件以上）' % (mv_hi or 0), lambda r: (r.get('moves300') or 0) >= (mv_hi or 1e9)),
+        ('blk_put', '大口（J-NET・100枚以上）がプットを新規建て', lambda r: (r.get('blk_P') or 0) > 0),
+        ('blk_call', '大口（J-NET・100枚以上）がコールを新規建て', lambda r: (r.get('blk_C') or 0) > 0),
     ]
 
 
@@ -247,6 +277,7 @@ def main():
         _backfill_git(base, os.path.dirname(os.path.abspath(a.data_dir)))
     _iv_rows(base, a.data_dir)
     _closes(base, a.data_dir)
+    _blocks(base, a.data_dir)
     d = _load(os.path.join(a.data_dir, 'data.json'), {})
     dt = (d.get('metadata') or {}).get('date')
     if dt:
