@@ -138,6 +138,27 @@ def evaluate(levels, base):
 
     groups = {}
 
+    def sq_path(dt, exp4):
+        """Closes after dt up to the day before that expiry's SQ (the last
+        day the options trade); None while that SQ has not come yet."""
+        sq = _sq(exp4).strftime('%Y%m%d')
+        if not days or days[-1] < sq:
+            return None
+        return [closes[j] for j in range(pos[dt] + 1, len(days)) if days[j] < sq] or None
+
+    def add_sq(key, dt, k, below, exp4):
+        sd = sigma_d(dt) if dt in pos else None
+        path = sq_path(dt, exp4) if sd else None
+        if not path:
+            return
+        hit = any(c <= k for c in path) if below else any(c >= k for c in path)
+        g = groups.setdefault((key, 'sq'), {'n': 0, 'hit': 0, 'exp': 0.0, 'dates': [], 'sqs': set()})
+        g['n'] += 1
+        g['hit'] += hit
+        g['exp'] += p_touch(math.log(k / closes[pos[dt]]), sd, len(path), below)
+        g['dates'].append(dt)
+        g['sqs'].add(exp4)
+
     def add(key, dt, k, below, h):
         i = pos.get(dt)
         sd = sigma_d(dt) if i is not None else None
@@ -166,6 +187,33 @@ def evaluate(levels, base):
                 add('build_' + s, dt, k, k < spot, h)
             for s, e, k, lots in lv.get('blocks') or []:
                 add('block_' + s, dt, k, k < spot, h)
+        # SQまで: front-month levels only, each judged up to its own SQ
+        fr, spot = lv.get('front'), (base.get(dt) or {}).get('close')
+        if not (fr and spot):
+            continue
+        if lv.get('pw'):
+            add_sq('put_wall', dt, lv['pw'], True, fr)
+        if lv.get('cw'):
+            add_sq('call_wall', dt, lv['cw'], False, fr)
+        for s, e, k, chg in lv.get('builds') or []:
+            if e == fr:
+                add_sq('build_' + s, dt, k, k < spot, fr)
+        for s, e, k, lots in lv.get('blocks') or []:
+            if e == fr:
+                add_sq('block_' + s, dt, k, k < spot, fr)
+        # between the walls on the day before SQ, against the IV-implied
+        # chance of ending there (no drift, lognormal)
+        sd = sigma_d(dt) if dt in pos else None
+        path = sq_path(dt, fr) if (sd and lv.get('pw') and lv.get('cw')) else None
+        if path:
+            v = sd * math.sqrt(len(path))
+            cdf = lambda x: 0.5 * (1 + math.erf(x / v / math.sqrt(2)))
+            g = groups.setdefault(('range', 'sq'), {'n': 0, 'hit': 0, 'exp': 0.0, 'dates': [], 'sqs': set()})
+            g['n'] += 1
+            g['hit'] += lv['pw'] < path[-1] < lv['cw']
+            g['exp'] += cdf(math.log(lv['cw'] / spot)) - cdf(math.log(lv['pw'] / spot))
+            g['dates'].append(dt)
+            g['sqs'].add(fr)
     return groups
 
 
@@ -177,6 +225,7 @@ LABELS = {
     'build_C': ('建玉が+300枚以上増えたコールの行使価格に届いた', '届き'),
     'block_P': ('大口（J-NET・100枚以上）がプットを新規建てした行使価格に届いた', '届き'),
     'block_C': ('大口（J-NET・100枚以上）がコールを新規建てした行使価格に届いた', '届き'),
+    'range': ('SQ前日の終値が、下値の壁と上値の壁の間に収まった', '収まり'),
 }
 
 
@@ -216,7 +265,7 @@ def main():
     tests = []
     for key, (name, verb) in LABELS.items():
         row = {'key': key, 'name': name, 'verb': verb, 'by_h': []}
-        for h in HORIZONS:
+        for h in HORIZONS + ('sq',):
             g = groups.get((key, h))
             if not g or not g['n']:
                 continue
@@ -224,6 +273,8 @@ def main():
             row['by_h'].append({'h': h, 'n': g['n'], 'hit': g['hit'], 'rate': g['hit'] / g['n'],
                                 'exp': exp, 'p': _binom_p(g['hit'], g['n'], exp),
                                 'first': g['dates'][0], 'last': g['dates'][-1]})
+            if h == 'sq':
+                row['by_h'][-1]['sqs'] = len(g['sqs'])
         tests.append(row)
     latest = max(levels) if levels else None
     out = {'as_of': latest, 'today': levels.get(latest), 'spot': (base.get(latest) or {}).get('close'),

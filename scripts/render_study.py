@@ -141,13 +141,16 @@ def walls_preview(sw):
 
 WALLS_CARD_JS = r"""
 function swN(n){return Math.round(n).toLocaleString();}
+function swSq(e){var d=new Date(2000+(+e.slice(0,2)),+e.slice(2)-1,8);d.setDate(8+(5-d.getDay()+7)%7);return (d.getMonth()+1)+'/'+d.getDate();}
 function swRow(r,verb){
   var tag='';
-  if(r.p!==null&&r.p<__P__&&r.n>=20){tag=r.rate<r.exp?'<span class="sd-tag up">理論より'+verb+'にくい</span>':'<span class="sd-tag dn">理論より'+verb+'やすい</span>';}
+  var sq=r.h==='sq';
+  // SQまで: a handful of expiries counted day after day, so no badge
+  if(!sq&&r.p!==null&&r.p<__P__&&r.n>=20){tag=r.rate<r.exp?'<span class="sd-tag up">理論より'+verb+'にくい</span>':'<span class="sd-tag dn">理論より'+verb+'やすい</span>';}
   var w=Math.min(100,r.rate*100),e=Math.min(100,r.exp*100),d=Math.round(r.rate*100)-Math.round(r.exp*100);
   // one bar for what happened; the IV-implied rate is a labelled marker on it
-  return '<div class="sd-l"><span class="sd-h">'+(r.h===1?'翌日':r.h+'日以内')+'</span><span class="sd-r">'+Math.round(r.rate*100)+'%</span>'
-    +'<span class="sd-b">理論'+Math.round(r.exp*100)+'%より'+(d===0?'差なし':(d<0?Math.abs(d)+'pt低い':d+'pt高い'))+'（'+r.n+'件中'+r.hit+'件、p='+r.p.toFixed(2)+'）</span>'+tag+'</div>'
+  return '<div class="sd-l"><span class="sd-h">'+(sq?'SQまで':r.h===1?'翌日':r.h+'日以内')+'</span><span class="sd-r">'+Math.round(r.rate*100)+'%</span>'
+    +'<span class="sd-b">理論'+Math.round(r.exp*100)+'%より'+(d===0?'差なし':(d<0?Math.abs(d)+'pt低い':d+'pt高い'))+'（'+r.n+'件中'+r.hit+'件'+(sq?'・SQ'+r.sqs+'回分':'、p='+r.p.toFixed(2))+'）</span>'+tag+'</div>'
     +'<div class="sw-bar"><i style="width:'+w.toFixed(1)+'%"></i><b style="left:'+e.toFixed(1)+'%"></b><em style="'+(e<6?'left:0;transform:none':(e>94?'left:auto;right:0;transform:none':'left:'+e.toFixed(1)+'%'))+'">理論'+Math.round(r.exp*100)+'%</em></div>';
 }
 function swBuild(){
@@ -155,6 +158,7 @@ function swBuild(){
   var t=D.today||{},h='<div class="sd-def">壁や建玉が無かったとしても、IVの値動きからその価格に届く確率（<b>理論</b>）は計算できます。実際に届いた割合がそれより<b>低ければ止まりやすい</b>、<b>高ければ引き寄せられやすい</b>と読みます。終値で判定、期間 '+sdD(D.period[0])+'〜'+sdD(D.period[1])+'。</div>';
   h+='<div class="sd-sec">今日（'+sdD(D.as_of)+'）の価格帯</div><div class="sd-base">'
     +'下値の壁 <b>P'+(t.pw?swN(t.pw):'—')+'</b>（'+(t.pw_oi?swN(t.pw_oi):'—')+'枚）／ 上値の壁 <b>C'+(t.cw?swN(t.cw):'—')+'</b>（'+(t.cw_oi?swN(t.cw_oi):'—')+'枚）'
+    +(t.front?'<br>壁は'+(+t.front.slice(2))+'月限（SQ '+swSq(t.front)+'）':'')
     +((t.builds&&t.builds.length)?'<br>+300枚以上の積み増し：'+t.builds.map(function(b){return b[0]+swN(b[2])+'（'+(+b[1].slice(2))+'月限 +'+swN(b[3])+'）';}).join('、'):'')
     +((t.blocks&&t.blocks.length)?'<br>大口の新規建て：'+t.blocks.map(function(b){return b[0]+swN(b[2])+'（'+swN(b[3])+'枚）';}).join('、'):'')+'</div>';
   h+='<div class="sd-sec">過去の結果</div>';
@@ -164,6 +168,8 @@ function swBuild(){
   });
   h+='<div class="sw-leg">棒＝実際に届いた（割った・超えた）割合。<b>│理論</b>の印＝壁や建玉が無くてもIVの値動きから届く確率。棒が印に届かなければ止まりやすい、印を越えていれば引き寄せられやすい。</div>';
   h+='<div class="sd-note">壁は、SQまで7日以上ある一番近い限月で、現値から±10%以内の最大建玉。理論はその日のIV（6/12より前は20日実現ボラ）で日々の終値を4,000通り試算した確率。'
+    +'<b>SQまで</b>＝SQ前日（オプション最終取引日）の終値までで判定、限月はその日の前限月の建玉だけ。理論はSQまでの営業日数で試算。SQの回数がまだ少なく、同じSQを毎日数え直しているので印は付けず数字だけ。'
+    +'「間に収まった」の理論は、IVどおりに動いたときSQ前日の終値が二つの壁の間に入る確率。'
     +'印は20件以上・p＜__P__のときだけ。同じ壁が何日も続いたり、同じ日に複数の行使価格が積まれたりするため件数は独立ではなく、pは実際より良く見えやすい点に注意。</div>';
   return h;
 }
