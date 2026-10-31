@@ -42,6 +42,16 @@ STUDY_CARD_CSS = r"""
 .sd-tag.dn{background:rgba(248,113,113,.14);color:#fca5a5}
 .sd-tag.lift{background:rgba(251,191,36,.14);color:#fbbf24}
 .sd-base{font-size:13px;color:var(--text);line-height:1.7;margin:0 2px}
+.sd-bar{position:relative;display:flex;height:8px;background:rgba(255,255,255,.06);border-radius:4px;margin:2px 0 8px}
+.sd-bar i{display:block;height:100%}
+.sd-bar i.u{background:#4ade80;border-radius:4px 0 0 4px}
+.sd-bar i.d{background:#f87171}
+.sd-bar b{position:absolute;top:-3px;width:2px;height:14px;background:#fbbf24}
+.sd-leg{font-size:12px;color:var(--sub);line-height:1.8;margin:0 2px 8px}
+.sd-leg span{margin-right:10px;white-space:nowrap}
+.sd-leg i{display:inline-block;width:12px;height:8px;border-radius:2px;vertical-align:middle;margin-right:4px}
+.sd-leg i.u{background:#4ade80}.sd-leg i.d{background:#f87171}
+.sd-leg b{display:inline-block;width:2px;height:12px;background:#fbbf24;vertical-align:middle;margin-right:4px}
 .sd-note{font-size:11px;color:var(--sub);line-height:1.6;margin:12px 2px 0}
 """
 
@@ -56,8 +66,12 @@ function sdLine(D,c,h){
   var lab=D.horizons.filter(function(x){return String(x.h)===h;})[0].label;
   return '<div class="sd-l"><span class="sd-h">'+lab+'</span><span class="sd-r">'+Math.round(rate*100)+'%</span>'
     +'<span class="sd-b">（'+s.n+'日中'+ev+'回、普段'+Math.round(br*100)+'%）</span>'
-    +'<span class="sd-up">上'+s.up+'</span><span class="sd-dn">下'+s.dn+'</span>'
-    +(s.big?'<span class="sd-b">うち1.5σ超え'+s.big+'</span>':'')+tags+'</div>';
+    +'<span class="sd-up">上昇'+s.up+'回</span><span class="sd-dn">下落'+s.dn+'回</span>'
+    +(s.big?'<span class="sd-b">うち1.5σ超え'+s.big+'回</span>':'')+tags+'</div>'
+    // bar: the large-move rate split into up (green) and down (red), with the
+    // usual rate marked, on a 0-100% scale like the walls card
+    +'<div class="sd-bar"><i class="u" style="width:'+(s.up/s.n*100).toFixed(1)+'%"></i><i class="d" style="width:'+(s.dn/s.n*100).toFixed(1)+'%"></i>'
+    +'<b style="left:'+(br*100).toFixed(1)+'%"></b></div>';
 }
 function sdCard(D,c,today){
   return '<div class="sd-c'+(today?' today':'')+'"><div class="sd-n">'+c.name+(c.last?'<span>直近 '+sdD(c.last)+'</span>':'')+'</div>'
@@ -68,7 +82,8 @@ function sdBuild(){
   var h='<div class="sd-def"><b>大きな動き</b>＝その日のIVが想定した値幅（'+D.sigma_k+'σ）を超えた終値の変化。翌日は ±IV÷√250、5日後は ±IV×√(5/250)。'
     +'期間 '+sdD(D.period[0])+'〜'+sdD(D.period[1])+'（'+sdD(D.iv_from)+'より前はIVの代わりに20日実現ボラ）。</div>';
   var b1=D.base['1'],b5=D.base['5'];
-  h+='<div class="sd-base">普段の確率：翌日 <b>'+Math.round((b1.up+b1.dn)/b1.n*100)+'%</b>（'+b1.n+'日中'+(b1.up+b1.dn)+'回、上'+b1.up+'・下'+b1.dn+'）／ 5日後 <b>'+Math.round((b5.up+b5.dn)/b5.n*100)+'%</b>（'+b5.n+'日中'+(b5.up+b5.dn)+'回、上'+b5.up+'・下'+b5.dn+'）</div>';
+  h+='<div class="sd-leg"><span><i class="u"></i>上昇</span><span><i class="d"></i>下落</span><span><b></b>普段の確率</span>　棒の長さ＝その条件の日に大きな動きが起きた割合（上昇・下落の内訳つき）</div>';
+  h+='<div class="sd-base">普段の確率：翌日 <b>'+Math.round((b1.up+b1.dn)/b1.n*100)+'%</b>（'+b1.n+'日中'+(b1.up+b1.dn)+'回：上昇'+b1.up+'回・下落'+b1.dn+'回）／ 5日後 <b>'+Math.round((b5.up+b5.dn)/b5.n*100)+'%</b>（'+b5.n+'日中'+(b5.up+b5.dn)+'回：上昇'+b5.up+'回・下落'+b5.dn+'回）</div>';
   var by={};D.conds.forEach(function(c){by[c.key]=c;});
   h+='<div class="sd-sec">今日（'+sdD(D.as_of)+'）あてはまる条件</div>';
   if(!D.applies_today.length) h+='<div class="sd-base">なし</div>';
