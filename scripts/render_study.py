@@ -126,9 +126,10 @@ function swRow(r,verb){
   var tag='';
   if(r.p!==null&&r.p<__P__&&r.n>=20){tag=r.rate<r.exp?'<span class="sd-tag up">理論より'+verb+'にくい</span>':'<span class="sd-tag dn">理論より'+verb+'やすい</span>';}
   var w=Math.min(100,r.rate*100),e=Math.min(100,r.exp*100);
-  return '<div class="sd-l"><span class="sd-h">'+r.h+'日以内</span><span class="sd-r">'+Math.round(r.rate*100)+'%</span>'
-    +'<span class="sd-b">（'+r.n+'件中'+r.hit+'件、理論'+Math.round(r.exp*100)+'%、p='+r.p.toFixed(2)+'）</span>'+tag+'</div>'
-    +'<div class="sw-bar"><i style="width:'+w.toFixed(0)+'%"></i><b style="left:'+e.toFixed(0)+'%"></b></div>';
+  // two labelled bars on the same 0-100% scale: what happened vs what IV implied
+  return '<div class="sd-l"><span class="sd-h">'+r.h+'日以内</span><span class="sd-b">（'+r.n+'件中'+r.hit+'件、p='+r.p.toFixed(2)+'）</span>'+tag+'</div>'
+    +'<div class="sw-row"><span class="sw-lab">実際</span><span class="sw-bar"><i style="width:'+w.toFixed(1)+'%"></i></span><span class="sw-pct">'+Math.round(r.rate*100)+'%</span></div>'
+    +'<div class="sw-row"><span class="sw-lab">理論</span><span class="sw-bar th"><i style="width:'+e.toFixed(1)+'%"></i></span><span class="sw-pct th">'+Math.round(r.exp*100)+'%</span></div>';
 }
 function swBuild(){
   var D=window.WALLS_DATA;if(!D)return '<div class="insight">データなし</div>';
@@ -142,7 +143,7 @@ function swBuild(){
     if(!x.by_h.length)return;
     h+='<div class="sd-c"><div class="sd-n">'+x.name+'</div>'+x.by_h.map(function(r){return swRow(r,x.verb);}).join('')+'</div>';
   });
-  h+='<div class="sw-leg"><i></i>実際の割合　<b></b>理論（IVから見た確率）</div>';
+  h+='<div class="sw-leg"><b>実際</b>＝実際に届いた（割った・超えた）割合　<b>理論</b>＝壁や建玉が無くてもIVの値動きから届く確率。実際が理論より短ければ止まりやすい、長ければ引き寄せられやすい。</div>';
   h+='<div class="sd-note">壁は、SQまで7日以上ある一番近い限月で、現値から±10%以内の最大建玉。理論はその日のIV（6/12より前は20日実現ボラ）で日々の終値を4,000通り試算した確率。'
     +'印は20件以上・p＜__P__のときだけ。同じ壁が何日も続いたり、同じ日に複数の行使価格が積まれたりするため件数は独立ではなく、pは実際より良く見えやすい点に注意。</div>';
   return h;
@@ -150,10 +151,14 @@ function swBuild(){
 """.replace('__P__', str(P_FLAG))
 
 WALLS_CARD_CSS = r"""
-.sw-bar{position:relative;height:8px;background:rgba(255,255,255,.06);border-radius:4px;margin:2px 0 8px}
-.sw-bar i{display:block;height:100%;background:#818cf8;border-radius:4px}
-.sw-bar b{position:absolute;top:-3px;width:2px;height:14px;background:#fbbf24}
-.sw-leg{font-size:12px;color:var(--sub);margin:4px 2px 0}
-.sw-leg i{display:inline-block;width:14px;height:8px;background:#818cf8;border-radius:3px;vertical-align:middle;margin-right:4px}
-.sw-leg b{display:inline-block;width:2px;height:12px;background:#fbbf24;vertical-align:middle;margin:0 4px 0 10px}
+.sw-row{display:flex;align-items:center;gap:8px;margin:3px 0}
+.sw-row:last-child{margin-bottom:6px}
+.sw-lab{flex:none;width:30px;font-size:12px;color:var(--sub)}
+.sw-bar{flex:1;height:10px;background:rgba(255,255,255,.06);border-radius:5px;overflow:hidden}
+.sw-bar i{display:block;height:100%;background:#818cf8;border-radius:5px}
+.sw-bar.th i{background:#fbbf24}
+.sw-pct{flex:none;width:40px;text-align:right;font-family:'DM Mono',monospace;font-size:13px;font-weight:600;color:var(--text)}
+.sw-pct.th{color:var(--sub);font-weight:500}
+.sw-leg{font-size:12px;color:var(--sub);line-height:1.7;margin:6px 2px 0}
+.sw-leg b{color:var(--text)}
 """
