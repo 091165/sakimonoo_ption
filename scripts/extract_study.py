@@ -58,6 +58,7 @@ def _signals(d):
         'fut_mini': (s02.get('nk225_mini') or {}).get('total_change'),
         'put_vol': s03.get('put_volume'), 'call_vol': s03.get('call_volume'),
         'moves300': len(d.get('s05') or []),
+        'pcr_oi': (d.get('indicators') or {}).get('pcr_oi'),
     }
 
 
@@ -201,6 +202,8 @@ def conditions(rows):
     pcr_hi, pcr_lo = _pct(pcr, 0.8), _pct(pcr, 0.2)
     mini_hi = _pct([abs(r['fut_mini']) for r in rows if r.get('fut_mini') is not None], 0.8)
     mv_hi = _pct([r.get('moves300') for r in rows if r.get('moves300') is not None], 0.8)
+    po = [r.get('pcr_oi') for r in rows if r.get('pcr_oi')]
+    po_hi, po_lo = _pct(po, 0.8), _pct(po, 0.2)
     sk = [r.get('skew') for r in rows if r.get('skew') is not None]
     sk_hi, sk_lo = _pct(sk, 0.8), _pct(sk, 0.2)
 
@@ -236,8 +239,12 @@ def conditions(rows):
         ('mini_big', 'mini建玉の大きな増減（上位20%%：±%s枚以上）' % format(int(mini_hi or 0), ','),
             lambda r: r.get('fut_mini') is not None and abs(r['fut_mini']) >= (mini_hi or 1e18)),
         ('call_day', '特異日：コール取引高＞プット', lambda r: (pcr_of(r) or 9) < 1),
-        ('pcr_hi', 'PCR（出来高）が高い（%.2f以上）' % (pcr_hi or 0), lambda r: (pcr_of(r) or 0) >= (pcr_hi or 1e9)),
-        ('pcr_lo', 'PCR（出来高）が低い（%.2f以下）' % (pcr_lo or 0), lambda r: pcr_of(r) is not None and pcr_of(r) <= (pcr_lo or -1)),
+        ('pcr_hi', 'PCR（出来高）が高い（%.2f以上・上位20%%）' % (pcr_hi or 0), lambda r: (pcr_of(r) or 0) >= (pcr_hi or 1e9)),
+        ('pcr_lo', 'PCR（出来高）が低い（%.2f以下・下位20%%）' % (pcr_lo or 0), lambda r: pcr_of(r) is not None and pcr_of(r) <= (pcr_lo or -1)),
+        ('pcr_oi_hi', 'PCR（建玉）が高い（%.2f以上・上位20%%）' % (po_hi or 0),
+            lambda r: r.get('pcr_oi') and r['pcr_oi'] >= (po_hi or 1e9)),
+        ('pcr_oi_lo', 'PCR（建玉）が低い（%.2f以下・下位20%%）' % (po_lo or 0),
+            lambda r: r.get('pcr_oi') and r['pcr_oi'] <= (po_lo or -1)),
         ('oi_moves', '建玉±300枚以上の銘柄が多い（%d件以上）' % (mv_hi or 0), lambda r: (r.get('moves300') or 0) >= (mv_hi or 1e9)),
         ('blk_put', '大口（J-NET・100枚以上）がプットを新規建て', lambda r: (r.get('blk_P') or 0) > 0),
         ('blk_call', '大口（J-NET・100枚以上）がコールを新規建て', lambda r: (r.get('blk_C') or 0) > 0),
