@@ -176,6 +176,12 @@ def build_rows(base):
                 ret = closes[i + h] / closes[i] - 1
                 sig = vol / 100 * math.sqrt(h / 250.0)
                 r['z%d' % h] = ret / sig
+        # where today's IV sits in its last 20 sessions (0 = low, 1 = high),
+        # the same reading as the range card's IVの水準
+        ivs = [base[days[j]].get('iv') for j in range(max(0, i - 19), i + 1)]
+        ivs = [v for v in ivs if v]
+        if r.get('iv') and len(ivs) >= 10 and max(ivs) > min(ivs):
+            r['iv_pos'] = (r['iv'] - min(ivs)) / (max(ivs) - min(ivs))
         prev = base[days[i - 1]] if i else {}
         if r.get('iv') and prev.get('iv') and r.get('front') == prev.get('front'):
             r['div'] = r['iv'] - prev['iv']
@@ -217,6 +223,8 @@ def conditions(rows):
             lambda r: r.get('skew') is not None and r['skew'] >= (sk_hi or 1e9)),
         ('skew_lo', 'スキューが低い（%.1fpt以下・下位20%%）' % (sk_lo or 0),
             lambda r: r.get('skew') is not None and r['skew'] <= (sk_lo if sk_lo is not None else -1e9)),
+        ('iv_hi20', 'IVの水準が直近20日で高め（上側3分の1）', lambda r: r.get('iv_pos') is not None and r['iv_pos'] >= 2 / 3),
+        ('iv_lo20', 'IVの水準が直近20日で低め（下側3分の1）', lambda r: r.get('iv_pos') is not None and r['iv_pos'] <= 1 / 3),
         ('iv_rich', 'IVが実現ボラより+4pt以上高い', lambda r: (gap(r) or 0) >= 4),
         ('iv_cheap', 'IVが実現ボラより低い', lambda r: gap(r) is not None and gap(r) < 0),
         ('moved', '当日すでに1σ以上動いた', lambda r: r.get('r0') is not None and r.get('iv') and
