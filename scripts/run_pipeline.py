@@ -290,6 +290,15 @@ def main():
         print('[WARN] extract_study.py failed (検証 card may be stale)', file=sys.stderr)
         print(result.stderr, file=sys.stderr)
 
+    # Step 2.990: 検証 — walls and strikes where OI was built, against the chance
+    # of reaching them implied by IV. Needs study_base.json and opt_blocks.json.
+    sw_cmd = [sys.executable, os.path.join(scripts_dir, 'extract_study_walls.py'), '--data-dir', datadir]
+    result = subprocess.run(sw_cmd, capture_output=True, text=True)
+    print(result.stdout)
+    if result.returncode != 0:
+        print('[WARN] extract_study_walls.py failed (壁の検証 card may be stale)', file=sys.stderr)
+        print(result.stderr, file=sys.stderr)
+
     # Step 2.99: accumulate weekly per-broker nets into broker_history.json
     # (persistent across weeks; powers the 大口動向 card). Runs only when
     # weekly files are present, otherwise leaves the existing history intact.

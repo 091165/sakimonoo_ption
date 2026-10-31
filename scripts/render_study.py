@@ -81,3 +81,64 @@ function sdBuild(){
   return h;
 }
 """.replace('__MIN__', str(MIN_EVENTS)).replace('__LIFT__', str(LIFT_FLAG)).replace('__P__', str(P_FLAG))
+
+
+# ---- 検証：壁と大口（data/study_walls.json, extract_study_walls.py) ----
+
+def walls_data_script(sw):
+    return ('window.WALLS_DATA = %s;\n' % json.dumps(sw, ensure_ascii=False, separators=(',', ':'))) if sw else ''
+
+
+def walls_preview(sw):
+    if not sw or not sw.get('today'):
+        return None
+    t = sw['today']
+    by = {x['key']: x for x in sw['tests']}
+
+    def five(key):
+        r = next((r for r in (by.get(key) or {}).get('by_h', []) if r['h'] == 5), None)
+        return ('%d%%（理論%d%%）' % (round(r['rate'] * 100), round(r['exp'] * 100))) if r else '—'
+    return ('<div class="mini-metrics">'
+            '<div class="mini-metric"><div class="mm-label">下値の壁 P%s を5日で割る率</div><div class="mm-value" style="font-size:14px">%s</div></div>'
+            '<div class="mini-metric"><div class="mm-label">上値の壁 C%s を5日で超える率</div><div class="mm-value" style="font-size:14px">%s</div></div></div>'
+            % (format(t['pw'], ',') if t.get('pw') else '—', five('put_wall'),
+               format(t['cw'], ',') if t.get('cw') else '—', five('call_wall')))
+
+
+WALLS_CARD_JS = r"""
+function swN(n){return Math.round(n).toLocaleString();}
+function swRow(r,verb){
+  var tag='';
+  if(r.p!==null&&r.p<__P__&&r.n>=20){tag=r.rate<r.exp?'<span class="sd-tag up">理論より'+verb+'にくい</span>':'<span class="sd-tag dn">理論より'+verb+'やすい</span>';}
+  var w=Math.min(100,r.rate*100),e=Math.min(100,r.exp*100);
+  return '<div class="sd-l"><span class="sd-h">'+r.h+'日以内</span><span class="sd-r">'+Math.round(r.rate*100)+'%</span>'
+    +'<span class="sd-b">（'+r.n+'件中'+r.hit+'件、理論'+Math.round(r.exp*100)+'%、p='+r.p.toFixed(2)+'）</span>'+tag+'</div>'
+    +'<div class="sw-bar"><i style="width:'+w.toFixed(0)+'%"></i><b style="left:'+e.toFixed(0)+'%"></b></div>';
+}
+function swBuild(){
+  var D=window.WALLS_DATA;if(!D)return '<div class="insight">データなし</div>';
+  var t=D.today||{},h='<div class="sd-def">壁や建玉が無かったとしても、IVの値動きからその価格に届く確率（<b>理論</b>）は計算できます。実際に届いた割合がそれより<b>低ければ止まりやすい</b>、<b>高ければ引き寄せられやすい</b>と読みます。終値で判定、期間 '+sdD(D.period[0])+'〜'+sdD(D.period[1])+'。</div>';
+  h+='<div class="sd-sec">今日（'+sdD(D.as_of)+'）の価格帯</div><div class="sd-base">'
+    +'下値の壁 <b>P'+(t.pw?swN(t.pw):'—')+'</b>（'+(t.pw_oi?swN(t.pw_oi):'—')+'枚）／ 上値の壁 <b>C'+(t.cw?swN(t.cw):'—')+'</b>（'+(t.cw_oi?swN(t.cw_oi):'—')+'枚）'
+    +((t.builds&&t.builds.length)?'<br>+300枚以上の積み増し：'+t.builds.map(function(b){return b[0]+swN(b[2])+'（'+(+b[1].slice(2))+'月限 +'+swN(b[3])+'）';}).join('、'):'')
+    +((t.blocks&&t.blocks.length)?'<br>大口の新規建て：'+t.blocks.map(function(b){return b[0]+swN(b[2])+'（'+swN(b[3])+'枚）';}).join('、'):'')+'</div>';
+  h+='<div class="sd-sec">過去の結果</div>';
+  D.tests.forEach(function(x){
+    if(!x.by_h.length)return;
+    h+='<div class="sd-c"><div class="sd-n">'+x.name+'</div>'+x.by_h.map(function(r){return swRow(r,x.verb);}).join('')+'</div>';
+  });
+  h+='<div class="sw-leg"><i></i>実際の割合　<b></b>理論（IVから見た確率）</div>';
+  h+='<div class="sd-note">壁は、SQまで7日以上ある一番近い限月で、現値から±10%以内の最大建玉。理論はその日のIV（6/12より前は20日実現ボラ）で日々の終値を4,000通り試算した確率。'
+    +'印は20件以上・p＜__P__のときだけ。同じ壁が何日も続いたり、同じ日に複数の行使価格が積まれたりするため件数は独立ではなく、pは実際より良く見えやすい点に注意。</div>';
+  return h;
+}
+""".replace('__P__', str(P_FLAG))
+
+WALLS_CARD_CSS = r"""
+.sw-bar{position:relative;height:8px;background:rgba(255,255,255,.06);border-radius:4px;margin:2px 0 8px}
+.sw-bar i{display:block;height:100%;background:#818cf8;border-radius:4px}
+.sw-bar b{position:absolute;top:-3px;width:2px;height:14px;background:#fbbf24}
+.sw-leg{font-size:12px;color:var(--sub);margin:4px 2px 0}
+.sw-leg i{display:inline-block;width:14px;height:8px;background:#818cf8;border-radius:3px;vertical-align:middle;margin-right:4px}
+.sw-leg b{display:inline-block;width:2px;height:12px;background:#fbbf24;vertical-align:middle;margin:0 4px 0 10px}
+"""
