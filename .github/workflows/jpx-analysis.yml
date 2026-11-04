@@ -76,18 +76,17 @@ jobs:
       - name: Cleanup old daily files in data/
         run: |
           cd data
-          # For each daily file type, keep only the latest and remove older ones
+          # For each daily file type, keep every file of the latest date and
+          # remove older dates. (One date has several files of the same type:
+          # day/night x auction/J-NET for volume_by_participant, day/night for
+          # market_data, so keeping only one file dropped the others.)
           for pattern in "open_interest" "market_data" "volume_by_participant"; do
-            files=$(ls -1 *${pattern}* 2>/dev/null | sort -r)
-            count=0
-            for f in $files; do
-              count=$((count + 1))
-              if [ $count -gt 1 ]; then
-                echo "Removing old: $f"
-                git rm "$f" 2>/dev/null || rm -f "$f"
-              else
-                echo "Keeping latest: $f"
-              fi
+            latest=$(ls -1 *${pattern}* 2>/dev/null | grep -o '^[0-9]\{8\}' | sort -r | head -1)
+            for f in $(ls -1 *${pattern}* 2>/dev/null); do
+              case "$f" in
+                ${latest}*) echo "Keeping latest: $f" ;;
+                *) echo "Removing old: $f"; git rm "$f" 2>/dev/null || rm -f "$f" ;;
+              esac
             done
           done
 

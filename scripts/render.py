@@ -59,6 +59,10 @@ try:
 except Exception:
     _ob = None
 try:
+    import render_opt_tekuchi as _tk
+except Exception:
+    _tk = None
+try:
     import render_technical as _tc
 except Exception:
     _tc = None
@@ -1617,7 +1621,7 @@ def _detail_ivtrend_js(ivts):
 
 
 
-def build_dashboard_html(data, oi_ts=None, wt=None, iv=None, ivts=None, greeks=None, jnet=None, optw=None, positions=None, broker_hist=None, venue_flow=None, greeks_hist=None, futures_flow=None, fut_brokers=None, opt_blocks=None, study=None, study_walls=None):
+def build_dashboard_html(data, oi_ts=None, wt=None, iv=None, ivts=None, greeks=None, jnet=None, optw=None, positions=None, broker_hist=None, venue_flow=None, greeks_hist=None, futures_flow=None, fut_brokers=None, opt_blocks=None, study=None, study_walls=None, opt_tekuchi=None):
     meta = data['metadata']
     s01 = data.get('s01', {})
     s02 = data.get('s02', {})
@@ -1641,7 +1645,7 @@ def build_dashboard_html(data, oi_ts=None, wt=None, iv=None, ivts=None, greeks=N
     h += '<meta name="viewport" content="width=device-width,initial-scale=1">\n'
     h += '<title>JPX Market Analysis %s</title>\n' % esc(meta.get('date_formatted', ''))
     h += '<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700&family=Noto+Sans+JP:wght@400;500;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">\n'
-    h += '<style>\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n</style>\n' % (DASHBOARD_CSS, OI_CHART_CSS, WEEKLY_TREND_CSS, IV_CARD_CSS, IV_TREND_CSS, (_rg.GREEKS_CARD_CSS if _rg else ''), (_rj.JNET_CARD_CSS if _rj else ''), (_ow.OPTW_CARD_CSS if _ow else ''), (_ps.POS_CARD_CSS if _ps else ''), (_oc.OPCROSS_CARD_CSS if _oc else ''), FLOW_VERDICT_CSS, (_bw.BW_CARD_CSS if _bw else ''), (_sb.SB_CARD_CSS if _sb else ''), (_rr.RANGE_CARD_CSS if _rr else ''), (_ft.FUT_CARD_CSS if _ft else ''), (_fb.FB_CARD_CSS if _fb else ''), (_ds.DIST_CARD_CSS if _ds else ''), (_ob.OB_CARD_CSS if _ob else ''), (_tc.TECH_CARD_CSS if _tc else ''), (_st.STUDY_CARD_CSS + _st.WALLS_CARD_CSS if _st else ''), READABILITY_CSS)
+    h += '<style>\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n</style>\n' % (DASHBOARD_CSS, OI_CHART_CSS, WEEKLY_TREND_CSS, IV_CARD_CSS, IV_TREND_CSS, (_rg.GREEKS_CARD_CSS if _rg else ''), (_rj.JNET_CARD_CSS if _rj else ''), (_ow.OPTW_CARD_CSS if _ow else ''), (_ps.POS_CARD_CSS if _ps else ''), (_oc.OPCROSS_CARD_CSS if _oc else ''), FLOW_VERDICT_CSS, (_bw.BW_CARD_CSS if _bw else ''), (_sb.SB_CARD_CSS if _sb else ''), (_rr.RANGE_CARD_CSS if _rr else ''), (_ft.FUT_CARD_CSS if _ft else ''), (_fb.FB_CARD_CSS if _fb else ''), (_ds.DIST_CARD_CSS if _ds else ''), (_ob.OB_CARD_CSS + (_tk.TK_CARD_CSS if _tk else '') if _ob else (_tk.TK_CARD_CSS if _tk else '')), (_tc.TECH_CARD_CSS if _tc else ''), (_st.STUDY_CARD_CSS + _st.WALLS_CARD_CSS if _st else ''), READABILITY_CSS)
     h += '</head>\n<body>\n'
 
     h += '<div class="topbar">\n  <span class="logo">JPX Dashboard</span>\n  <nav>\n'
@@ -1809,7 +1813,9 @@ def build_dashboard_html(data, oi_ts=None, wt=None, iv=None, ivts=None, greeks=N
         # 大口 last in each group, as in 先物: overall first, then who moved.
         ] + ([
             ('opt_blocks', '🔎', 'オプションの大口（行使価格別）', _ob.preview(opt_blocks, s03), "return obBuild();", DB),
-        ] if (_ob and opt_blocks) else [])),
+        ] if (_ob and opt_blocks) else []) + ([
+            ('opt_tekuchi', '🗓', 'オプションの手口（行使価格×日付）', _tk.preview(opt_tekuchi) or '<span class="mm-label">データなし</span>', "return tkBuild();", DB),
+        ] if (_tk and opt_tekuchi and opt_tekuchi.get('dates')) else [])),
         ('テクニカル', [
             ('range', '📐', 'IVから見た想定レンジ',
              (_rr.preview_range(greeks, ivts, oi_ts) if _rr else '<span class="mm-label">データ待ち</span>'),
@@ -1906,6 +1912,9 @@ def build_dashboard_html(data, oi_ts=None, wt=None, iv=None, ivts=None, greeks=N
     if _ob and opt_blocks:
         h += _ob.data_script(opt_blocks, s03, data.get('s05'))
         h += _ob.OB_CARD_JS
+    if _tk and opt_tekuchi and opt_tekuchi.get('dates'):
+        h += _tk.data_script(opt_tekuchi, optw)
+        h += _tk.TK_CARD_JS
     if _ds:
         h += _ds.dist_data_script(s06, _spot, ind)
         h += _ds.DIST_CARD_JS
@@ -3134,6 +3143,16 @@ def run(args):
         except Exception as e:
             print('[render.py] opt_blocks.json load error: %s' % e)
 
+    opt_tekuchi = None
+    _tkpath = os.path.join(data_dir, 'opt_tekuchi.json')
+    if os.path.exists(_tkpath):
+        try:
+            with open(_tkpath, encoding='utf-8') as f:
+                opt_tekuchi = json.load(f)
+            print('[render.py] Loaded opt_tekuchi: %d days' % len(opt_tekuchi.get('dates', [])))
+        except Exception as e:
+            print('[render.py] opt_tekuchi.json load error: %s' % e)
+
     fut_brokers = None
     _fbpath = os.path.join(data_dir, 'fut_brokers.json')
     if os.path.exists(_fbpath):
@@ -3177,7 +3196,7 @@ def run(args):
         f.write(build_markdown(data))
     print('[render.py] Markdown: %s (%.1f KB)' % (md_path, os.path.getsize(md_path) / 1024))
     html_path = os.path.join(outdir, 'index.html')
-    html = build_dashboard_html(data, oi_ts=oi_ts, wt=wt, iv=iv, ivts=ivts, greeks=greeks, jnet=jnet, optw=optw, positions=positions, broker_hist=broker_hist, venue_flow=venue_flow, greeks_hist=greeks_hist, futures_flow=futures_flow, fut_brokers=fut_brokers, opt_blocks=opt_blocks, study=study, study_walls=study_walls)
+    html = build_dashboard_html(data, oi_ts=oi_ts, wt=wt, iv=iv, ivts=ivts, greeks=greeks, jnet=jnet, optw=optw, positions=positions, broker_hist=broker_hist, venue_flow=venue_flow, greeks_hist=greeks_hist, futures_flow=futures_flow, fut_brokers=fut_brokers, opt_blocks=opt_blocks, study=study, study_walls=study_walls, opt_tekuchi=opt_tekuchi)
     if _theme:
         html = _theme.warm(html)
     with open(html_path, 'w', encoding='utf-8') as f:
