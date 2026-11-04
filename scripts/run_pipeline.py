@@ -280,6 +280,16 @@ def main():
         print('[WARN] extract_opt_blocks.py failed (オプションの大口 card may be stale)', file=sys.stderr)
         print(result.stderr, file=sys.stderr)
 
+    # Step 2.9885: option volume per strike and day, overall and per participant
+    # (オプションの手口 card). Needs all four session files; keeps its own history.
+    tk_cmd = [sys.executable, os.path.join(scripts_dir, 'extract_opt_tekuchi.py'),
+              '--data-dir', datadir, '--out', os.path.join(datadir, 'opt_tekuchi.json')]
+    result = subprocess.run(tk_cmd, capture_output=True, text=True)
+    print(result.stdout)
+    if result.returncode != 0:
+        print('[WARN] extract_opt_tekuchi.py failed (オプションの手口 card may be stale)', file=sys.stderr)
+        print(result.stderr, file=sys.stderr)
+
     # Step 2.989: 検証 — after each kind of day, how often the index moved
     # beyond 1σ of its IV. Needs futures_flow.json and iv_timeseries.json
     # from the steps above; keeps its own history in study_base.json.

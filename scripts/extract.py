@@ -271,10 +271,12 @@ def detect_files(data_dir):
         if 'open_interest' in fl and fl.endswith('.xlsx'):
             candidates['open_interest'].append((fdate, fp))
 
-        elif 'volume_by_participant' in fl and 'j-net' in fl and fl.endswith('.xlsx'):
+        # Day-session files only: the night (and auction) session files share
+        # these name fragments and the same date, and would be picked at random.
+        elif 'volume_by_participant_whole_day_j-net' in fl and fl.endswith('.xlsx'):
             candidates['jnet'].append((fdate, fp))
 
-        elif ('market_data' in fl or 'derivatives_market_data' in fl) and fl.endswith('.xlsx'):
+        elif ('market_data' in fl or 'derivatives_market_data' in fl) and 'night' not in fl and fl.endswith('.xlsx'):
             candidates['market_data'].append((fdate, fp))
 
         elif 'nk225op_oi_by_tp' in fl and fl.endswith('.xlsx'):
