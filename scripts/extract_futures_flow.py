@@ -166,6 +166,13 @@ def main():
     with open(data_path, encoding='utf-8') as f:
         d = json.load(f)
     today = (d.get('metadata') or {}).get('date')
+    # A run made days after the data date (e.g. after a holiday) fetches OHLC
+    # bars newer than the data. Drop those close-only rows so later steps
+    # (検証 card) still treat the data date as the latest day.
+    if today:
+        for dt in [k for k, v in flow['rows'].items()
+                   if k > today and not any(p in v for p in PRODUCTS)]:
+            del flow['rows'][dt]
     s02 = d.get('s02') or {}
     if today and 'error' not in s02:
         row = flow['rows'].setdefault(today, {})

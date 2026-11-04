@@ -364,6 +364,10 @@ def main():
     d = _load(os.path.join(a.data_dir, 'data.json'), {})
     dt = (d.get('metadata') or {}).get('date')
     if dt:
+        # Rows after the data date (closes fetched on a later run day) would
+        # make an IV-less day the latest one; they come back on that day's run.
+        for k in [k for k in base if k > dt]:
+            del base[k]
         base.setdefault(dt, {}).update(_signals(d))
     with open(base_path, 'w', encoding='utf-8') as f:
         json.dump({k: base[k] for k in sorted(base)}, f, ensure_ascii=False, separators=(',', ':'))
