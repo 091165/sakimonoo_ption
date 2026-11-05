@@ -135,13 +135,20 @@ def _js_str(s):
 # Markdown Report Builder
 # ============================================================
 
+def vi_text(meta, vi):
+    """VI for display; marks the value estimated from tp.csv (compute_vi.py)."""
+    if not vi:
+        return '-'
+    return '%s（推計）' % vi if meta.get('vi_source') == 'estimate' else '%s' % vi
+
+
 def build_markdown(data):
     meta = data['metadata']
     md = []
     md.append('# JPX Market Analysis %s' % meta['date_formatted'])
     md.append('')
     md.append('> ATM: %s / VI: %s / %s / SQまで%d営業日' % (
-        fnum(meta.get('atm')), meta.get('vi', '-'),
+        fnum(meta.get('atm')), vi_text(meta, meta.get('vi')),
         meta.get('sq_label', ''), meta.get('days_to_sq', 0)))
     md.append('')
 
@@ -151,7 +158,9 @@ def build_markdown(data):
     if s01.get('nikkei_close'):
         md.append('- 日経平均終値: **%s**' % fnum(s01['nikkei_close']))
     if s01.get('vi'):
-        md.append('- 日経平均VI: **%s**' % s01['vi'])
+        md.append('- 日経平均VI: **%s**' % vi_text(meta, s01['vi']))
+        if meta.get('vi_source') == 'estimate':
+            md.append('  - 公式値が取得できないため、理論価格（oseYYYYMMDDtp.csv）から日経VIと同じ方式で算出した推計値')
     r1d = s01.get('range_1d', {})
     r1w = s01.get('range_1w', {})
     if r1d:
@@ -2840,7 +2849,7 @@ def build_simulator_html(data):
     h += '.sim-section{max-width:900px;margin:0 auto;padding:16px}\n.preset-btn{display:inline-block;padding:6px 14px;margin:4px;background:var(--card);border:1px solid var(--border);border-radius:6px;color:var(--text);cursor:pointer;font-size:11px;font-family:Outfit}\n.preset-btn:hover{border-color:var(--accent);color:var(--accent)}\n.leg-row{display:flex;gap:8px;align-items:center;margin:4px 0;flex-wrap:wrap}\n.leg-row select,.leg-row input{background:var(--card);border:1px solid var(--border);color:var(--text);padding:4px 8px;border-radius:4px;font-size:12px;font-family:DM Mono}\n.leg-row input{width:80px}\n.btn{padding:6px 16px;background:var(--accent);color:#fff;border:none;border-radius:6px;cursor:pointer;font-family:Outfit;font-size:12px}\n.btn-outline{background:transparent;border:1px solid var(--border);color:var(--text)}\n.btn-outline:hover{border-color:var(--accent)}\n#pnl-canvas{width:100%;height:300px;background:var(--card);border-radius:8px;margin:12px 0}\n.pnl-table{font-size:11px}\n.pnl-table td,.pnl-table th{padding:3px 6px}\n'
     h += '</style>\n</head>\n<body>\n'
     h += '<div class="topbar"><span class="logo">P&L Simulator</span><nav><a href="index.html">← ダッシュボード</a><a href="weekly_trend.html">週次推移</a><a href="archive.html">アーカイブ</a></nav></div>\n'
-    h += '<div class="hero"><h1>P&L Simulator</h1><div class="sub">%s / ATM %s / VI %s / SQまで%d日</div></div>\n' % (esc(meta.get('date_formatted', '')), fnum(atm), vi, days_to_sq)
+    h += '<div class="hero"><h1>P&L Simulator</h1><div class="sub">%s / ATM %s / VI %s / SQまで%d日</div></div>\n' % (esc(meta.get('date_formatted', '')), fnum(atm), vi_text(meta, vi), days_to_sq)
     h += '<div class="kpi-strip">\n  <div class="kpi"><div class="label">ATM</div><div class="value">%s</div></div>\n  <div class="kpi"><div class="label">SQ</div><div class="value">%s</div></div>\n  <div class="kpi"><div class="label">残り営業日</div><div class="value">%d</div></div>\n</div>\n' % (fnum(atm), esc(meta.get('sq_date', '')), days_to_sq)
     h += '<div class="sim-section">\n<div style="margin:12px 0"><div style="color:var(--sub);font-size:11px;margin-bottom:6px">プリセット戦略</div>\n'
     for i, p in enumerate(presets):

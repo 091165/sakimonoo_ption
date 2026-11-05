@@ -70,10 +70,29 @@ def main():
 
         if nikkei is None:
             print('[WARN] Nikkei close not available. Using ATM from futures as fallback.', file=sys.stderr)
-        if vi is None:
-            print('[WARN] VI not available. OTM probabilities will be skipped.', file=sys.stderr)
 
-    print('Nikkei: %s / VI: %s' % (nikkei, vi))
+    # Step 1.5: no free source carries the Nikkei VI any more, so estimate it
+    # from the newest ose<date>tp.csv with the index's own (VIX) method.
+    vi_source = 'manual' if args.vi is not None else ('web' if vi is not None else None)
+    if vi is None:
+        try:
+            import glob as _glob
+            import compute_vi
+            tps = sorted(_glob.glob(os.path.join(datadir, 'ose*tp.csv')))
+            if tps:
+                vi_est, detail = compute_vi.compute_vi(tps[-1])
+                if vi_est is not None:
+                    vi = vi_est
+                    vi_source = 'estimate'
+                    print('[VI] estimated from %s: %.2f %s' % (os.path.basename(tps[-1]), vi, detail))
+                else:
+                    print('[WARN] VI estimate failed: %s' % detail, file=sys.stderr)
+        except Exception as e:
+            print('[WARN] VI estimate failed: %s' % e, file=sys.stderr)
+    if vi is None:
+        print('[WARN] VI not available. OTM probabilities will be skipped.', file=sys.stderr)
+
+    print('Nikkei: %s / VI: %s (%s)' % (nikkei, vi, vi_source))
 
     # Step 2: Extract data
     print('\n=== Step 2: Extracting data ===')
@@ -95,6 +114,16 @@ def main():
         print('ERROR: extract.py failed', file=sys.stderr)
         print(result.stderr, file=sys.stderr)
         sys.exit(1)
+
+    # Record where the VI came from (web / manual / estimate) for the labels.
+    try:
+        with open(data_json, encoding='utf-8') as f:
+            _dj = json.load(f)
+        _dj.setdefault('metadata', {})['vi_source'] = vi_source
+        with open(data_json, 'w', encoding='utf-8') as f:
+            json.dump(_dj, f, ensure_ascii=False, indent=2)
+    except Exception as e:
+        print('[WARN] could not record vi_source: %s' % e, file=sys.stderr)
 
     # Step 2.6: Build time-series cards (建玉推移 / 週次手口推移)
     # These regenerate oi_timeseries.json and weekly_trend.json which render.py
