@@ -96,54 +96,6 @@ def main():
         print(result.stderr, file=sys.stderr)
         sys.exit(1)
 
-    # Step 2.5: ⑧ assessment — manual override first, else Gemini
-    # Priority: data/manual_assessment_YYYYMMDD.md (dated, must match the data
-    # date) > Gemini (if GEMINI_API_KEY) > placeholder. The dated manual file
-    # lets a human-written (Claude) analysis appear with the 👤手動分析 badge,
-    # and the date match prevents a stale older file from being reused.
-    print('\n=== Step 2.5: ⑧ assessment ===')
-    data_date = None
-    try:
-        with open(data_json, encoding='utf-8') as f:
-            _d = json.load(f)
-        data_date = (_d.get('metadata') or {}).get('date')
-    except Exception as e:
-        print('[WARN] could not read data.json for date: %s' % e, file=sys.stderr)
-
-    manual_used = False
-    if data_date:
-        manual_path = os.path.join(datadir, 'manual_assessment_%s.md' % data_date)
-        if os.path.exists(manual_path):
-            try:
-                with open(manual_path, encoding='utf-8') as f:
-                    manual_text = f.read().strip()
-                if manual_text:
-                    with open(data_json, encoding='utf-8') as f:
-                        dj = json.load(f)
-                    dj['s08_assessment'] = manual_text
-                    dj['s08_source'] = 'manual'
-                    with open(data_json, 'w', encoding='utf-8') as f:
-                        json.dump(dj, f, ensure_ascii=False, indent=2)
-                    manual_used = True
-                    print('[assessment] manual override: %s (%d chars) -> manual'
-                          % (os.path.basename(manual_path), len(manual_text)))
-            except Exception as e:
-                print('[WARN] failed to inject manual assessment: %s' % e, file=sys.stderr)
-        else:
-            print('[assessment] no manual file for %s (looked for %s)'
-                  % (data_date, os.path.basename(manual_path)))
-
-    if not manual_used:
-        # No manual ⑧ → deterministic template assessment from real numbers.
-        # (Accurate, no API key. Replaces the old Gemini fallback.)
-        print('[assessment] no manual file → deterministic 定型⑧')
-        assess_cmd = [sys.executable, os.path.join(scripts_dir, 'generate_assessment.py'),
-                      '--data', data_json]
-        result = subprocess.run(assess_cmd, capture_output=True, text=True)
-        print(result.stdout)
-        if result.stderr:
-            print(result.stderr)
-
     # Step 2.6: Build time-series cards (建玉推移 / 週次手口推移)
     # These regenerate oi_timeseries.json and weekly_trend.json which render.py
     # embeds into the dashboard. Without this step the 建玉推移 and 週次手口推移
@@ -320,6 +272,56 @@ def main():
     if result.returncode != 0:
         print('[WARN] extract_broker_history.py failed (大口動向 card may be stale)', file=sys.stderr)
         print(result.stderr, file=sys.stderr)
+
+    # Step 2.999: ⑧ assessment — manual override first, else the template.
+    # Runs after the IV / greeks steps: the template reads iv.json,
+    # greeks.json and greeks_history.json, which must be today's.
+    # Priority: data/manual_assessment_YYYYMMDD.md (dated, must match the data
+    # date) > Gemini (if GEMINI_API_KEY) > placeholder. The dated manual file
+    # lets a human-written (Claude) analysis appear with the 👤手動分析 badge,
+    # and the date match prevents a stale older file from being reused.
+    print('\n=== Step 2.999: ⑧ assessment ===')
+    data_date = None
+    try:
+        with open(data_json, encoding='utf-8') as f:
+            _d = json.load(f)
+        data_date = (_d.get('metadata') or {}).get('date')
+    except Exception as e:
+        print('[WARN] could not read data.json for date: %s' % e, file=sys.stderr)
+
+    manual_used = False
+    if data_date:
+        manual_path = os.path.join(datadir, 'manual_assessment_%s.md' % data_date)
+        if os.path.exists(manual_path):
+            try:
+                with open(manual_path, encoding='utf-8') as f:
+                    manual_text = f.read().strip()
+                if manual_text:
+                    with open(data_json, encoding='utf-8') as f:
+                        dj = json.load(f)
+                    dj['s08_assessment'] = manual_text
+                    dj['s08_source'] = 'manual'
+                    with open(data_json, 'w', encoding='utf-8') as f:
+                        json.dump(dj, f, ensure_ascii=False, indent=2)
+                    manual_used = True
+                    print('[assessment] manual override: %s (%d chars) -> manual'
+                          % (os.path.basename(manual_path), len(manual_text)))
+            except Exception as e:
+                print('[WARN] failed to inject manual assessment: %s' % e, file=sys.stderr)
+        else:
+            print('[assessment] no manual file for %s (looked for %s)'
+                  % (data_date, os.path.basename(manual_path)))
+
+    if not manual_used:
+        # No manual ⑧ → deterministic template assessment from real numbers.
+        # (Accurate, no API key. Replaces the old Gemini fallback.)
+        print('[assessment] no manual file → deterministic 定型⑧')
+        assess_cmd = [sys.executable, os.path.join(scripts_dir, 'generate_assessment.py'),
+                      '--data', data_json]
+        result = subprocess.run(assess_cmd, capture_output=True, text=True)
+        print(result.stdout)
+        if result.stderr:
+            print(result.stderr)
 
     # Step 3: Render outputs
     print('\n=== Step 3: Rendering outputs ===')
