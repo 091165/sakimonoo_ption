@@ -274,6 +274,20 @@ def run(args):
         if spot:
             source = 'yahoo'
 
+    # OHLC history (25 trading days for technical analysis)
+    ohlc_history = fetch_stooq_ohlc_history(25)
+
+    # The quote pages above often fail from GitHub Actions while the history
+    # still loads; its last row is today's cash close once the market has
+    # closed. Use it before falling back to the CME future.
+    if not spot and ohlc_history:
+        today_jst = (datetime.utcnow() + timedelta(hours=9)).strftime('%Y-%m-%d')
+        last = ohlc_history[-1]
+        if last.get('date') == today_jst and last.get('close'):
+            spot = float(last['close'])
+            source = 'ohlc_history'
+            print('[fetch] cash close from OHLC history (%s): %.2f' % (today_jst, spot), file=sys.stderr)
+
     # Front-month Nikkei 225 futures (for ATM + real basis)
     futures, fut_source = fetch_nikkei_futures()
     if futures:
@@ -317,9 +331,6 @@ def run(args):
                 print('[fetch] VI from yahoo: %.2f' % vi, file=sys.stderr)
             else:
                 print('[fetch] VI unavailable from all sources', file=sys.stderr)
-
-    # OHLC history (25 trading days for technical analysis)
-    ohlc_history = fetch_stooq_ohlc_history(25)
 
     result = {
         'nikkei_close': nikkei_for_atm,   # value used downstream for ATM (cash index preferred; tracks OSE close)

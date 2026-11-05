@@ -28,7 +28,7 @@ def _fmt(n):
         return str(n)
 
 
-def _skew(iv, expiry='202607'):
+def _skew(iv, expiry):
     ee = next((x for x in (iv or {}).get('expiries', []) if x['expiry'] == expiry), None)
     if not ee:
         return None
@@ -52,13 +52,14 @@ def build_assessment(data_dir, data_json_path):
     spot = e.get('spot')
     atm_chg = (e.get('atm_iv_chg') or 0) * 100
     front_atm = None; term = []
-    for ex in ['202607', '202608', '202609']:
-        q = next((x for x in iv.get('expiries', []) if x['expiry'] == ex), None)
-        if q:
-            term.append((ex[4:6], q['atm_iv'] * 100))
-            if ex == '202607':
-                front_atm = q['atm_iv'] * 100
-    skew = _skew(iv)
+    # nearest three expiries (front month first), not fixed months
+    near = sorted(x['expiry'] for x in iv.get('expiries', []) if x.get('atm_iv'))[:3]
+    for ex in near:
+        q = next(x for x in iv['expiries'] if x['expiry'] == ex)
+        term.append((str(int(ex[4:6])), q['atm_iv'] * 100))
+    if near:
+        front_atm = term[0][1]
+    skew = _skew(iv, near[0]) if near else None
 
     prev_spot = None
     if ghist:
@@ -92,7 +93,7 @@ def build_assessment(data_dir, data_json_path):
 
     ivbits = []
     if front_atm is not None:
-        ivbits.append('7月限ATM IVは%.1f%%(前日比%+.1fpt)' % (front_atm, atm_chg))
+        ivbits.append('%s月限ATM IVは%.1f%%(前日比%+.1fpt)' % (term[0][0], front_atm, atm_chg))
     if len(term) >= 2:
         ivbits.append('期間構造は' + '＞'.join('%s月%.1f' % (m, v) for m, v in term))
     if skew is not None:
