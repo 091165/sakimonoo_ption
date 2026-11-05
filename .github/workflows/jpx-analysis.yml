@@ -2,10 +2,14 @@
 # JPX Market Analysis - Automated Pipeline
 #
 # Triggers:
-#   1. Push Excel files to data/ directory
-#   2. Manual dispatch (with optional Nikkei/VI override)
+#   1. Schedule (weekdays, JST 08:07 / 18:37 / 22:37): downloads the new JPX
+#      files itself (scripts/fetch_jpx.py) and builds only when a new day's
+#      set is complete or a new weekly file appeared
+#   2. Push Excel files to data/ directory (manual upload still works)
+#   3. Manual dispatch (with optional Nikkei/VI override; also fetches)
 #
 # What it does:
+#   0. Downloads new JPX files into data/ (schedule / dispatch)
 #   1. Fetches Nikkei 225 close and VI (or uses manual input)
 #   2. Runs extract.py to parse Excel files → data.json
 #   3. Runs render.py to generate HTML/MD files
@@ -14,6 +18,11 @@
 name: JPX Daily Analysis
 
 on:
+  schedule:
+    # UTC. = JST 08:07 Mon-Fri, 18:37 Mon-Fri, 22:37 Mon-Fri
+    - cron: '7 23 * * 0-4'
+    - cron: '37 9 * * 1-5'
+    - cron: '37 13 * * 1-5'
   push:
     paths:
       - 'data/*.xlsx'
@@ -28,14 +37,23 @@ on:
         description: 'Nikkei VI close (leave empty for auto-fetch)'
         required: false
         type: string
+      fetch:
+        description: 'Download the newest JPX files first'
+        required: false
+        type: boolean
+        default: true
 
 permissions:
   contents: write
 
+concurrency:
+  group: jpx-analysis
+  cancel-in-progress: false
+
 jobs:
   analyze:
     runs-on: ubuntu-latest
-    
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -50,12 +68,33 @@ jobs:
       - name: Install dependencies
         run: pip install openpyxl xlrd
 
+      - name: Download new JPX files
+        id: fetch
+        if: github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && github.event.inputs.fetch != 'false')
+        run: python scripts/fetch_jpx.py --datadir data
+
+      # Scheduled runs build only when there is something new; push and manual
+      # runs always build.
+      - name: Decide whether to build
+        id: gate
+        run: |
+          if [ "${{ github.event_name }}" != "schedule" ] \
+             || [ "${{ steps.fetch.outputs.daily_status }}" = "ready" ] \
+             || [ "${{ steps.fetch.outputs.new_weekly }}" != "0" -a -n "${{ steps.fetch.outputs.new_weekly }}" ]; then
+            echo "build=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "Nothing new on JPX yet (daily: ${{ steps.fetch.outputs.daily_status }})"
+            echo "build=false" >> "$GITHUB_OUTPUT"
+          fi
+
       - name: List data files
+        if: steps.gate.outputs.build == 'true'
         run: |
           echo "=== Files in data/ ==="
           ls -la data/ || echo "No data/ directory"
 
       - name: Run pipeline
+        if: steps.gate.outputs.build == 'true'
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
         run: |
@@ -69,11 +108,13 @@ jobs:
           python scripts/run_pipeline.py $ARGS
 
       - name: List generated files
+        if: steps.gate.outputs.build == 'true'
         run: |
           echo "=== Generated files ==="
           ls -la *.html *.md data/data.json 2>/dev/null || true
 
       - name: Cleanup old daily files in data/
+        if: steps.gate.outputs.build == 'true'
         run: |
           cd data
           # For each daily file type, keep every file of the latest date and
@@ -91,6 +132,7 @@ jobs:
           done
 
       - name: Commit and push
+        if: steps.gate.outputs.build == 'true'
         run: |
           git config user.name "JPX Analysis Bot"
           git config user.email "bot@jpx-analysis.local"
@@ -105,5 +147,6 @@ jobs:
           else
             DATE=$(date +%Y%m%d)
             git commit -m "${DATE} analysis update [automated]"
+            git pull --rebase origin "${GITHUB_REF_NAME}"
             git push
           fi
