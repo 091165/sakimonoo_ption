@@ -2,7 +2,7 @@
 # JPX Market Analysis - Automated Pipeline
 #
 # Triggers:
-#   1. Schedule (weekdays, JST 08:07 / 18:37 / 22:37): downloads the new JPX
+#   1. Schedule (weekdays, JST 18:07 / 20:37 / 23:07): downloads the new JPX
 #      files itself (scripts/fetch_jpx.py) and builds only when a new day's
 #      set is complete or a new weekly file appeared
 #   2. Push Excel files to data/ directory (manual upload still works)
@@ -19,10 +19,11 @@ name: JPX Daily Analysis
 
 on:
   schedule:
-    # UTC. = JST 08:07 Mon-Fri, 18:37 Mon-Fri, 22:37 Mon-Fri
-    - cron: '7 23 * * 0-4'
-    - cron: '37 9 * * 1-5'
-    - cron: '37 13 * * 1-5'
+    # UTC. = JST 18:07 / 20:37 / 23:07 Mon-Fri. JPX publishes the day's files
+    # between 16:40 and 17:45 JST; the later runs retry if a file was late.
+    - cron: '7 9 * * 1-5'
+    - cron: '37 11 * * 1-5'
+    - cron: '7 14 * * 1-5'
   push:
     paths:
       - 'data/*.xlsx'

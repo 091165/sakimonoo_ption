@@ -7,9 +7,10 @@ download and push them by hand.
 
 How it finds the files
 ----------------------
-JPX publishes each file as a link on a listing page. Instead of hard-coding
-the file URLs (their folder names change), this script reads the listing
-pages and picks the links whose *file name* matches a known pattern:
+JPX builds most of its listing pages in the browser from JSON files under
+/automation/markets/derivatives/. This script reads those JSON lists (and the
+links written directly in a few HTML pages), and picks the files whose *file
+name* matches a known pattern:
 
     ose<YYYYMMDD>tp.zip / .csv                        option theoretical prices
     <YYYYMMDD>open_interest.xlsx                      open interest
@@ -18,9 +19,15 @@ pages and picks the links whose *file name* matches a known pattern:
     <YYYYMMDD>_nk225op_oi_by_tp.xlsx                  weekly option OI by participant
     <YYYYMMDD>_indexfut_oi_by_tp.xlsx                 weekly futures OI by participant
 
-It starts from the known listing pages (SEED_PAGES). If a file type is not
-found there, it follows links under /markets/derivatives/ (a few dozen pages
-at most, one request per second) until every type is found.
+    source (JST publication time seen on 2026-11-05)
+    tp             option-price json             16:41 same day
+    market_data    trading-volume json (eve)     17:11 same day
+    volume         participant-volume json       17:41 same day
+    open_interest  trading-volume HTML page      evening, same day
+    weekly         open-interest json            Monday ~15:30 (previous Friday)
+
+If a type is still not found, it follows links under /markets/derivatives/
+(a few dozen pages at most, one request per second).
 
 Which files it downloads
 ------------------------
@@ -57,13 +64,24 @@ from urllib.request import Request, urlopen
 BASE = 'https://www.jpx.co.jp'
 CRAWL_PREFIX = '/markets/derivatives/'
 
-# Known listing pages, visited first.
+JSON_ROOT = '/automation/markets/derivatives/'
+# JSON lists read directly. {month}/{prev_month}/{year} are filled in from the
+# list files (participant-volume_monthlylist.json, open_interest_yearlist.json).
+JSON_LISTS = [
+    'option-price/json/option_theoretical_price.json',
+    'trading-volume/json/derivatives_market_data_eve.json',
+    'trading-volume/json/derivatives_market_data_mor.json',
+]
+MONTH_LIST = 'participant-volume/json/participant-volume_monthlylist.json'
+MONTH_JSON = 'participant-volume/json/participant_volume_%s.json'
+YEAR_LIST = 'open-interest/json/open_interest_yearlist.json'
+
+# HTML pages whose links are written in the page itself, visited next.
 SEED_PAGES = [
+    '/markets/derivatives/trading-volume/index.html',
     '/markets/derivatives/option-price/index.html',
     '/markets/derivatives/open-interest/index.html',
     '/markets/derivatives/participant-volume/index.html',
-    '/markets/derivatives/trading-volume/index.html',
-    '/markets/derivatives/participant-open-interest/index.html',
     '/markets/derivatives/index.html',
 ]
 
@@ -139,9 +157,57 @@ def classify(name):
     return out
 
 
+def json_strings(obj):
+    if isinstance(obj, dict):
+        for v in obj.values():
+            yield from json_strings(v)
+    elif isinstance(obj, list):
+        for v in obj:
+            yield from json_strings(v)
+    elif isinstance(obj, str):
+        yield obj
+
+
+def get_json(fetcher, url):
+    body = fetcher.get(url)
+    if body is None:
+        return None
+    try:
+        return json.loads(body.decode('utf-8-sig'))
+    except ValueError as e:
+        print('[json] %s: %s' % (url, e), file=sys.stderr)
+        return None
+
+
+def add_link(found, url):
+    for t, d in classify(file_name(url)):
+        found[t].setdefault(d, set()).add(url)
+
+
+def discover_json(fetcher, base, found):
+    root = urljoin(base, JSON_ROOT)
+    lists = list(JSON_LISTS)
+
+    months = get_json(fetcher, root + MONTH_LIST)
+    ms = sorted({v for v in json_strings(months) if re.fullmatch(r'\d{6}', v)}, reverse=True)
+    lists += [MONTH_JSON % m for m in ms[:2]]  # this month and last (month start)
+
+    years = get_json(fetcher, root + YEAR_LIST)
+    yjson = sorted(v for v in json_strings(years) if v.endswith('.json'))
+    lists += [urljoin(base, y) for y in yjson[-1:]]
+
+    for item in lists:
+        url = item if item.startswith('http') else root + item
+        data = get_json(fetcher, url)
+        for v in json_strings(data):
+            if '/' in v or '.' in v:
+                add_link(found, urljoin(base, v))
+
+
 def discover(fetcher, base, max_pages, need_types):
-    """Crawl listing pages; return {type: {date: set(urls)}}."""
+    """Read JSON lists, then listing pages; return {type: {date: set(urls)}}."""
     found = {t: {} for t in TARGETS}
+    discover_json(fetcher, base, found)
     seen = set()
     queue = deque(urljoin(base, p) for p in SEED_PAGES)
     pages = 0
@@ -167,9 +233,7 @@ def discover(fetcher, base, max_pages, need_types):
             pu = urlparse(url)
             if pu.netloc != host:
                 continue
-            name = file_name(url)
-            for t, d in classify(name):
-                found[t].setdefault(d, set()).add(url)
+            add_link(found, url)
             if (pu.path.startswith(CRAWL_PREFIX)
                     and (pu.path.endswith('.html') or pu.path.endswith('/'))
                     and url not in seen):
@@ -177,7 +241,7 @@ def discover(fetcher, base, max_pages, need_types):
         if all(found[t] for t in need_types):
             break
 
-    print('[crawl] visited %d page(s)' % pages)
+    print('[crawl] read the JSON lists and %d page(s)' % pages)
     for t in TARGETS:
         dates = sorted(found[t])
         print('[crawl] %-13s %s' % (t, ('latest %s (%d dates)' % (dates[-1], len(dates))) if dates else 'not found'))
