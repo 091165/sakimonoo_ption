@@ -124,7 +124,7 @@ HM_CARD_CSS = r"""
 .hm-range{display:block;width:100%;margin:2px 0 2px;accent-color:#d97706}
 /* .card-detail scrolls sideways (overflow-x:auto), which would pin the dock to it instead of the page */
 .card[data-card="oi_heatmap"] .card-detail{overflow:visible}
-.hm-dock{position:sticky;top:46px;z-index:5;background:var(--card);padding:4px 2px 2px;margin:0 -2px 4px;border-bottom:1px solid var(--border)}
+.hm-dock{position:sticky;bottom:0;z-index:5;background:var(--card);padding:6px 2px 4px;margin:4px -2px 0;border-top:1px solid var(--border)}
 .hm-hint{font-size:11px;color:var(--sub);margin:0 2px 2px}
 .hm-bars{touch-action:pan-y;user-select:none;-webkit-user-select:none;border:1px solid var(--border);border-radius:8px;padding:4px 0}
 .hm-row{display:grid;grid-template-columns:1fr 58px 1fr;align-items:center;height:15px;cursor:pointer}
@@ -254,14 +254,14 @@ function hmBarInner(){
   var D=window.HM_DATA,n=D.dates.length;if(HM_DI===null||HM_DI>=n)HM_DI=n-1;
   var o='<div class="hm-def">選んだ日の建玉の分布です（左がプット、右がコール）。<b>グラフを左右にスワイプ</b>するか、つまみを動かすと日付が変わります。'
     +'濃い色の部分は前日から<b>増えた</b>建玉、点線の枠は前日から<b>減った</b>分です。<b style="color:#92400e;background:rgba(251,191,36,.35);padding:0 3px;border-radius:3px">黄色</b>の行使価格はその日の終値に最も近いところです。</div>';
-  // date + Nikkei close, the slider right under it; the block stays on screen while the chart scrolls
+  o+='<div class="hm-info" id="hm-info"></div><div class="hm-bars" id="hm-bars"></div>';
+  // date + Nikkei close and the slider, right under the chart; the block stays at the bottom of the screen while the chart scrolls
   o+='<div class="hm-dock"><div class="hm-date"><button type="button" onclick="hmGo(HM_DI-1)" aria-label="前の日">◀</button>'
     +'<div style="text-align:center;flex:1"><b id="hm-dl"></b></div>'
     +'<button type="button" onclick="hmGo(HM_DI+1)" aria-label="次の日">▶</button>'
     +'<button type="button" class="hm-playb" id="hm-play" onclick="hmPlay()" >再生</button></div>'
     +'<input type="range" class="hm-range" id="hm-range" min="0" max="'+(n-1)+'" value="'+HM_DI+'" oninput="hmGo(+this.value)">'
     +'<div class="hm-hint">'+hmD(D.dates[0])+' 〜 '+hmD(D.dates[n-1])+'（'+n+'営業日）</div></div>';
-  o+='<div class="hm-info" id="hm-info"></div><div class="hm-bars" id="hm-bars"></div>';
   o+='<div class="hm-note">・棒の長さは期間を通した共通の目盛りです。とび抜けて大きい行使価格（例：P60,000）は棒を端で切り、建玉（k＝1,000枚）と前日比を数字で表示しています。<br>'
     +'・±200枚以上の増減は棒の先に数字を出しています。建玉の増減だけでは、買いか売りかは分かりません。</div>';
   setTimeout(hmBarDraw,0);hmSwipe();
