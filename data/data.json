@@ -22,11 +22,21 @@
     "atm_oi_center": 53500,
     "atm_warning": null,
     "nikkei_close": 59662.02,
-    "vi": null
+    "vi": 35.1
   },
   "s01": {
     "nikkei_close": 59662.02,
-    "vi": null
+    "vi": 35.1,
+    "range_1d": {
+      "width": 1324,
+      "low": 58338,
+      "high": 60986
+    },
+    "range_1w": {
+      "width": 2904,
+      "low": 56758,
+      "high": 62566
+    }
   },
   "s02": {
     "nk225_large": {
@@ -4645,7 +4655,308 @@
         },
         "calls": {}
       }
-    }
+    },
+    "otm_table": [
+      {
+        "strike": 54500,
+        "type": "put",
+        "label": "Deep OTM P",
+        "otm_prob": {
+          "vi_minus10": 89.8,
+          "vi_current": 81.8,
+          "vi_plus10": 76.0
+        },
+        "bs_price": 545.8
+      },
+      {
+        "strike": 56500,
+        "type": "put",
+        "label": "OTM P",
+        "otm_prob": {
+          "vi_minus10": 77.3,
+          "vi_current": 70.4,
+          "vi_plus10": 66.1
+        },
+        "bs_price": 1050.3
+      },
+      {
+        "strike": 57500,
+        "type": "put",
+        "label": "OTM P",
+        "otm_prob": {
+          "vi_minus10": 68.9,
+          "vi_current": 63.8,
+          "vi_plus10": 60.8
+        },
+        "bs_price": 1396.8
+      },
+      {
+        "strike": 58500,
+        "type": "put",
+        "label": "Near OTM P",
+        "otm_prob": {
+          "vi_minus10": 59.7,
+          "vi_current": 57.0,
+          "vi_plus10": 55.4
+        },
+        "bs_price": 1811.5
+      },
+      {
+        "strike": 61500,
+        "type": "call",
+        "label": "OTM C",
+        "otm_prob": {
+          "vi_minus10": 68.4,
+          "vi_current": 63.4,
+          "vi_plus10": 60.5
+        },
+        "bs_price": 1469.4
+      },
+      {
+        "strike": 62500,
+        "type": "call",
+        "label": "OTM C",
+        "otm_prob": {
+          "vi_minus10": 76.1,
+          "vi_current": 69.4,
+          "vi_plus10": 65.4
+        },
+        "bs_price": 1151.3
+      },
+      {
+        "strike": 64500,
+        "type": "call",
+        "label": "Deep OTM C",
+        "otm_prob": {
+          "vi_minus10": 87.8,
+          "vi_current": 79.8,
+          "vi_plus10": 74.2
+        },
+        "bs_price": 678.1
+      }
+    ],
+    "edge_scores": [
+      {
+        "zone": "Deep OTM コール",
+        "type": "sell-c",
+        "range_low": 64500,
+        "range_high": 69500,
+        "wall_max_oi": 1505,
+        "wall_strike": 64500,
+        "wall_score": 0.058,
+        "otm_score": 0.596,
+        "flow_score": 0.5,
+        "participant_score": 0,
+        "total_score": 0.289,
+        "stars": 2
+      },
+      {
+        "zone": "OTM コール",
+        "type": "sell-c",
+        "range_low": 61500,
+        "range_high": 64500,
+        "wall_max_oi": 3645,
+        "wall_strike": 62000,
+        "wall_score": 0.141,
+        "otm_score": 0.596,
+        "flow_score": 0,
+        "participant_score": 0,
+        "total_score": 0.184,
+        "stars": 1
+      },
+      {
+        "zone": "ATM帯",
+        "type": "atm",
+        "range_low": 57500,
+        "range_high": 61500,
+        "wall_max_oi": 25839,
+        "wall_strike": 60000,
+        "wall_score": 1.0,
+        "otm_score": 0.276,
+        "flow_score": 0,
+        "participant_score": 0,
+        "total_score": 0.319,
+        "stars": 2
+      },
+      {
+        "zone": "OTM プット",
+        "type": "sell-p",
+        "range_low": 54500,
+        "range_high": 58500,
+        "wall_max_oi": 7809,
+        "wall_strike": 55000,
+        "wall_score": 0.302,
+        "otm_score": 0.636,
+        "flow_score": 0.5,
+        "participant_score": 0,
+        "total_score": 0.36,
+        "stars": 2
+      },
+      {
+        "zone": "Deep OTM プット",
+        "type": "sell-p",
+        "range_low": 49500,
+        "range_high": 54500,
+        "wall_max_oi": 1643,
+        "wall_strike": 54500,
+        "wall_score": 0.064,
+        "otm_score": 0.636,
+        "flow_score": 0.5,
+        "participant_score": 0,
+        "total_score": 0.3,
+        "stars": 2
+      }
+    ],
+    "presets": [
+      {
+        "name": "Iron Condor",
+        "legs": [
+          {
+            "type": "put",
+            "side": "short",
+            "strike": 57500,
+            "qty": 1,
+            "multiplier": 1000,
+            "premium": 1396.8
+          },
+          {
+            "type": "put",
+            "side": "long",
+            "strike": 55500,
+            "qty": 1,
+            "multiplier": 1000,
+            "premium": 768.5
+          },
+          {
+            "type": "call",
+            "side": "short",
+            "strike": 61500,
+            "qty": 1,
+            "multiplier": 1000,
+            "premium": 1469.4
+          },
+          {
+            "type": "call",
+            "side": "long",
+            "strike": 63500,
+            "qty": 1,
+            "multiplier": 1000,
+            "premium": 889.7
+          }
+        ]
+      },
+      {
+        "name": "Put Credit Spread",
+        "legs": [
+          {
+            "type": "put",
+            "side": "short",
+            "strike": 57500,
+            "qty": 1,
+            "multiplier": 1000,
+            "premium": 1396.8
+          },
+          {
+            "type": "put",
+            "side": "long",
+            "strike": 55500,
+            "qty": 1,
+            "multiplier": 1000,
+            "premium": 768.5
+          }
+        ]
+      },
+      {
+        "name": "Call Credit Spread",
+        "legs": [
+          {
+            "type": "call",
+            "side": "short",
+            "strike": 61500,
+            "qty": 1,
+            "multiplier": 1000,
+            "premium": 1469.4
+          },
+          {
+            "type": "call",
+            "side": "long",
+            "strike": 63500,
+            "qty": 1,
+            "multiplier": 1000,
+            "premium": 889.7
+          }
+        ]
+      },
+      {
+        "name": "Short Strangle + 先物ヘッジ",
+        "legs": [
+          {
+            "type": "put",
+            "side": "short",
+            "strike": 57500,
+            "qty": 1,
+            "multiplier": 1000,
+            "premium": 1396.8
+          },
+          {
+            "type": "call",
+            "side": "short",
+            "strike": 61500,
+            "qty": 1,
+            "multiplier": 1000,
+            "premium": 1469.4
+          },
+          {
+            "type": "futures",
+            "side": "short",
+            "entry": 59500,
+            "qty": 0,
+            "multiplier": 100
+          }
+        ]
+      },
+      {
+        "name": "P売り + mini先物ヘッジ",
+        "legs": [
+          {
+            "type": "put",
+            "side": "short",
+            "strike": 57500,
+            "qty": 1,
+            "multiplier": 1000,
+            "premium": 1396.8
+          },
+          {
+            "type": "futures",
+            "side": "short",
+            "entry": 58000,
+            "qty": 3,
+            "multiplier": 100
+          }
+        ]
+      },
+      {
+        "name": "ミニ週次θハーベスト",
+        "legs": [
+          {
+            "type": "put",
+            "side": "short",
+            "strike": 58000,
+            "qty": 10,
+            "multiplier": 100,
+            "premium": 633.4
+          },
+          {
+            "type": "call",
+            "side": "short",
+            "strike": 61000,
+            "qty": 10,
+            "multiplier": 100,
+            "premium": 661.7
+          }
+        ]
+      }
+    ]
   },
   "indicators": {
     "pcr_volume": 1.23,
@@ -4656,9 +4967,9 @@
     "max_pain": 60000,
     "max_pain_total": 75746000,
     "max_pain_diff": 500,
-    "basis": -157,
-    "basis_pct": -0.26,
-    "basis_signal": "バックワーデーション（先物ディスカウント）",
+    "basis": 68,
+    "basis_pct": 0.11,
+    "basis_signal": "コンタンゴ（先物プレミアム）",
     "walls_reinforced": [
       {
         "strike": 58000,
