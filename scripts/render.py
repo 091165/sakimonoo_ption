@@ -63,6 +63,10 @@ try:
 except Exception:
     _tk = None
 try:
+    import render_checks as _ck
+except Exception:
+    _ck = None
+try:
     import render_oi_heatmap as _hm
 except Exception:
     _hm = None
@@ -1625,7 +1629,7 @@ def _detail_ivtrend_js(ivts):
 
 
 
-def build_dashboard_html(data, oi_ts=None, wt=None, iv=None, ivts=None, greeks=None, jnet=None, optw=None, positions=None, broker_hist=None, venue_flow=None, greeks_hist=None, futures_flow=None, fut_brokers=None, opt_blocks=None, study=None, study_walls=None, opt_tekuchi=None):
+def build_dashboard_html(data, oi_ts=None, wt=None, iv=None, ivts=None, greeks=None, jnet=None, optw=None, positions=None, broker_hist=None, venue_flow=None, greeks_hist=None, futures_flow=None, fut_brokers=None, opt_blocks=None, study=None, study_walls=None, opt_tekuchi=None, checks_dir=None):
     meta = data['metadata']
     s01 = data.get('s01', {})
     s02 = data.get('s02', {})
@@ -1649,7 +1653,7 @@ def build_dashboard_html(data, oi_ts=None, wt=None, iv=None, ivts=None, greeks=N
     h += '<meta name="viewport" content="width=device-width,initial-scale=1">\n'
     h += '<title>JPX Market Analysis %s</title>\n' % esc(meta.get('date_formatted', ''))
     h += '<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700&family=Noto+Sans+JP:wght@400;500;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">\n'
-    h += '<style>\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n</style>\n' % (DASHBOARD_CSS, OI_CHART_CSS, WEEKLY_TREND_CSS, IV_CARD_CSS, IV_TREND_CSS, (_rg.GREEKS_CARD_CSS if _rg else ''), (_rj.JNET_CARD_CSS if _rj else ''), (_ow.OPTW_CARD_CSS if _ow else ''), (_ps.POS_CARD_CSS if _ps else ''), (_oc.OPCROSS_CARD_CSS if _oc else ''), FLOW_VERDICT_CSS, (_bw.BW_CARD_CSS if _bw else ''), (_sb.SB_CARD_CSS if _sb else ''), (_rr.RANGE_CARD_CSS if _rr else ''), (_ft.FUT_CARD_CSS if _ft else ''), (_fb.FB_CARD_CSS if _fb else ''), (_ds.DIST_CARD_CSS if _ds else ''), (_ob.OB_CARD_CSS + (_tk.TK_CARD_CSS if _tk else '') if _ob else (_tk.TK_CARD_CSS if _tk else '')), (_tc.TECH_CARD_CSS if _tc else '') + (_hm.HM_CARD_CSS if _hm else ''), (_st.STUDY_CARD_CSS + _st.WALLS_CARD_CSS if _st else ''), READABILITY_CSS)
+    h += '<style>\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n</style>\n' % (DASHBOARD_CSS, OI_CHART_CSS, WEEKLY_TREND_CSS, IV_CARD_CSS, IV_TREND_CSS, (_rg.GREEKS_CARD_CSS if _rg else ''), (_rj.JNET_CARD_CSS if _rj else ''), (_ow.OPTW_CARD_CSS if _ow else ''), (_ps.POS_CARD_CSS if _ps else ''), (_oc.OPCROSS_CARD_CSS if _oc else ''), FLOW_VERDICT_CSS, (_bw.BW_CARD_CSS if _bw else ''), (_sb.SB_CARD_CSS if _sb else ''), (_rr.RANGE_CARD_CSS if _rr else ''), (_ft.FUT_CARD_CSS if _ft else ''), (_fb.FB_CARD_CSS if _fb else ''), (_ds.DIST_CARD_CSS if _ds else ''), (_ob.OB_CARD_CSS + (_tk.TK_CARD_CSS if _tk else '') if _ob else (_tk.TK_CARD_CSS if _tk else '')), (_tc.TECH_CARD_CSS if _tc else '') + (_hm.HM_CARD_CSS if _hm else '') + (_ck.CK_CARD_CSS if _ck else ''), (_st.STUDY_CARD_CSS + _st.WALLS_CARD_CSS if _st else ''), READABILITY_CSS)
     h += '</head>\n<body>\n'
 
     h += '<div class="topbar">\n  <span class="logo">JPX Dashboard</span>\n  <nav>\n'
@@ -1793,7 +1797,9 @@ def build_dashboard_html(data, oi_ts=None, wt=None, iv=None, ivts=None, greeks=N
         # ⑧ first: it is the one card read every day, so it leads the page.
         ('今日のまとめ', [
             ('gemini', '📝', '今日の分析', _preview_gemini(data), _detail_gemini_js(data), DB),
-        ]),
+        ] + ([
+            ('checks', '🎯', '答え合わせ（注目点の当たり外れ）', _ck.preview(checks_dir), "return ckBuild();", DB),
+        ] if (_ck and checks_dir and _ck.build(checks_dir)) else [])),
         ('先物', [
             ('futures', '📈', '先物（建玉・価格・取引高）',
              (_ft and futures_flow and _ft.preview_futures(futures_flow, s02)) or _preview_futures(s02, oi_ts),
@@ -1924,6 +1930,9 @@ def build_dashboard_html(data, oi_ts=None, wt=None, iv=None, ivts=None, greeks=N
     if _tk and opt_tekuchi and opt_tekuchi.get('dates'):
         h += _tk.data_script(opt_tekuchi, optw)
         h += _tk.TK_CARD_JS
+    if _ck and checks_dir and _ck.build(checks_dir):
+        h += _ck.data_script(checks_dir)
+        h += _ck.CK_CARD_JS
     if _hm and _hm.build(oi_ts):
         h += _hm.data_script(oi_ts)
         h += _hm.HM_CARD_JS
@@ -3208,7 +3217,7 @@ def run(args):
         f.write(build_markdown(data))
     print('[render.py] Markdown: %s (%.1f KB)' % (md_path, os.path.getsize(md_path) / 1024))
     html_path = os.path.join(outdir, 'index.html')
-    html = build_dashboard_html(data, oi_ts=oi_ts, wt=wt, iv=iv, ivts=ivts, greeks=greeks, jnet=jnet, optw=optw, positions=positions, broker_hist=broker_hist, venue_flow=venue_flow, greeks_hist=greeks_hist, futures_flow=futures_flow, fut_brokers=fut_brokers, opt_blocks=opt_blocks, study=study, study_walls=study_walls, opt_tekuchi=opt_tekuchi)
+    html = build_dashboard_html(data, oi_ts=oi_ts, wt=wt, iv=iv, ivts=ivts, greeks=greeks, jnet=jnet, optw=optw, positions=positions, broker_hist=broker_hist, venue_flow=venue_flow, greeks_hist=greeks_hist, futures_flow=futures_flow, fut_brokers=fut_brokers, opt_blocks=opt_blocks, study=study, study_walls=study_walls, opt_tekuchi=opt_tekuchi, checks_dir=data_dir)
     if _theme:
         html = _theme.warm(html)
     with open(html_path, 'w', encoding='utf-8') as f:
