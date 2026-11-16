@@ -235,7 +235,7 @@ def build_markdown(data):
     md.append('')
 
     s06 = data.get('s06', {})
-    md.append('## ⑥ 建玉分布（ATM±5,000円）')
+    md.append('## ⑥ 建玉分布（%sATM±5,000円）' % ('%s・' % s06['distribution_label'] if s06.get('distribution_label') else ''))
     md.append('')
     if 'distribution' in s06:
         md.append('ATM = %s' % fnum(s06.get('atm')))
@@ -1705,6 +1705,8 @@ def build_dashboard_html(data, oi_ts=None, wt=None, iv=None, ivts=None, greeks=N
         _ivm = [e for e in iv['expiries'] if len(e['expiry']) == 6]
         if _ivm and _ivm[0].get('atm_iv'):
             h += '  <div class="kpi"><div class="label">ATM IV</div><div class="value">%.1f%%</div></div>\n' % (_ivm[0]['atm_iv'] * 100)
+    if vi:
+        h += '  <div class="kpi"><div class="label">日経VI</div><div class="value">%.1f</div></div>\n' % vi
     mp = ind.get('max_pain')
     if mp:
         h += '  <div class="kpi"><div class="label">Max Pain</div><div class="value">%s</div></div>\n' % fnum(mp)
@@ -1725,9 +1727,9 @@ def build_dashboard_html(data, oi_ts=None, wt=None, iv=None, ivts=None, greeks=N
             max_p = max(dist, key=lambda d: d['put_oi'])
             max_c = max(dist, key=lambda d: d['call_oi'])
             if max_p['put_oi'] > 0:
-                h += '  <div class="kpi"><div class="label">P壁（全限月）</div><div class="value" style="color:var(--put)">%s</div></div>\n' % fnum(max_p['strike'])
+                h += '  <div class="kpi"><div class="label">P壁（%s）</div><div class="value" style="color:var(--put)">%s</div></div>\n' % (esc(s06.get('distribution_label') or '全限月'), fnum(max_p['strike']))
             if max_c['call_oi'] > 0:
-                h += '  <div class="kpi"><div class="label">C壁（全限月）</div><div class="value" style="color:var(--call)">%s</div></div>\n' % fnum(max_c['strike'])
+                h += '  <div class="kpi"><div class="label">C壁（%s）</div><div class="value" style="color:var(--call)">%s</div></div>\n' % (esc(s06.get('distribution_label') or '全限月'), fnum(max_c['strike']))
     h += '</div>\n'
 
     _charts_html = ''
@@ -2024,7 +2026,7 @@ def _preview_dist(s06):
     max_c = max(dist, key=lambda d: d['call_oi']) if dist else None
     h = '<div class="mini-metrics">'
     if max_p:
-        h += '<div class="mini-metric"><div class="mm-label">P壁</div><div class="mm-value" style="color:var(--put)">%s (%s)</div></div>' % (fnum(max_p['strike']), fnum(max_p['put_oi']))
+        h += '<div class="mini-metric"><div class="mm-label">P壁（%s）</div><div class="mm-value" style="color:var(--put)">%s (%s)</div></div>' % (esc(s06.get('distribution_label') or '全限月'), fnum(max_p['strike']), fnum(max_p['put_oi']))
     h += '<div class="mini-metric"><div class="mm-label">ATM</div><div class="mm-value" style="color:var(--yellow)">%s</div></div>' % fnum(s06.get('atm'))
     if max_c:
         h += '<div class="mini-metric"><div class="mm-label">C壁</div><div class="mm-value" style="color:var(--call)">%s (%s)</div></div>' % (fnum(max_c['strike']), fnum(max_c['call_oi']))

@@ -1079,15 +1079,27 @@ def extract_s06(wb_oi, atm):
             max_pain_expiry = e
         break
 
+    # 'distribution' and the top lists are the FRONT expiry's (the same month
+    # as Max Pain), not all expiries summed: walls, the ⑥ table and the edge
+    # scores then use one contract month, the same figures as the per-expiry
+    # cards and greeks. The all-expiry sums stay under *_all.
+    front = next((e for e in expiry_distributions if e['expiry'] == max_pain_expiry), None)
+    if front is None and expiry_distributions:
+        front = max(expiry_distributions, key=lambda e: e['total_oi'])
     return {
         'atm': atm,
         'atm_round': atm_round,
         'max_pain_front': max_pain_front,
         'max_pain_expiry': max_pain_expiry,
-        'distribution': combined,
+        'distribution': front['distribution'] if front else combined,
+        'distribution_expiry': front['expiry'] if front else None,
+        'distribution_label': front['label'] if front else '全限月',
+        'distribution_all': combined,
         'by_expiry': expiry_distributions,
-        'top_puts': top_puts,
-        'top_calls': top_calls,
+        'top_puts': front['top_puts'] if front else top_puts,
+        'top_calls': front['top_calls'] if front else top_calls,
+        'top_puts_all': top_puts,
+        'top_calls_all': top_calls,
     }
 
 
