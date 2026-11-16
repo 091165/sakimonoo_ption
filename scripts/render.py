@@ -63,6 +63,10 @@ try:
 except Exception:
     _tk = None
 try:
+    import render_oi_heatmap as _hm
+except Exception:
+    _hm = None
+try:
     import render_technical as _tc
 except Exception:
     _tc = None
@@ -1645,7 +1649,7 @@ def build_dashboard_html(data, oi_ts=None, wt=None, iv=None, ivts=None, greeks=N
     h += '<meta name="viewport" content="width=device-width,initial-scale=1">\n'
     h += '<title>JPX Market Analysis %s</title>\n' % esc(meta.get('date_formatted', ''))
     h += '<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700&family=Noto+Sans+JP:wght@400;500;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">\n'
-    h += '<style>\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n</style>\n' % (DASHBOARD_CSS, OI_CHART_CSS, WEEKLY_TREND_CSS, IV_CARD_CSS, IV_TREND_CSS, (_rg.GREEKS_CARD_CSS if _rg else ''), (_rj.JNET_CARD_CSS if _rj else ''), (_ow.OPTW_CARD_CSS if _ow else ''), (_ps.POS_CARD_CSS if _ps else ''), (_oc.OPCROSS_CARD_CSS if _oc else ''), FLOW_VERDICT_CSS, (_bw.BW_CARD_CSS if _bw else ''), (_sb.SB_CARD_CSS if _sb else ''), (_rr.RANGE_CARD_CSS if _rr else ''), (_ft.FUT_CARD_CSS if _ft else ''), (_fb.FB_CARD_CSS if _fb else ''), (_ds.DIST_CARD_CSS if _ds else ''), (_ob.OB_CARD_CSS + (_tk.TK_CARD_CSS if _tk else '') if _ob else (_tk.TK_CARD_CSS if _tk else '')), (_tc.TECH_CARD_CSS if _tc else ''), (_st.STUDY_CARD_CSS + _st.WALLS_CARD_CSS if _st else ''), READABILITY_CSS)
+    h += '<style>\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n</style>\n' % (DASHBOARD_CSS, OI_CHART_CSS, WEEKLY_TREND_CSS, IV_CARD_CSS, IV_TREND_CSS, (_rg.GREEKS_CARD_CSS if _rg else ''), (_rj.JNET_CARD_CSS if _rj else ''), (_ow.OPTW_CARD_CSS if _ow else ''), (_ps.POS_CARD_CSS if _ps else ''), (_oc.OPCROSS_CARD_CSS if _oc else ''), FLOW_VERDICT_CSS, (_bw.BW_CARD_CSS if _bw else ''), (_sb.SB_CARD_CSS if _sb else ''), (_rr.RANGE_CARD_CSS if _rr else ''), (_ft.FUT_CARD_CSS if _ft else ''), (_fb.FB_CARD_CSS if _fb else ''), (_ds.DIST_CARD_CSS if _ds else ''), (_ob.OB_CARD_CSS + (_tk.TK_CARD_CSS if _tk else '') if _ob else (_tk.TK_CARD_CSS if _tk else '')), (_tc.TECH_CARD_CSS if _tc else '') + (_hm.HM_CARD_CSS if _hm else ''), (_st.STUDY_CARD_CSS + _st.WALLS_CARD_CSS if _st else ''), READABILITY_CSS)
     h += '</head>\n<body>\n'
 
     h += '<div class="topbar">\n  <span class="logo">JPX Dashboard</span>\n  <nav>\n'
@@ -1807,6 +1811,9 @@ def build_dashboard_html(data, oi_ts=None, wt=None, iv=None, ivts=None, greeks=N
              (_sb.SB_CARD_JS + "return sbBuild();" if (_sb and greeks) else "return '<div class=\\'insight\\'>データなし</div>';"), DB),
         ]) + [
             ('op_oi_timeseries', '📉', 'オプション建玉の推移', _preview_op_oi_timeseries(oi_ts), _detail_op_oi_timeseries_js(oi_ts), DB),
+        ] + ([
+            ('oi_heatmap', '🌡', 'オプション建玉の推移（行使価格×日付）', _hm.preview(oi_ts) or '<span class="mm-label">データなし</span>', "return hmBuild();", DB),
+        ] if (_hm and _hm.build(oi_ts)) else []) + [
             ('dist', '🦋', 'オプション建玉の分布',
              (_ds and _ds.preview(s06, _spot)) or _preview_dist(s06),
              ("return dsBuild();" if (_ds and _ds.build(s06, _spot)) else _detail_dist_js(s06, ind)), DB),
@@ -1915,6 +1922,9 @@ def build_dashboard_html(data, oi_ts=None, wt=None, iv=None, ivts=None, greeks=N
     if _tk and opt_tekuchi and opt_tekuchi.get('dates'):
         h += _tk.data_script(opt_tekuchi, optw)
         h += _tk.TK_CARD_JS
+    if _hm and _hm.build(oi_ts):
+        h += _hm.data_script(oi_ts)
+        h += _hm.HM_CARD_JS
     if _ds:
         h += _ds.dist_data_script(s06, _spot, ind)
         h += _ds.DIST_CARD_JS
