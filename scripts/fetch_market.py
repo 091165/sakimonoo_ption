@@ -53,6 +53,62 @@ def fetch_yahoo_nikkei():
     return None
 
 
+def fetch_nikkei_official_vi():
+    """Nikkei VI from Nikkei Inc.'s own daily CSV (the index owner).
+    Returns (close, 'YYYY-MM-DD') or (None, None)."""
+    for url in ('https://indexes.nikkei.co.jp/nkave/historical/nikkei_stock_average_vi_daily_jp.csv',
+                'https://indexes.nikkei.co.jp/nkave/historical/nikkei_stock_average_vi_daily_en.csv'):
+        try:
+            req = Request(url, headers={'User-Agent': 'Mozilla/5.0'})
+            raw = urlopen(req, timeout=12).read()
+            text = None
+            for enc in ('utf-8-sig', 'shift_jis', 'cp932'):
+                try:
+                    text = raw.decode(enc)
+                    break
+                except Exception:
+                    pass
+            rows = [l.split(',') for l in (text or '').splitlines() if re.match(r'\s*"?\d{4}[/.-]\d{1,2}[/.-]\d{1,2}', l)]
+            if not rows:
+                print('[fetch] nikkei VI csv: no data rows (%s)' % url, file=sys.stderr)
+                continue
+            last = rows[-1]
+            d = re.findall(r'\d+', last[0])
+            date = '%04d-%02d-%02d' % (int(d[0]), int(d[1]), int(d[2]))
+            # columns: date, close, open, high, low (close first in Nikkei's CSVs)
+            close = float(last[1].strip().strip('"').replace(',', ''))
+            if 5 < close < 150:
+                return close, date
+        except Exception as e:
+            print('[fetch] nikkei VI csv failed (%s): %s' % (url, e), file=sys.stderr)
+    return None, None
+
+
+def fetch_yahoo_chart_vi():
+    """Nikkei VI from Yahoo Finance's chart API (the same API that already
+    serves the Nikkei OHLC history and NIY=F in this script).
+    Returns (close, 'YYYY-MM-DD') or (None, None)."""
+    for sym in ('%5EJNIV', '%5ENKVI'):
+        try:
+            url = 'https://query1.finance.yahoo.com/v8/finance/chart/%s?interval=1d&range=10d' % sym
+            req = Request(url, headers={'User-Agent': 'Mozilla/5.0'})
+            data = json.loads(urlopen(req, timeout=12).read().decode('utf-8'))
+            res = (data.get('chart') or {}).get('result') or []
+            if not res:
+                print('[fetch] yahoo VI %s: no result' % sym, file=sys.stderr)
+                continue
+            ts = res[0].get('timestamp') or []
+            closes = ((res[0].get('indicators') or {}).get('quote') or [{}])[0].get('close') or []
+            for t, c in reversed(list(zip(ts, closes))):
+                if c and 5 < c < 150:
+                    date = (datetime.utcfromtimestamp(t) + timedelta(hours=9)).strftime('%Y-%m-%d')
+                    return round(float(c), 2), date
+            print('[fetch] yahoo VI %s: no valid close' % sym, file=sys.stderr)
+        except Exception as e:
+            print('[fetch] yahoo VI %s failed: %s' % (sym, e), file=sys.stderr)
+    return None, None
+
+
 def fetch_stooq_vi():
     """Fetch Nikkei VI from stooq.com."""
     try:
@@ -317,20 +373,29 @@ def run(args):
     # as the ATM source. Falls back to futures only if the cash index is missing.
     nikkei_for_atm = spot if spot else futures
 
-    # VI (try multiple sources)
-    vi = fetch_stooq_vi()
-    if vi:
-        print('[fetch] VI from stooq: %.2f' % vi, file=sys.stderr)
+    # VI: Nikkei's own CSV, then Yahoo's chart API, then the old page scrapers.
+    # A value dated before the cash close's day is a stale value: not used.
+    want = (ohlc_history[-1]['date'] if ohlc_history else None)
+    vi, vi_source, vi_date = None, None, None
+    for name, fn in (('nikkei', fetch_nikkei_official_vi), ('yahoo_chart', fetch_yahoo_chart_vi)):
+        v, d = fn()
+        if v is None:
+            continue
+        if want and d and d < want:
+            print('[fetch] VI from %s is dated %s, older than the close (%s): skipped' % (name, d, want), file=sys.stderr)
+            continue
+        vi, vi_source, vi_date = v, name, d
+        break
+    if vi is None:
+        for name, fn in (('stooq', fetch_stooq_vi), ('investing', fetch_investing_vi)):
+            v = fn()
+            if v:
+                vi, vi_source = v, name
+                break
+    if vi is not None:
+        print('[fetch] VI from %s: %.2f (%s)' % (vi_source, vi, vi_date or 'date unknown'), file=sys.stderr)
     else:
-        vi = fetch_investing_vi()
-        if vi:
-            print('[fetch] VI from investing.com: %.2f' % vi, file=sys.stderr)
-        else:
-            vi = fetch_yahoo_vi()
-            if vi:
-                print('[fetch] VI from yahoo: %.2f' % vi, file=sys.stderr)
-            else:
-                print('[fetch] VI unavailable from all sources', file=sys.stderr)
+        print('[fetch] VI unavailable from all sources', file=sys.stderr)
 
     result = {
         'nikkei_close': nikkei_for_atm,   # value used downstream for ATM (cash index preferred; tracks OSE close)
@@ -340,6 +405,8 @@ def run(args):
         'basis': basis,                   # real basis = futures - spot (or None)
         'basis_signal': basis_signal,
         'vi': vi,
+        'vi_source': vi_source,
+        'vi_date': vi_date,
         'source': source,
         'timestamp': datetime.now().isoformat(),
         'ohlc_history': ohlc_history,
