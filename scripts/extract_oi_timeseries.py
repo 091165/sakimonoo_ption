@@ -162,7 +162,7 @@ def extract_options_oi(wb_oi):
 
 # --- Main aggregation ------------------------------------------------------
 
-def extract_oi_timeseries(data_dir, max_days=20, top_strikes=8, nearest_expiry_only=True,
+def extract_oi_timeseries(data_dir, max_days=60, top_strikes=8, nearest_expiry_only=True,
                           out_path=None, nikkei_close=None):
     """Build the multi-day OI timeseries dict — INCREMENTAL/ACCUMULATING.
 
@@ -395,7 +395,7 @@ def main():
     ap = argparse.ArgumentParser(description='Extract daily OI timeseries')
     ap.add_argument('--data-dir',   default='data', help='dir with *open_interest.xlsx')
     ap.add_argument('--out',        default='data/oi_timeseries.json', help='output JSON path')
-    ap.add_argument('--max-days',   type=int, default=20)
+    ap.add_argument('--max-days',   type=int, default=60)
     ap.add_argument('--top-strikes', type=int, default=8,
                     help='number of top strikes per expiry to track individually')
     ap.add_argument('--all-expiries', action='store_true',

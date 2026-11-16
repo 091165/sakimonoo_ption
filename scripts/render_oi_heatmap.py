@@ -65,7 +65,11 @@ def build(oi_ts):
     exp0 = (oi_ts.get('options') or {}).get('top_expiry')
     if exp0 not in out_exps or not tot(exp0):
         exp0 = max(out_exps, key=tot)
-    return {'dates': dates, 'closes': closes, 'exps': sorted(out_exps), 'exp0': exp0, 'rows': out_exps}
+    # JPX's OI file lists only the nearest few months, so a month appears some
+    # weeks after the period starts: each month's view begins at its first day.
+    start = {e: min((i for r in rows for i in range(len(dates)) if r[1][i] is not None or r[2][i] is not None),
+                    default=0) for e, rows in out_exps.items()}
+    return {'dates': dates, 'closes': closes, 'exps': sorted(out_exps), 'exp0': exp0, 'rows': out_exps, 'start': start}
 
 
 def data_script(oi_ts):
@@ -235,11 +239,12 @@ function hmBarDraw(){
   q('hm-info').innerHTML=hmBarInfo();
   var rg=q('hm-range');if(rg&&+rg.value!==i)rg.value=i;
 }
-function hmGo(i){var n=window.HM_DATA.dates.length;HM_DI=Math.max(0,Math.min(n-1,i));hmBarDraw();}
+function hmS0(){var D=window.HM_DATA;return (D.start&&D.start[HM_EXP])||0;}
+function hmGo(i){var n=window.HM_DATA.dates.length;HM_DI=Math.max(hmS0(),Math.min(n-1,i));hmBarDraw();}
 function hmPlay(){
   var b=document.getElementById('hm-play');
   if(HM_PLAY){clearInterval(HM_PLAY);HM_PLAY=null;if(b)b.textContent='再生';return;}
-  var n=window.HM_DATA.dates.length;if(HM_DI>=n-1)HM_DI=0;hmBarDraw();if(b)b.textContent='停止';
+  var n=window.HM_DATA.dates.length;if(HM_DI>=n-1)HM_DI=hmS0();hmBarDraw();if(b)b.textContent='停止';
   HM_PLAY=setInterval(function(){if(HM_DI>=n-1){hmPlay();return;}hmGo(HM_DI+1);},700);
 }
 function hmSwipe(){
@@ -251,7 +256,7 @@ function hmSwipe(){
   },0);
 }
 function hmBarInner(){
-  var D=window.HM_DATA,n=D.dates.length;if(HM_DI===null||HM_DI>=n)HM_DI=n-1;
+  var D=window.HM_DATA,n=D.dates.length,s0=hmS0();if(HM_DI===null||HM_DI>=n)HM_DI=n-1;if(HM_DI<s0)HM_DI=s0;
   var o='<div class="hm-def">選んだ日の建玉の分布です（左がプット、右がコール）。<b>グラフを左右にスワイプ</b>するか、つまみを動かすと日付が変わります。'
     +'濃い色の部分は前日から<b>増えた</b>建玉、点線の枠は前日から<b>減った</b>分です。<b style="color:#92400e;background:rgba(251,191,36,.35);padding:0 3px;border-radius:3px">黄色</b>の行使価格はその日の終値に最も近いところです。</div>';
   o+='<div class="hm-info" id="hm-info"></div><div class="hm-bars" id="hm-bars"></div>';
@@ -260,10 +265,11 @@ function hmBarInner(){
     +'<div style="text-align:center;flex:1"><b id="hm-dl"></b></div>'
     +'<button type="button" onclick="hmGo(HM_DI+1)" aria-label="次の日">▶</button>'
     +'<button type="button" class="hm-playb" id="hm-play" onclick="hmPlay()" >再生</button></div>'
-    +'<input type="range" class="hm-range" id="hm-range" min="0" max="'+(n-1)+'" value="'+HM_DI+'" oninput="hmGo(+this.value)">'
-    +'<div class="hm-hint">'+hmD(D.dates[0])+' 〜 '+hmD(D.dates[n-1])+'（'+n+'営業日）</div></div>';
+    +'<input type="range" class="hm-range" id="hm-range" min="'+s0+'" max="'+(n-1)+'" value="'+HM_DI+'" oninput="hmGo(+this.value)">'
+    +'<div class="hm-hint">'+hmD(D.dates[s0])+' 〜 '+hmD(D.dates[n-1])+'（'+(n-s0)+'営業日）</div></div>';
   o+='<div class="hm-note">・棒の長さは期間を通した共通の目盛りです。とび抜けて大きい行使価格（例：P60,000）は棒を端で切り、建玉（k＝1,000枚）と前日比を数字で表示しています。<br>'
-    +'・±200枚以上の増減は棒の先に数字を出しています。建玉の増減だけでは、買いか売りかは分かりません。</div>';
+    +'・±200枚以上の増減は棒の先に数字を出しています。建玉の増減だけでは、買いか売りかは分かりません。<br>'
+    +'・JPXの建玉ファイルには期近の3限月しか載らないため、限月によって始まりの日が違います。建玉ファイルが残っていない日は飛ばしていて、その翌日の増減は2日分以上の変化です。</div>';
   setTimeout(hmBarDraw,0);hmSwipe();
   return o;
 }
@@ -274,7 +280,7 @@ function hmInner(){
     +(D.exps.length>1?'<select onchange="hmSet(\'HM_EXP\',this.value)">'+D.exps.map(function(e){
       return '<option value="'+e+'"'+(e===HM_EXP?' selected':'')+'>20'+e.slice(0,2)+'年'+(+e.slice(2))+'月限</option>';}).join('')+'</select>':'')+'</div>';
   if(HM_VIEW==='bar') return top+hmBarInner();
-  var dates=D.dates,n=dates.length;
+  var s0=(D.start&&D.start[HM_EXP])||0,dates=D.dates,n=dates.length;
   // only the strikes that have open interest on the selected side
   var all=D.rows[HM_EXP],rows=all.filter(function(r){for(var i=0;i<n;i++){var v=hmVal(r,i);if(v)return true;}return false;});
   window.HM_ROWS=rows;
@@ -292,12 +298,12 @@ function hmInner(){
     +'</div>';
   o+='<div class="hm-info">'+hmInfo()+'</div>';
   o+='<div class="hm-wrap"><table class="hm-t"><thead><tr><th class="k">行使価格</th>'
-    +dates.map(function(d){return '<th>'+hmD(d)+'</th>';}).join('')+'</tr>'
-    +'<tr class="cl"><th class="k">日経</th>'+D.closes.map(function(c){return '<th>'+(c?(c/1000).toFixed(1)+'k':'')+'</th>';}).join('')+'</tr></thead><tbody>';
+    +dates.map(function(d,i){return i<s0?'':'<th>'+hmD(d)+'</th>';}).join('')+'</tr>'
+    +'<tr class="cl"><th class="k">日経</th>'+D.closes.map(function(c,i){return i<s0?'':'<th>'+(c?(c/1000).toFixed(1)+'k':'')+'</th>';}).join('')+'</tr></thead><tbody>';
   for(var ri=rows.length-1;ri>=0;ri--){
     var r=rows[ri];
     o+='<tr><td class="k">'+r[0].toLocaleString()+'</td>';
-    for(var i=0;i<n;i++){
+    for(var i=s0;i<n;i++){
       var v=hmCell(r,i),cls=[],st='';
       if(spot[i]===ri) cls.push('spot');
       if(HM_SEL&&HM_SEL[0]===ri&&HM_SEL[1]===i) cls.push('sel');
@@ -313,7 +319,7 @@ function hmInner(){
   }
   o+='</tbody></table></div>';
   if(HM_MODE==='chg') o+='<div class="hm-key"><span><i style="background:rgba(248,113,113,.8)"></i>増加（新規建て）</span><span><i style="background:rgba(96,165,250,.8)"></i>減少（手仕舞い・決済）</span><span><i style="outline:2px solid #fbbf24;outline-offset:-2px"></i>終値に最も近い行使価格</span></div>';
-  var notes=['建玉ファイル（open_interest）の過去'+n+'営業日分です。1k＝1,000枚。',
+  var notes=['建玉ファイル（open_interest）の'+(n-s0)+'営業日分です。1k＝1,000枚。JPXの建玉ファイルには期近の3限月しか載らないため、限月によって始まりの日が違います。',
     '表示するのは、期間中に建玉が'+(300).toLocaleString()+'枚以上になったことがあり、期間中の終値から±12%以内の行使価格です。',
     '建玉の増減だけでは、買いか売りかは分かりません。増加は新しい建玉ができたこと、減少は反対売買か権利行使で建玉が消えたことを示します。'];
   return o+'<div class="hm-note">'+notes.map(function(x){return '・'+x;}).join('<br>')+'</div>';
