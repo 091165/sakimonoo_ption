@@ -1335,7 +1335,7 @@
           "topix": -10438.0,
           "direction": "ロング",
           "summary": "N225 +1620 / mini +4325 / TOPIX -10438",
-          "nk225_large_delta": -2806.0
+          "nk225_large_delta": 0.0
         },
         "positions": {
           "60875": {
@@ -1363,18 +1363,9 @@
         "call_total": -535.0,
         "significance": 1072.0,
         "is_new": false,
-        "deltas": {
-          "60875": {
-            "put": 0,
-            "call": -272.0
-          },
-          "61000": {
-            "put": 537.0,
-            "call": -263.0
-          }
-        },
-        "put_total_delta": 768.0,
-        "call_total_delta": -565.0
+        "deltas": {},
+        "put_total_delta": 0.0,
+        "call_total_delta": 0.0
       },
       {
         "name": "ＡＢＮクリアリン証券",
@@ -1387,7 +1378,7 @@
           "topix": 1285.0,
           "direction": "ショート",
           "summary": "N225 -3946 / mini -11318 / TOPIX +1285",
-          "nk225_large_delta": -1853.0
+          "nk225_large_delta": 0.0
         },
         "positions": {
           "60875": {
@@ -1415,30 +1406,9 @@
         "call_total": 184.0,
         "significance": 641.0,
         "is_new": false,
-        "deltas": {
-          "60875": {
-            "put": 15.0,
-            "call": 5.0
-          },
-          "61000": {
-            "put": -488.0,
-            "call": 175.0
-          },
-          "61125": {
-            "put": 16.0,
-            "call": 4.0
-          },
-          "61250": {
-            "put": -4.0,
-            "call": 0
-          },
-          "61375": {
-            "put": 4.0,
-            "call": 0
-          }
-        },
-        "put_total_delta": -1378.0,
-        "call_total_delta": 361.0
+        "deltas": {},
+        "put_total_delta": 0.0,
+        "call_total_delta": 0.0
       },
       {
         "name": "ＢＮＰパリバ証券",
@@ -1451,7 +1421,7 @@
           "topix": -28144.0,
           "direction": "ロング",
           "summary": "N225 +3784 / mini -28442 / TOPIX -28144",
-          "nk225_large_delta": -731.0
+          "nk225_large_delta": 0.0
         },
         "positions": {
           "60875": {
@@ -1479,18 +1449,9 @@
         "call_total": -482.0,
         "significance": 636.0,
         "is_new": false,
-        "deltas": {
-          "61000": {
-            "put": 153.0,
-            "call": -482.0
-          },
-          "61250": {
-            "put": 1.0,
-            "call": 0
-          }
-        },
-        "put_total_delta": -588.0,
-        "call_total_delta": -455.0
+        "deltas": {},
+        "put_total_delta": 0.0,
+        "call_total_delta": 0.0
       },
       {
         "name": "バークレイズ証券",
@@ -1503,7 +1464,7 @@
           "topix": -9907.0,
           "direction": "ロング",
           "summary": "N225 +5750 / mini +24443 / TOPIX -9907",
-          "nk225_large_delta": 493.0
+          "nk225_large_delta": 0.0
         },
         "positions": {
           "60875": {
@@ -1531,26 +1492,9 @@
         "call_total": 300.0,
         "significance": 581.0,
         "is_new": false,
-        "deltas": {
-          "60875": {
-            "put": 0,
-            "call": 190.0
-          },
-          "61000": {
-            "put": -158.0,
-            "call": -12.0
-          },
-          "61125": {
-            "put": -1.0,
-            "call": 0
-          },
-          "61375": {
-            "put": -122.0,
-            "call": 122.0
-          }
-        },
-        "put_total_delta": -56.0,
-        "call_total_delta": 299.0
+        "deltas": {},
+        "put_total_delta": 0.0,
+        "call_total_delta": 0.0
       },
       {
         "name": "ＪＰモルガン証券",
@@ -1563,7 +1507,7 @@
           "topix": 15041.0,
           "direction": "ショート",
           "summary": "N225 -70 / mini -16818 / TOPIX +15041",
-          "nk225_large_delta": 135.0
+          "nk225_large_delta": 0.0
         },
         "positions": {
           "60875": {
@@ -1591,22 +1535,9 @@
         "call_total": 357.0,
         "significance": 523.0,
         "is_new": false,
-        "deltas": {
-          "60875": {
-            "put": 0,
-            "call": 82.0
-          },
-          "61000": {
-            "put": 44.0,
-            "call": 397.0
-          },
-          "61375": {
-            "put": 122.0,
-            "call": -122.0
-          }
-        },
-        "put_total_delta": -525.0,
-        "call_total_delta": 351.0
+        "deltas": {},
+        "put_total_delta": 0.0,
+        "call_total_delta": 0.0
       },
       {
         "name": "みずほ証券",
@@ -1619,7 +1550,7 @@
           "topix": -5262.0,
           "direction": "ショート",
           "summary": "N225 -10439 / mini +12442 / TOPIX -5262",
-          "nk225_large_delta": 737.0
+          "nk225_large_delta": 0.0
         },
         "positions": {
           "60875": {
@@ -1647,14 +1578,9 @@
         "call_total": 210.0,
         "significance": 420.0,
         "is_new": false,
-        "deltas": {
-          "61000": {
-            "put": 210.0,
-            "call": 210.0
-          }
-        },
-        "put_total_delta": 230.0,
-        "call_total_delta": 210.0
+        "deltas": {},
+        "put_total_delta": 0.0,
+        "call_total_delta": 0.0
       },
       {
         "name": "ビーオブエー証券",
@@ -1667,7 +1593,7 @@
           "topix": 8595.0,
           "direction": "ロング",
           "summary": "N225 -1292 / mini +21588 / TOPIX +8595",
-          "nk225_large_delta": -1165.0
+          "nk225_large_delta": 0.0
         },
         "positions": {
           "60875": {
@@ -1695,14 +1621,9 @@
         "call_total": 76.0,
         "significance": 369.0,
         "is_new": false,
-        "deltas": {
-          "61000": {
-            "put": 293.0,
-            "call": 76.0
-          }
-        },
-        "put_total_delta": 1172.0,
-        "call_total_delta": 11.0
+        "deltas": {},
+        "put_total_delta": 0.0,
+        "call_total_delta": 0.0
       },
       {
         "name": "ＳＢＩ証券",
@@ -1715,7 +1636,7 @@
           "topix": -6464.0,
           "direction": "ショート",
           "summary": "N225 -2692 / mini +2261 / TOPIX -6464",
-          "nk225_large_delta": -1747.0
+          "nk225_large_delta": 0.0
         },
         "positions": {
           "60875": {
@@ -1743,14 +1664,9 @@
         "call_total": 5.0,
         "significance": 311.0,
         "is_new": false,
-        "deltas": {
-          "61000": {
-            "put": -306.0,
-            "call": 5.0
-          }
-        },
-        "put_total_delta": -174.0,
-        "call_total_delta": -4.0
+        "deltas": {},
+        "put_total_delta": 0.0,
+        "call_total_delta": 0.0
       },
       {
         "name": "ＨＳＢＣ証券",
@@ -1762,7 +1678,8 @@
           "nk225_mini": 12597.0,
           "topix": -16606.0,
           "direction": "ショート",
-          "summary": "N225 -31435 / mini +12597 / TOPIX -16606"
+          "summary": "N225 -31435 / mini +12597 / TOPIX -16606",
+          "nk225_large_delta": 0.0
         },
         "positions": {
           "60875": {
@@ -1789,7 +1706,10 @@
         "put_total": 0,
         "call_total": -200.0,
         "significance": 200.0,
-        "is_new": true
+        "is_new": false,
+        "deltas": {},
+        "put_total_delta": 0,
+        "call_total_delta": 0.0
       },
       {
         "name": "サスケハナ・ホンコン",
@@ -1802,7 +1722,7 @@
           "topix": -617.0,
           "direction": "ロング",
           "summary": "N225 +1336 / mini -383 / TOPIX -617",
-          "nk225_large_delta": -338.0
+          "nk225_large_delta": 0.0
         },
         "positions": {
           "60875": {
@@ -1830,13 +1750,8 @@
         "call_total": 0,
         "significance": 194.0,
         "is_new": false,
-        "deltas": {
-          "61000": {
-            "put": -194.0,
-            "call": 0
-          }
-        },
-        "put_total_delta": -119.0,
+        "deltas": {},
+        "put_total_delta": 0.0,
         "call_total_delta": 0
       },
       {
@@ -1850,7 +1765,7 @@
           "topix": -2873.0,
           "direction": "ロング",
           "summary": "N225 +1898 / mini +5733 / TOPIX -2873",
-          "nk225_large_delta": 706.0
+          "nk225_large_delta": 0.0
         },
         "positions": {
           "60875": {
@@ -1878,21 +1793,8 @@
         "call_total": 0,
         "significance": 188.0,
         "is_new": false,
-        "deltas": {
-          "60875": {
-            "put": -4.0,
-            "call": 0
-          },
-          "61000": {
-            "put": 200.0,
-            "call": 0
-          },
-          "61125": {
-            "put": -8.0,
-            "call": 0
-          }
-        },
-        "put_total_delta": 263.0,
+        "deltas": {},
+        "put_total_delta": 0.0,
         "call_total_delta": 0
       },
       {
@@ -1906,7 +1808,7 @@
           "topix": 7386.0,
           "direction": "ロング",
           "summary": "N225 +2456 / mini -12023 / TOPIX +7386",
-          "nk225_large_delta": -523.0
+          "nk225_large_delta": 0.0
         },
         "positions": {
           "60875": {
@@ -1934,14 +1836,9 @@
         "call_total": 100.0,
         "significance": 163.0,
         "is_new": false,
-        "deltas": {
-          "61000": {
-            "put": 63.0,
-            "call": 100.0
-          }
-        },
-        "put_total_delta": -234.0,
-        "call_total_delta": 104.0
+        "deltas": {},
+        "put_total_delta": 0.0,
+        "call_total_delta": 0.0
       },
       {
         "name": "野村証券",
@@ -1954,7 +1851,7 @@
           "topix": -518.0,
           "direction": "ロング",
           "summary": "N225 +41202 / mini -15730 / TOPIX -518",
-          "nk225_large_delta": 3751.0
+          "nk225_large_delta": 0.0
         },
         "positions": {
           "60875": {
@@ -1982,18 +1879,9 @@
         "call_total": 7.0,
         "significance": 107.0,
         "is_new": false,
-        "deltas": {
-          "60875": {
-            "put": 0,
-            "call": -5.0
-          },
-          "61000": {
-            "put": -100.0,
-            "call": 12.0
-          }
-        },
-        "put_total_delta": -524.0,
-        "call_total_delta": 7.0
+        "deltas": {},
+        "put_total_delta": 0.0,
+        "call_total_delta": 0.0
       },
       {
         "name": "ドイツ証券",
@@ -2006,7 +1894,7 @@
           "topix": 7512.0,
           "direction": "ロング",
           "summary": "N225 +5950 / TOPIX +7512",
-          "nk225_large_delta": 2654.0
+          "nk225_large_delta": 0.0
         },
         "positions": {
           "60875": {
@@ -2034,13 +1922,8 @@
         "call_total": 0,
         "significance": 100.0,
         "is_new": false,
-        "deltas": {
-          "61000": {
-            "put": -100.0,
-            "call": 0
-          }
-        },
-        "put_total_delta": -30.0,
+        "deltas": {},
+        "put_total_delta": 0.0,
         "call_total_delta": 0
       },
       {
@@ -2054,7 +1937,7 @@
           "topix": 16423.0,
           "direction": "ショート",
           "summary": "N225 -3804 / mini -17278 / TOPIX +16423",
-          "nk225_large_delta": 1362.0
+          "nk225_large_delta": 0.0
         },
         "positions": {
           "60875": {
@@ -2082,18 +1965,9 @@
         "call_total": 0,
         "significance": 90.0,
         "is_new": false,
-        "deltas": {
-          "61000": {
-            "put": -100.0,
-            "call": 0
-          },
-          "61250": {
-            "put": 10.0,
-            "call": 0
-          }
-        },
-        "put_total_delta": 761.0,
-        "call_total_delta": -100.0
+        "deltas": {},
+        "put_total_delta": 0.0,
+        "call_total_delta": 0
       },
       {
         "name": "モルガンＭＵＦＧ証券",
@@ -2106,7 +1980,7 @@
           "topix": 33793.0,
           "direction": "ショート",
           "summary": "N225 -10046 / mini +2496 / TOPIX +33793",
-          "nk225_large_delta": -87.0
+          "nk225_large_delta": 0.0
         },
         "positions": {
           "60875": {
@@ -2134,29 +2008,8 @@
         "call_total": 0,
         "significance": 64.0,
         "is_new": false,
-        "deltas": {
-          "60875": {
-            "put": -11.0,
-            "call": 0
-          },
-          "61000": {
-            "put": -35.0,
-            "call": 0
-          },
-          "61125": {
-            "put": -7.0,
-            "call": 0
-          },
-          "61250": {
-            "put": -7.0,
-            "call": 0
-          },
-          "61375": {
-            "put": -4.0,
-            "call": 0
-          }
-        },
-        "put_total_delta": 239.0,
+        "deltas": {},
+        "put_total_delta": 0.0,
         "call_total_delta": 0
       },
       {
@@ -2170,7 +2023,7 @@
           "topix": -1240.0,
           "direction": "ショート",
           "summary": "N225 -126 / TOPIX -1240",
-          "nk225_large_delta": -18.0
+          "nk225_large_delta": 0.0
         },
         "positions": {
           "60875": {
@@ -2198,13 +2051,8 @@
         "call_total": 0,
         "significance": 10.0,
         "is_new": false,
-        "deltas": {
-          "61000": {
-            "put": -10.0,
-            "call": 0
-          }
-        },
-        "put_total_delta": 20.0,
+        "deltas": {},
+        "put_total_delta": 0.0,
         "call_total_delta": 0
       },
       {
@@ -2218,7 +2066,7 @@
           "topix": 0,
           "direction": "フラット",
           "summary": "N225 -137 / mini +1302",
-          "nk225_large_delta": -549.0
+          "nk225_large_delta": 0.0
         },
         "positions": {
           "60875": {
@@ -2246,14 +2094,9 @@
         "call_total": -6.0,
         "significance": 8.0,
         "is_new": false,
-        "deltas": {
-          "61000": {
-            "put": 2.0,
-            "call": -6.0
-          }
-        },
-        "put_total_delta": 110.0,
-        "call_total_delta": -8.0
+        "deltas": {},
+        "put_total_delta": 0.0,
+        "call_total_delta": 0.0
       },
       {
         "name": "東海東京証券",
@@ -2266,7 +2109,7 @@
           "topix": -58.0,
           "direction": "ロング",
           "summary": "N225 +131 / mini +1619 / TOPIX -58",
-          "nk225_large_delta": 34.0
+          "nk225_large_delta": 0.0
         },
         "positions": {
           "60875": {
@@ -2294,14 +2137,9 @@
         "call_total": -6.0,
         "significance": 6.0,
         "is_new": false,
-        "deltas": {
-          "61000": {
-            "put": 0,
-            "call": -6.0
-          }
-        },
-        "put_total_delta": 21.0,
-        "call_total_delta": -6.0
+        "deltas": {},
+        "put_total_delta": 0,
+        "call_total_delta": 0.0
       },
       {
         "name": "光世証券",
@@ -2313,7 +2151,8 @@
           "nk225_mini": 0,
           "topix": 0,
           "direction": "OP専業",
-          "summary": ""
+          "summary": "",
+          "nk225_large_delta": 0
         },
         "positions": {
           "60875": {
@@ -2340,7 +2179,10 @@
         "put_total": 0,
         "call_total": -6.0,
         "significance": 6.0,
-        "is_new": true
+        "is_new": false,
+        "deltas": {},
+        "put_total_delta": 0,
+        "call_total_delta": 0.0
       },
       {
         "name": "インタラクティブ証券",
@@ -2353,7 +2195,7 @@
           "topix": -622.0,
           "direction": "ロング",
           "summary": "N225 +236 / mini +1518 / TOPIX -622",
-          "nk225_large_delta": -21.0
+          "nk225_large_delta": 0.0
         },
         "positions": {
           "60875": {
@@ -2381,14 +2223,9 @@
         "call_total": 0,
         "significance": 6.0,
         "is_new": false,
-        "deltas": {
-          "61000": {
-            "put": -6.0,
-            "call": 0
-          }
-        },
-        "put_total_delta": -64.0,
-        "call_total_delta": -3.0
+        "deltas": {},
+        "put_total_delta": 0.0,
+        "call_total_delta": 0
       },
       {
         "name": "三菱ＵＦＪｅスマート",
@@ -2401,7 +2238,7 @@
           "topix": 54.0,
           "direction": "ロング",
           "summary": "N225 +76 / mini +1423 / TOPIX +54",
-          "nk225_large_delta": -48.0
+          "nk225_large_delta": 0.0
         },
         "positions": {
           "60875": {
@@ -2429,14 +2266,9 @@
         "call_total": -2.0,
         "significance": 4.0,
         "is_new": false,
-        "deltas": {
-          "61000": {
-            "put": -2.0,
-            "call": -2.0
-          }
-        },
-        "put_total_delta": 58.0,
-        "call_total_delta": -3.0
+        "deltas": {},
+        "put_total_delta": 0.0,
+        "call_total_delta": 0.0
       },
       {
         "name": "松井証券",
@@ -2449,7 +2281,7 @@
           "topix": 183.0,
           "direction": "ロング",
           "summary": "N225 +231 / mini +1767 / TOPIX +183",
-          "nk225_large_delta": -87.0
+          "nk225_large_delta": 0.0
         },
         "positions": {
           "60875": {
@@ -2477,14 +2309,9 @@
         "call_total": -2.0,
         "significance": 3.0,
         "is_new": false,
-        "deltas": {
-          "61000": {
-            "put": -1.0,
-            "call": -2.0
-          }
-        },
-        "put_total_delta": 13.0,
-        "call_total_delta": 5.0
+        "deltas": {},
+        "put_total_delta": 0.0,
+        "call_total_delta": 0.0
       },
       {
         "name": "安藤証券",
@@ -2496,7 +2323,8 @@
           "nk225_mini": -2548.0,
           "topix": 0,
           "direction": "ショート",
-          "summary": "mini -2548"
+          "summary": "mini -2548",
+          "nk225_large_delta": 0
         },
         "positions": {
           "60875": {
@@ -2523,9 +2351,12 @@
         "put_total": -2.0,
         "call_total": 0,
         "significance": 2.0,
-        "is_new": true
+        "is_new": false,
+        "deltas": {},
+        "put_total_delta": 0.0,
+        "call_total_delta": 0
       }
     ],
-    "prev_date": "20261113"
+    "prev_date": "20261116"
   }
 }
