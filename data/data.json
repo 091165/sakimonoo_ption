@@ -21,21 +21,21 @@
     "atm_weekly_proxy": 61000,
     "atm_oi_center": 53500,
     "atm_warning": null,
-    "nikkei_close": 59845.0,
+    "nikkei_close": 59760.0,
     "vi": 35.1
   },
   "s01": {
-    "nikkei_close": 59845.0,
+    "nikkei_close": 59760.0,
     "vi": 35.1,
     "range_1d": {
-      "width": 1329,
-      "low": 58516,
-      "high": 61174
+      "width": 1327,
+      "low": 58433,
+      "high": 61087
     },
     "range_1w": {
-      "width": 2913,
-      "low": 56932,
-      "high": 62758
+      "width": 2909,
+      "low": 56851,
+      "high": 62669
     }
   },
   "s02": {
