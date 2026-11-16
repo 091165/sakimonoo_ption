@@ -4656,8 +4656,8 @@
     "max_pain": 60000,
     "max_pain_total": 75746000,
     "max_pain_diff": 500,
-    "basis": 448,
-    "basis_pct": 0.75,
+    "basis": 408,
+    "basis_pct": 0.68,
     "basis_signal": "コンタンゴ（先物プレミアム）",
     "walls_reinforced": [
       {
