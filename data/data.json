@@ -15,27 +15,27 @@
       "fut_participants": "20261113_indexfut_oi_by_tp.xlsx",
       "stock_vol": "stock_val_1_260402.xls"
     },
-    "atm": 59500,
+    "atm": 60000,
     "ohlc": {},
     "atm_source": "nikkei_close",
     "atm_weekly_proxy": 61000,
     "atm_oi_center": 53500,
     "atm_warning": null,
-    "nikkei_close": 59662.02,
+    "nikkei_close": 59845.0,
     "vi": 35.1
   },
   "s01": {
-    "nikkei_close": 59662.02,
+    "nikkei_close": 59845.0,
     "vi": 35.1,
     "range_1d": {
-      "width": 1324,
-      "low": 58338,
-      "high": 60986
+      "width": 1329,
+      "low": 58516,
+      "high": 61174
     },
     "range_1w": {
-      "width": 2904,
-      "low": 56758,
-      "high": 62566
+      "width": 2913,
+      "low": 56932,
+      "high": 62758
     }
   },
   "s02": {
@@ -542,19 +542,183 @@
     }
   ],
   "s06": {
-    "atm": 59500,
-    "atm_round": 59500,
+    "atm": 60000,
+    "atm_round": 60000,
     "max_pain_front": 60000,
     "max_pain_expiry": "2612",
     "distribution": [
       {
-        "strike": 54500,
-        "put_oi": 1643,
-        "put_change": 333,
-        "call_oi": 540,
+        "strike": 55000,
+        "put_oi": 6850,
+        "put_change": -12,
+        "call_oi": 1831,
         "call_change": 0,
         "is_atm": false
       },
+      {
+        "strike": 55500,
+        "put_oi": 516,
+        "put_change": 2,
+        "call_oi": 300,
+        "call_change": 0,
+        "is_atm": false
+      },
+      {
+        "strike": 56000,
+        "put_oi": 3373,
+        "put_change": 68,
+        "call_oi": 791,
+        "call_change": 0,
+        "is_atm": false
+      },
+      {
+        "strike": 56500,
+        "put_oi": 847,
+        "put_change": 9,
+        "call_oi": 283,
+        "call_change": 0,
+        "is_atm": false
+      },
+      {
+        "strike": 57000,
+        "put_oi": 2680,
+        "put_change": -74,
+        "call_oi": 1200,
+        "call_change": 0,
+        "is_atm": false
+      },
+      {
+        "strike": 57500,
+        "put_oi": 1340,
+        "put_change": 21,
+        "call_oi": 242,
+        "call_change": 0,
+        "is_atm": false
+      },
+      {
+        "strike": 58000,
+        "put_oi": 3919,
+        "put_change": 61,
+        "call_oi": 2734,
+        "call_change": 0,
+        "is_atm": false
+      },
+      {
+        "strike": 58500,
+        "put_oi": 1379,
+        "put_change": 4,
+        "call_oi": 350,
+        "call_change": 0,
+        "is_atm": false
+      },
+      {
+        "strike": 59000,
+        "put_oi": 2909,
+        "put_change": 5,
+        "call_oi": 2192,
+        "call_change": 0,
+        "is_atm": false
+      },
+      {
+        "strike": 59500,
+        "put_oi": 2097,
+        "put_change": 400,
+        "call_oi": 400,
+        "call_change": 0,
+        "is_atm": false
+      },
+      {
+        "strike": 60000,
+        "put_oi": 24543,
+        "put_change": 375,
+        "call_oi": 9677,
+        "call_change": -389,
+        "is_atm": true
+      },
+      {
+        "strike": 60500,
+        "put_oi": 478,
+        "put_change": 5,
+        "call_oi": 664,
+        "call_change": 6,
+        "is_atm": false
+      },
+      {
+        "strike": 61000,
+        "put_oi": 2260,
+        "put_change": -43,
+        "call_oi": 1687,
+        "call_change": 554,
+        "is_atm": false
+      },
+      {
+        "strike": 61500,
+        "put_oi": 963,
+        "put_change": 101,
+        "call_oi": 213,
+        "call_change": 2,
+        "is_atm": false
+      },
+      {
+        "strike": 62000,
+        "put_oi": 3556,
+        "put_change": 0,
+        "call_oi": 3083,
+        "call_change": 44,
+        "is_atm": false
+      },
+      {
+        "strike": 62500,
+        "put_oi": 1231,
+        "put_change": 0,
+        "call_oi": 623,
+        "call_change": 5,
+        "is_atm": false
+      },
+      {
+        "strike": 63000,
+        "put_oi": 3700,
+        "put_change": 0,
+        "call_oi": 3284,
+        "call_change": 109,
+        "is_atm": false
+      },
+      {
+        "strike": 63500,
+        "put_oi": 605,
+        "put_change": 0,
+        "call_oi": 954,
+        "call_change": 55,
+        "is_atm": false
+      },
+      {
+        "strike": 64000,
+        "put_oi": 3117,
+        "put_change": 4,
+        "call_oi": 2247,
+        "call_change": 38,
+        "is_atm": false
+      },
+      {
+        "strike": 64500,
+        "put_oi": 469,
+        "put_change": 0,
+        "call_oi": 1502,
+        "call_change": 9,
+        "is_atm": false
+      },
+      {
+        "strike": 65000,
+        "put_oi": 4685,
+        "put_change": 0,
+        "call_oi": 5884,
+        "call_change": 256,
+        "is_atm": false
+      }
+    ],
+    "distribution_expiry": "2612",
+    "distribution_label": "2026年12月限",
+    "distribution_all": [
       {
         "strike": 55000,
         "put_oi": 7809,
@@ -633,7 +797,7 @@
         "put_change": 415,
         "call_oi": 402,
         "call_change": 0,
-        "is_atm": true
+        "is_atm": false
       },
       {
         "strike": 60000,
@@ -641,7 +805,7 @@
         "put_change": 375,
         "call_oi": 9847,
         "call_change": -380,
-        "is_atm": false
+        "is_atm": true
       },
       {
         "strike": 60500,
@@ -714,22 +878,22 @@
         "call_oi": 1505,
         "call_change": 12,
         "is_atm": false
+      },
+      {
+        "strike": 65000,
+        "put_oi": 5385,
+        "put_change": 0,
+        "call_oi": 7080,
+        "call_change": 956,
+        "is_atm": false
       }
     ],
     "by_expiry": [
       {
         "expiry": "2612",
         "label": "2026年12月限",
-        "total_oi": 102928,
+        "total_oi": 111658,
         "distribution": [
-          {
-            "strike": 54500,
-            "put_oi": 1299,
-            "put_change": 333,
-            "call_oi": 540,
-            "call_change": 0,
-            "is_atm": false
-          },
           {
             "strike": 55000,
             "put_oi": 6850,
@@ -808,7 +972,7 @@
             "put_change": 400,
             "call_oi": 400,
             "call_change": 0,
-            "is_atm": true
+            "is_atm": false
           },
           {
             "strike": 60000,
@@ -816,7 +980,7 @@
             "put_change": 375,
             "call_oi": 9677,
             "call_change": -389,
-            "is_atm": false
+            "is_atm": true
           },
           {
             "strike": 60500,
@@ -889,6 +1053,14 @@
             "call_oi": 1502,
             "call_change": 9,
             "is_atm": false
+          },
+          {
+            "strike": 65000,
+            "put_oi": 4685,
+            "put_change": 0,
+            "call_oi": 5884,
+            "call_change": 256,
+            "is_atm": false
           }
         ],
         "top_puts": [
@@ -939,16 +1111,8 @@
       {
         "expiry": "2701",
         "label": "2027年01月限",
-        "total_oi": 9489,
+        "total_oi": 10788,
         "distribution": [
-          {
-            "strike": 54500,
-            "put_oi": 344,
-            "put_change": 0,
-            "call_oi": 0,
-            "call_change": 0,
-            "is_atm": false
-          },
           {
             "strike": 55000,
             "put_oi": 934,
@@ -1027,7 +1191,7 @@
             "put_change": 15,
             "call_oi": 2,
             "call_change": 0,
-            "is_atm": true
+            "is_atm": false
           },
           {
             "strike": 60000,
@@ -1035,7 +1199,7 @@
             "put_change": 0,
             "call_oi": 170,
             "call_change": 9,
-            "is_atm": false
+            "is_atm": true
           },
           {
             "strike": 60500,
@@ -1108,6 +1272,14 @@
             "call_oi": 0,
             "call_change": 0,
             "is_atm": false
+          },
+          {
+            "strike": 65000,
+            "put_oi": 447,
+            "put_change": 0,
+            "call_oi": 1196,
+            "call_change": 700,
+            "is_atm": false
           }
         ],
         "top_puts": [
@@ -1158,16 +1330,8 @@
       {
         "expiry": "2702",
         "label": "2027年02月限",
-        "total_oi": 1709,
+        "total_oi": 1962,
         "distribution": [
-          {
-            "strike": 54500,
-            "put_oi": 0,
-            "put_change": 0,
-            "call_oi": 0,
-            "call_change": 0,
-            "is_atm": false
-          },
           {
             "strike": 55000,
             "put_oi": 25,
@@ -1246,7 +1410,7 @@
             "put_change": 0,
             "call_oi": 0,
             "call_change": 0,
-            "is_atm": true
+            "is_atm": false
           },
           {
             "strike": 60000,
@@ -1254,7 +1418,7 @@
             "put_change": 0,
             "call_oi": 0,
             "call_change": 0,
-            "is_atm": false
+            "is_atm": true
           },
           {
             "strike": 60500,
@@ -1327,6 +1491,14 @@
             "call_oi": 3,
             "call_change": 3,
             "is_atm": false
+          },
+          {
+            "strike": 65000,
+            "put_oi": 253,
+            "put_change": 0,
+            "call_oi": 0,
+            "call_change": 0,
+            "is_atm": false
           }
         ],
         "top_puts": [
@@ -1378,6 +1550,50 @@
     "top_puts": [
       {
         "strike": 60000,
+        "oi": 24543
+      },
+      {
+        "strike": 30000,
+        "oi": 11864
+      },
+      {
+        "strike": 50000,
+        "oi": 9474
+      },
+      {
+        "strike": 55000,
+        "oi": 6850
+      },
+      {
+        "strike": 40000,
+        "oi": 6559
+      }
+    ],
+    "top_calls": [
+      {
+        "strike": 60000,
+        "oi": 9677
+      },
+      {
+        "strike": 70000,
+        "oi": 7976
+      },
+      {
+        "strike": 80000,
+        "oi": 7800
+      },
+      {
+        "strike": 65000,
+        "oi": 5884
+      },
+      {
+        "strike": 72000,
+        "oi": 5450
+      }
+    ],
+    "top_puts_all": [
+      {
+        "strike": 60000,
         "oi": 25839
       },
       {
@@ -1397,7 +1613,7 @@
         "oi": 7556
       }
     ],
-    "top_calls": [
+    "top_calls_all": [
       {
         "strike": 60000,
         "oi": 9847
@@ -2815,8 +3031,8 @@
     "source": "live",
     "data_date": "20261116",
     "strike_matrix": {
-      "atm": 59500,
-      "atm_round": 59500,
+      "atm": 60000,
+      "atm_round": 60000,
       "strikes": [
         60875,
         61000,
@@ -4658,121 +4874,121 @@
     },
     "otm_table": [
       {
-        "strike": 54500,
+        "strike": 55000,
         "type": "put",
         "label": "Deep OTM P",
         "otm_prob": {
-          "vi_minus10": 89.8,
-          "vi_current": 81.8,
-          "vi_plus10": 76.0
+          "vi_minus10": 89.6,
+          "vi_current": 81.6,
+          "vi_plus10": 75.8
         },
-        "bs_price": 545.8
+        "bs_price": 558.7
       },
       {
-        "strike": 56500,
+        "strike": 57000,
         "type": "put",
         "label": "OTM P",
         "otm_prob": {
-          "vi_minus10": 77.3,
-          "vi_current": 70.4,
-          "vi_plus10": 66.1
+          "vi_minus10": 77.1,
+          "vi_current": 70.2,
+          "vi_plus10": 66.0
         },
-        "bs_price": 1050.3
+        "bs_price": 1067.0
       },
       {
-        "strike": 57500,
+        "strike": 58000,
         "type": "put",
         "label": "OTM P",
         "otm_prob": {
-          "vi_minus10": 68.9,
-          "vi_current": 63.8,
-          "vi_plus10": 60.8
+          "vi_minus10": 68.8,
+          "vi_current": 63.7,
+          "vi_plus10": 60.7
         },
-        "bs_price": 1396.8
+        "bs_price": 1414.9
       },
       {
-        "strike": 58500,
+        "strike": 59000,
         "type": "put",
         "label": "Near OTM P",
         "otm_prob": {
-          "vi_minus10": 59.7,
-          "vi_current": 57.0,
+          "vi_minus10": 59.6,
+          "vi_current": 56.9,
           "vi_plus10": 55.4
         },
-        "bs_price": 1811.5
+        "bs_price": 1830.5
       },
       {
-        "strike": 61500,
+        "strike": 62000,
         "type": "call",
         "label": "OTM C",
         "otm_prob": {
-          "vi_minus10": 68.4,
-          "vi_current": 63.4,
-          "vi_plus10": 60.5
+          "vi_minus10": 68.2,
+          "vi_current": 63.3,
+          "vi_plus10": 60.4
         },
-        "bs_price": 1469.4
+        "bs_price": 1487.6
       },
       {
-        "strike": 62500,
+        "strike": 63000,
         "type": "call",
         "label": "OTM C",
         "otm_prob": {
-          "vi_minus10": 76.1,
-          "vi_current": 69.4,
-          "vi_plus10": 65.4
+          "vi_minus10": 76.0,
+          "vi_current": 69.3,
+          "vi_plus10": 65.3
         },
-        "bs_price": 1151.3
+        "bs_price": 1168.3
       },
       {
-        "strike": 64500,
+        "strike": 65000,
         "type": "call",
         "label": "Deep OTM C",
         "otm_prob": {
-          "vi_minus10": 87.8,
-          "vi_current": 79.8,
-          "vi_plus10": 74.2
+          "vi_minus10": 87.6,
+          "vi_current": 79.6,
+          "vi_plus10": 74.0
         },
-        "bs_price": 678.1
+        "bs_price": 691.7
       }
     ],
     "edge_scores": [
       {
         "zone": "Deep OTM コール",
         "type": "sell-c",
-        "range_low": 64500,
-        "range_high": 69500,
-        "wall_max_oi": 1505,
-        "wall_strike": 64500,
-        "wall_score": 0.058,
-        "otm_score": 0.596,
+        "range_low": 65000,
+        "range_high": 70000,
+        "wall_max_oi": 5884,
+        "wall_strike": 65000,
+        "wall_score": 0.24,
+        "otm_score": 0.592,
         "flow_score": 0.5,
         "participant_score": 0,
-        "total_score": 0.289,
+        "total_score": 0.333,
         "stars": 2
       },
       {
         "zone": "OTM コール",
         "type": "sell-c",
-        "range_low": 61500,
-        "range_high": 64500,
-        "wall_max_oi": 3645,
-        "wall_strike": 62000,
-        "wall_score": 0.141,
-        "otm_score": 0.596,
-        "flow_score": 0,
+        "range_low": 62000,
+        "range_high": 65000,
+        "wall_max_oi": 5884,
+        "wall_strike": 65000,
+        "wall_score": 0.24,
+        "otm_score": 0.592,
+        "flow_score": 0.5,
         "participant_score": 0,
-        "total_score": 0.184,
-        "stars": 1
+        "total_score": 0.333,
+        "stars": 2
       },
       {
         "zone": "ATM帯",
         "type": "atm",
-        "range_low": 57500,
-        "range_high": 61500,
-        "wall_max_oi": 25839,
+        "range_low": 58000,
+        "range_high": 62000,
+        "wall_max_oi": 24543,
         "wall_strike": 60000,
         "wall_score": 1.0,
-        "otm_score": 0.276,
+        "otm_score": 0.274,
         "flow_score": 0,
         "participant_score": 0,
         "total_score": 0.319,
@@ -4781,29 +4997,29 @@
       {
         "zone": "OTM プット",
         "type": "sell-p",
-        "range_low": 54500,
-        "range_high": 58500,
-        "wall_max_oi": 7809,
+        "range_low": 55000,
+        "range_high": 59000,
+        "wall_max_oi": 6850,
         "wall_strike": 55000,
-        "wall_score": 0.302,
-        "otm_score": 0.636,
+        "wall_score": 0.279,
+        "otm_score": 0.632,
         "flow_score": 0.5,
         "participant_score": 0,
-        "total_score": 0.36,
+        "total_score": 0.353,
         "stars": 2
       },
       {
         "zone": "Deep OTM プット",
         "type": "sell-p",
-        "range_low": 49500,
-        "range_high": 54500,
-        "wall_max_oi": 1643,
-        "wall_strike": 54500,
-        "wall_score": 0.064,
-        "otm_score": 0.636,
+        "range_low": 50000,
+        "range_high": 55000,
+        "wall_max_oi": 6850,
+        "wall_strike": 55000,
+        "wall_score": 0.279,
+        "otm_score": 0.632,
         "flow_score": 0.5,
         "participant_score": 0,
-        "total_score": 0.3,
+        "total_score": 0.353,
         "stars": 2
       }
     ],
@@ -4814,34 +5030,34 @@
           {
             "type": "put",
             "side": "short",
-            "strike": 57500,
+            "strike": 58000,
             "qty": 1,
             "multiplier": 1000,
-            "premium": 1396.8
+            "premium": 1414.9
           },
           {
             "type": "put",
             "side": "long",
-            "strike": 55500,
+            "strike": 56000,
             "qty": 1,
             "multiplier": 1000,
-            "premium": 768.5
+            "premium": 783.4
           },
           {
             "type": "call",
             "side": "short",
-            "strike": 61500,
+            "strike": 62000,
             "qty": 1,
             "multiplier": 1000,
-            "premium": 1469.4
+            "premium": 1487.6
           },
           {
             "type": "call",
             "side": "long",
-            "strike": 63500,
+            "strike": 64000,
             "qty": 1,
             "multiplier": 1000,
-            "premium": 889.7
+            "premium": 905.1
           }
         ]
       },
@@ -4851,18 +5067,18 @@
           {
             "type": "put",
             "side": "short",
-            "strike": 57500,
+            "strike": 58000,
             "qty": 1,
             "multiplier": 1000,
-            "premium": 1396.8
+            "premium": 1414.9
           },
           {
             "type": "put",
             "side": "long",
-            "strike": 55500,
+            "strike": 56000,
             "qty": 1,
             "multiplier": 1000,
-            "premium": 768.5
+            "premium": 783.4
           }
         ]
       },
@@ -4872,18 +5088,18 @@
           {
             "type": "call",
             "side": "short",
-            "strike": 61500,
+            "strike": 62000,
             "qty": 1,
             "multiplier": 1000,
-            "premium": 1469.4
+            "premium": 1487.6
           },
           {
             "type": "call",
             "side": "long",
-            "strike": 63500,
+            "strike": 64000,
             "qty": 1,
             "multiplier": 1000,
-            "premium": 889.7
+            "premium": 905.1
           }
         ]
       },
@@ -4893,23 +5109,23 @@
           {
             "type": "put",
             "side": "short",
-            "strike": 57500,
+            "strike": 58000,
             "qty": 1,
             "multiplier": 1000,
-            "premium": 1396.8
+            "premium": 1414.9
           },
           {
             "type": "call",
             "side": "short",
-            "strike": 61500,
+            "strike": 62000,
             "qty": 1,
             "multiplier": 1000,
-            "premium": 1469.4
+            "premium": 1487.6
           },
           {
             "type": "futures",
             "side": "short",
-            "entry": 59500,
+            "entry": 60000,
             "qty": 0,
             "multiplier": 100
           }
@@ -4921,15 +5137,15 @@
           {
             "type": "put",
             "side": "short",
-            "strike": 57500,
+            "strike": 58000,
             "qty": 1,
             "multiplier": 1000,
-            "premium": 1396.8
+            "premium": 1414.9
           },
           {
             "type": "futures",
             "side": "short",
-            "entry": 58000,
+            "entry": 58500,
             "qty": 3,
             "multiplier": 100
           }
@@ -4941,18 +5157,18 @@
           {
             "type": "put",
             "side": "short",
-            "strike": 58000,
+            "strike": 58500,
             "qty": 10,
             "multiplier": 100,
-            "premium": 633.4
+            "premium": 642.9
           },
           {
             "type": "call",
             "side": "short",
-            "strike": 61000,
+            "strike": 61500,
             "qty": 10,
             "multiplier": 100,
-            "premium": 661.7
+            "premium": 671.2
           }
         ]
       }
@@ -4962,86 +5178,85 @@
     "pcr_volume": 1.23,
     "pcr_oi": 1.81,
     "pcr_signal": "やや弱気",
-    "max_pain_all_window": 60000,
+    "max_pain_all_window": 60500,
     "max_pain_expiry": "2612",
     "max_pain": 60000,
-    "max_pain_total": 75746000,
-    "max_pain_diff": 500,
-    "basis": 68,
-    "basis_pct": 0.11,
-    "basis_signal": "コンタンゴ（先物プレミアム）",
+    "max_pain_total": 92071500,
+    "max_pain_diff": 0,
+    "basis": null,
+    "basis_signal": null,
     "walls_reinforced": [
-      {
-        "strike": 58000,
-        "type": "P",
-        "oi": 5181,
-        "change": 557
-      },
       {
         "strike": 60000,
         "type": "P",
-        "oi": 25839,
+        "oi": 24543,
         "change": 375
+      },
+      {
+        "strike": 65000,
+        "type": "C",
+        "oi": 5884,
+        "change": 256
       }
     ],
     "walls_weakened": [
       {
         "strike": 60000,
         "type": "C",
-        "oi": 9847,
-        "change": -380
+        "oi": 9677,
+        "change": -389
       }
     ]
   },
   "technicals": {
     "pivot": {
-      "date": "2026-11-13",
-      "high": 61902.5,
-      "low": 61082.23,
-      "close": 61142.35,
-      "pp": 61376,
-      "r1": 61669.77,
-      "r2": 62196.27,
-      "r3": 62490.03999999999,
-      "s1": 60849.5,
-      "s2": 60555.73,
-      "s3": 60029.23
+      "date": "2026-11-12",
+      "high": 61788.44,
+      "low": 60643.79,
+      "close": 60819.36,
+      "pp": 61084,
+      "r1": 61524.21,
+      "r2": 62228.65,
+      "r3": 62668.86,
+      "s1": 60379.56,
+      "s2": 59939.35,
+      "s3": 59234.909999999996
     },
     "fibonacci": {
       "trend": "downtrend",
-      "high": 65405,
+      "high": 65712,
       "low": 56746,
       "period": 20,
       "levels": {
         "0%": 56746,
-        "23.6%": 58789,
-        "38.2%": 60053,
-        "50%": 61075,
-        "61.8%": 62097,
-        "78.6%": 63552,
-        "100%": 65405
+        "23.6%": 58862,
+        "38.2%": 60171,
+        "50%": 61229,
+        "61.8%": 62287,
+        "78.6%": 63793,
+        "100%": 65712
       },
       "label": "戻り売り水準（下降トレンド中の反発）"
     },
     "bollinger": {
       "period": 20,
-      "mean": 62123,
-      "std": 1984,
-      "upper3": 68075,
-      "upper2": 66091,
-      "upper1": 64107,
-      "lower1": 60139,
-      "lower2": 58156,
-      "lower3": 56172,
-      "current_sigma": -1.24,
-      "bandwidth": 12.77
+      "mean": 62406,
+      "std": 2016,
+      "upper3": 68455,
+      "upper2": 66439,
+      "upper1": 64423,
+      "lower1": 60390,
+      "lower2": 58374,
+      "lower3": 56358,
+      "current_sigma": -0.63,
+      "bandwidth": 12.92
     },
     "rsi": {
       "period": 14,
-      "value": 42.0,
+      "value": 44.7,
       "signal": "ニュートラル"
     }
   },
-  "s08_assessment": "11/16｜日経平均 59,662（−1,480、−2.42%）｜12月SQ（12/11）まで19営業日\n\n結論：\n・**60,000を割り込み、ほぼ安値（59,631）で引けた。** 始値61,348から1,700円近く下げ続けた形で、引けにかけての売り圧力が強い。\n・12月SQまでの想定レンジは**54,300〜65,000**（12月限ATM付近のIV約34%から見た1σ）。60,000は**下値支持から上値の壁に変わった**可能性があり、まず60,000を回復できるかが焦点。次の下値の目安は**58,000（P5,181、+557）**、その下は**55,000（P7,809）**。\n・オプションでは**下落への備えの買い**が目立つ。P52,000 +841、P59,500 +400、P54,500 +333、P51,000 +331と、遠い行使価格までプットが積まれた。12月限IVは31.7%→34.0%（+2.4pt）、スキューも12.2→13.0ptに拡大。\n・方向はデータ上**弱め**。下落日にmini +22,382、TOPIX +10,467と先物の建玉が大きく増えた。新規の売り（またはヘッジの売り）が入った形。\n\n先物の方向性：弱め\n・下落日にmini +22,382、TOPIX +10,467、ラージ +631（12月限+386）。建玉が増えながら下げており、買いの手仕舞いではなく**新規の売りが主導**したとみられる（11/13は上昇日にラージ+2,415で、逆の動き）。\n・先物ベーシスは+483（+0.81%）と、11/13の+358から拡大。\n・地合いの判定は再び割れた。標準の前提（A）と建玉からの推定（B）はマイナス（**値動きが加速しやすい**）、IVの相対変化で見るB2だけがプラス。11/13にB・B2がプラスに転じたのは1日で終わった。\n・ボリンジャー（20日）は−1.24σ、RSI 42.0。−2σ（58,156）が次の目安。\n\n押し目買い・戻り売りの水準：\n| 水準 | 価格 | 根拠 |\n|---|---|---|\n| 戻り売り候補 | **64,000〜65,000** | ゼロガンマA 64,187、C65,000（5,884、+256）、ボリンジャー+1σ 64,107 |\n| 中間の抵抗 | **60,000〜61,000** | P60,000（24,543）・C60,000（9,677）のガンマ最大地点、MaxPain 60,000〜61,000、C61,000 +554の新規建て |\n| 目先の攻防 | 59,000〜59,500 | P59,500 +400（J-NETでＡＢＮ・ビーオブエー400ずつ）、P59,000にもJ-NETで850枚 |\n| 押し目買い候補 | **58,000** | P58,000（5,181、+557）、ボリンジャー−2σ 58,156 |\n| 強い下値支持 | **55,000** | P55,000（7,809）、12月SQまでの1σ下限54,278 |\n\nOP売りのエッジ：\n・**IV > 実現ボラに戻った**：12月限ATM IV 34.0%、20日実現ボラ32.4%（差+1.6pt）。11/12の「IVが4pt低い」状態から、売り手にやや有利な側へ。ただし下落とIV上昇が同時に起きている局面で、プット売りはまだ慎重に。\n・同じくらいのOTM確率なら、プットの方が高く売れるようになってきた：P55,000（76%、775円）に対しC63,000（76%、770円）はほぼ同じだが、P54,000（80%、636円）とC64,000（82%、522円）では**プットが約1.2倍**。\n| 候補（12月限） | SQ時OTM確率 | 理論価格 | 建玉 |\n|---|---|---|---|\n| P56,000 | 71% | 960円 | 3,924 |\n| P55,000 | 76% | 775円 | 7,809 |\n| P54,000 | 80% | 636円 | 4,270 |\n| C64,000 | 82% | 522円 | 3,009 |\n| C65,000 | 87% | 360円 | 5,884 |\n| C66,000 | 91% | 243円 | 2,025 |\n| C67,000 | 93% | 159円 | 4,134 |\n・コール側はC64,000〜65,000以上なら、ゼロガンマ（64,187）と建玉の壁の外側で相対的に安全。プット側は58,000が破られると55,000まで支えが薄い。売るならP55,000以下に限定したい。\n※OTM確率は12月限の各行使価格のIV（残存25日）から計算した理論値で、実際の確率を保証するものではない。\n\nリスクシナリオとヘッジ：\n・**下：58,000を割る**と、加速しやすい地合いの中で55,000（P7,809）まで支えが薄い。プット売りは58,000割れを撤退・mini先物でのヘッジの基準にする。\n・**上：60,000を回復して定着**すれば、MaxPain（60,000〜61,000）への引力で戻りやすい。その場合は今日の下げが「ヘッジの売りの一巡」だった可能性。\n・**IV：** 下落でIVが上がる形は、まだ警戒が強まっている最中の合図。IVが下がりながら下げ止まるかを確認する。\n\n▼詳細\n\n| 指標（12月限） | 11/16 | 11/13 |\n|---|---|---|\n| ATM IV | 34.03% | 31.66% |\n| 実現ボラ（HV20日） | 32.43% | 32.16% |\n| スキュー | 13.01pt | 12.15pt |\n| PCR（出来高 / 建玉） | 1.23 / 1.81 | 1.54 / 1.82 |\n| GEX A / B / B2 | −2.14 / −4.26 / +3.51 | −1.50 / +3.36 / +2.95 |\n| ゼロガンマ A / B / B2 | 64,187 / なし（全域マイナス） / なし（全域プラス） | 64,367 / なし / なし |\n| MaxPain | 60,000〜61,000 | 62,000 |\n| 先物ベーシス | +483（+0.81%） | +358（+0.59%） |\n\n建玉の動き：12月限はP52,000 +841、C61,000 +554、C67,000 +516、C60,875 +498、P59,500 +400、C60,000 −389、P50,000 +386、P60,000 +375、P54,500 +333、P51,000 +331、C70,000 +410、C65,000 +256。1月限はC65,000 +700、P58,000 +496。\n\n大口手口（J-NET）：P59,750でＡＢＮ462、P59,500でＡＢＮ400⟷ビーオブエー400（建玉+400で新規として残った）、P59,000でＡＢＮ250・ゴールドマン200・ＢＮＰ200・ビーオブエー200。コールはC60,500でＵＢＳ1,200。先物ラージのJ-NETは野村4,131が最大。\n\n値動き：始値61,348、高値61,389、安値59,631、終値59,662。ほぼ安値引け。\n\n自己照合（11/13の注視点）：\n・① 「60,000を割るとP60,000のヘッジ売りで加速、58,000まで速い可能性」→ 60,000は割れて安値圏で引けたが、58,000には届かず（安値59,631）。P60,000の建玉は減らず+375と積み増し。\n・② 「B・B2のプラス転換が続くか」→ 続かなかった。Bは+3.36→−4.26とマイナスに戻り、B2だけプラスが残った。\n・③ 「IV ≒ 実現ボラ」→ IVが+2.4pt上がり、実現ボラを1.6pt上回った。\n・④ 「65,000を超えるとコールの買い戻し」→ 上には向かわなかった。C67,000 +516、C70,000 +410と、遠いコールの建玉はむしろ増えた。",
+  "s08_assessment": "11/16｜日経平均 59,662（−1,480、−2.42%）｜12月SQ（12/11）まで19営業日\n\n結論：\n・**60,000を割り込み、ほぼ安値（59,631）で引けた。** 始値61,348から1,700円近く下げ続けた形で、引けにかけての売り圧力が強い。\n・12月SQまでの想定レンジは**54,300〜65,000**（12月限ATM付近のIV約34%から見た1σ）。60,000は**下値支持から上値の壁に変わった**可能性があり、まず60,000を回復できるかが焦点。次の下値の目安は**58,000（P5,181、+557）**、その下は**55,000（P7,809）**。\n・オプションでは**下落への備えの買い**が目立つ。P52,000 +841、P59,500 +400、P54,500 +333、P51,000 +331と、遠い行使価格までプットが積まれた。12月限IVは31.7%→34.0%（+2.4pt）、スキューも12.2→13.0ptに拡大。\n・方向はデータ上**弱め**。下落日にmini +22,382、TOPIX +10,467と先物の建玉が大きく増えた。新規の売り（またはヘッジの売り）が入った形。\n\n先物の方向性：弱め\n・下落日にmini +22,382、TOPIX +10,467、ラージ +631（12月限+386）。建玉が増えながら下げており、買いの手仕舞いではなく**新規の売りが主導**したとみられる（11/13は上昇日にラージ+2,415で、逆の動き）。\n・先物ベーシスは+483（+0.81%）と、11/13の+358から拡大。\n・地合いの判定は再び割れた。標準の前提（A）と建玉からの推定（B）はマイナス（**値動きが加速しやすい**）、IVの相対変化で見るB2だけがプラス。11/13にB・B2がプラスに転じたのは1日で終わった。\n・ボリンジャー（20日）は−1.24σ、RSI 42.0。−2σ（58,156）が次の目安。\n\n押し目買い・戻り売りの水準：\n| 水準 | 価格 | 根拠 |\n|---|---|---|\n| 戻り売り候補 | **64,000〜65,000** | ゼロガンマA 64,187、C65,000（5,884、+256）、ボリンジャー+1σ 64,107 |\n| 中間の抵抗 | **60,000〜61,000** | P60,000（24,543）・C60,000（9,677）のガンマ最大地点、MaxPain 60,000〜61,000、C61,000 +554の新規建て |\n| 目先の攻防 | 59,000〜59,500 | P59,500 +400（J-NETでＡＢＮ・ビーオブエー400ずつ）、P59,000にもJ-NETで850枚 |\n| 押し目買い候補 | **58,000** | P58,000（5,181、+557）、ボリンジャー−2σ 58,156 |\n| 強い下値支持 | **55,000** | P55,000（7,809）、12月SQまでの1σ下限54,278 |\n\nOP売りのエッジ：\n・**IV > 実現ボラに戻った**：12月限ATM IV 34.0%、20日実現ボラ32.4%（差+1.6pt）。11/12の「IVが4pt低い」状態から、売り手にやや有利な側へ。ただし下落とIV上昇が同時に起きている局面で、プット売りはまだ慎重に。\n・同じくらいのOTM確率なら、プットの方が高く売れるようになってきた：P55,000（76%、775円）に対しC63,000（76%、770円）はほぼ同じだが、P54,000（80%、636円）とC64,000（82%、522円）では**プットが約1.2倍**。\n| 候補（12月限） | SQ時OTM確率 | 理論価格 | 建玉 |\n|---|---|---|---|\n| P56,000 | 71% | 960円 | 3,924 |\n| P55,000 | 76% | 775円 | 7,809 |\n| P54,000 | 80% | 636円 | 4,270 |\n| C64,000 | 82% | 522円 | 3,009 |\n| C65,000 | 87% | 360円 | 5,884 |\n| C66,000 | 91% | 243円 | 2,025 |\n| C67,000 | 93% | 159円 | 4,134 |\n・コール側はC64,000〜65,000以上なら、ゼロガンマ（64,187）と建玉の壁の外側で相対的に安全。プット側は58,000が破られると55,000まで支えが薄い。売るならP55,000以下に限定したい。\n※OTM確率は12月限の各行使価格のIV（残存25日）から計算した理論値で、実際の確率を保証するものではない。\n\nリスクシナリオとヘッジ：\n・**下：58,000を割る**と、加速しやすい地合いの中で55,000（P7,809）まで支えが薄い。プット売りは58,000割れを撤退・mini先物でのヘッジの基準にする。\n・**上：60,000を回復して定着**すれば、MaxPain（60,000〜61,000）への引力で戻りやすい。その場合は今日の下げが「ヘッジの売りの一巡」だった可能性。\n・**IV：** 下落でIVが上がる形は、まだ警戒が強まっている最中の合図。IVが下がりながら下げ止まるかを確認する。\n\n▼詳細\n\n| 指標（12月限） | 11/16 | 11/13 |\n|---|---|---|\n| ATM IV | 34.03% | 31.66% |\n| 実現ボラ（HV20日） | 32.43% | 32.16% |\n| スキュー | 13.01pt | 12.15pt |\n| PCR（出来高 / 建玉） | 1.23 / 1.81 | 1.54 / 1.82 |\n| GEX A / B / B2 | −2.14 / −4.26 / +3.51 | −1.50 / +3.36 / +2.95 |\n| ゼロガンマ A / B / B2 | 64,187 / なし（全域マイナス） / なし（全域プラス） | 64,367 / なし / なし |\n| MaxPain | 60,000〜61,000 | 62,000 |\n| 先物ベーシス | +483（+0.81%） | +358（+0.59%） |\n\n建玉の動き：12月限はP52,000 +841、C61,000 +554、C67,000 +516、C60,875 +498、P59,500 +400、C60,000 −389、P50,000 +386、P60,000 +375、P54,500 +333、P51,000 +331、C70,000 +410、C65,000 +256。1月限はC65,000 +700、P58,000 +496。\n\n大口手口（J-NET）：P59,750でＡＢＮ462、P59,500でＡＢＮ400⟷ビーオブエー400（建玉+400で新規として残った）、P59,000でＡＢＮ250・ゴールドマン200・ＢＮＰ200・ビーオブエー200。コールはC60,500でＵＢＳ1,200。先物ラージのJ-NETは野村4,131が最大。\n\n値動き：始値61,348、高値61,389、安値59,631、終値59,662。ほぼ安値引け。\n\n自己照合（11/13の注視点）：\n・① △ 「60,000を割るとP60,000のヘッジ売りで加速、58,000まで速い可能性」→ 60,000は割れて安値圏で引けたが、58,000には届かず（安値59,631）。P60,000の建玉は減らず+375と積み増し。\n・② × 「B・B2がプラスに転じ、60,000〜65,000のレンジで動きが鈍りやすい」→ 続かなかった。−2.4%と大きく動いてレンジの下を割った。Bは+3.36→−4.26とマイナスに戻り、B2だけプラスが残った。\n・③ － 「IV ≒ 実現ボラ」→ 状態の説明で予想ではない。IVが+2.4pt上がり、実現ボラを1.6pt上回った。\n・④ － 「65,000を超えるとコールの買い戻し」→ 条件（65,000超え）が起きなかった。上には向かわなかった。C67,000 +516、C70,000 +410と、遠いコールの建玉はむしろ増えた。",
   "s08_source": "manual"
 }
