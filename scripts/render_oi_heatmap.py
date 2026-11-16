@@ -116,10 +116,29 @@ HM_CARD_CSS = r"""
 .hm-key{display:flex;align-items:center;gap:8px;font-size:11px;color:var(--sub);margin:8px 2px 0;flex-wrap:wrap}
 .hm-key i{display:inline-block;width:14px;height:10px;border-radius:2px;vertical-align:middle;margin-right:3px}
 .hm-note{font-size:11px;color:var(--sub);line-height:1.6;margin:8px 2px 0}
+.hm-date{display:flex;align-items:center;justify-content:space-between;gap:8px;margin:2px 2px 4px}
+.hm-date b{font-size:16px;font-family:'DM Mono',monospace}
+.hm-date .sub{font-size:12px;color:var(--sub);font-weight:500}
+.hm-date button,.hm-playb{background:transparent;border:1px solid var(--border);color:var(--text);border-radius:8px;width:36px;height:30px;font-size:14px;cursor:pointer;flex:none}
+.hm-range{flex:1;width:100%;margin:2px 0 4px;accent-color:#d97706}
+.hm-hint{font-size:11px;color:var(--sub);margin:0 2px 6px}
+.hm-bars{touch-action:pan-y;user-select:none;-webkit-user-select:none;border:1px solid var(--border);border-radius:8px;padding:4px 0}
+.hm-row{display:grid;grid-template-columns:1fr 58px 1fr;align-items:center;height:15px;cursor:pointer}
+.hm-row:nth-child(even){background:rgba(127,127,127,.06)}
+.hm-row.spot .hm-k{color:#1f1300!important;font-weight:700;background:#fbbf24;border-radius:4px}
+.hm-row.sel{outline:1px solid var(--text);outline-offset:-1px}
+.hm-k{text-align:center;font-size:10.5px;font-family:'DM Mono',monospace;color:var(--sub)}
+.hm-side{position:relative;height:11px}
+.hm-b{position:absolute;top:0;height:11px;border-radius:2px}
+.hm-pl .hm-b{right:0}.hm-cl .hm-b{left:0}
+.hm-b.dec{border:1px dashed currentColor;box-sizing:border-box}
+.hm-dv{position:absolute;top:-1px;font-size:9.5px;font-family:'DM Mono',monospace;white-space:nowrap;color:var(--text)}
+.hm-dv.in{color:#fff;font-weight:700}
+.hm-axis{display:grid;grid-template-columns:1fr 58px 1fr;font-size:11px;color:var(--sub);margin:2px 0 2px;text-align:center}
 """
 
 HM_CARD_JS = r"""
-var HM_SIDE='P',HM_MODE='oi',HM_EXP=null,HM_SEL=null;
+var HM_SIDE='P',HM_MODE='oi',HM_EXP=null,HM_SEL=null,HM_VIEW='bar',HM_DI=null,HM_PLAY=null;
 function hmD(d){return (+d.slice(4,6))+'/'+(+d.slice(6));}
 function hmS(n){return (n>0?'+':'')+n.toLocaleString();}
 function hmVal(r,i){
@@ -133,7 +152,7 @@ function hmCell(r,i){
   if(i===0) return null;
   var w=hmVal(r,i-1);return w===null?null:v-w;
 }
-function hmSet(k,v){window[k]=v;if(k!=='HM_SEL')HM_SEL=null;var el=document.getElementById('hm-root');if(!el)return;
+function hmSet(k,v){if(HM_PLAY){clearInterval(HM_PLAY);HM_PLAY=null;}window[k]=v;if(k!=='HM_SEL')HM_SEL=null;var el=document.getElementById('hm-root');if(!el)return;
   var w=el.querySelector('.hm-wrap'),x=w?w.scrollLeft:0,y=w?w.scrollTop:0;el.innerHTML=hmInner();
   if(k==='HM_SEL'){var w2=el.querySelector('.hm-wrap');if(w2){w2.scrollLeft=x;w2.scrollTop=y;}}else hmScroll();}
 // show the latest day and the strikes around its close
@@ -147,8 +166,108 @@ function hmInfo(){
   var f=function(s,a){var v=a[i],w=i>0?a[i-1]:null;if(v===null)return s+' —';return s+' '+v.toLocaleString()+(w!==null?'（'+hmS(v-w)+'）':'');};
   return hmD(d)+'　'+r[0].toLocaleString()+'　'+f('P',r[1])+'　'+f('C',r[2])+(D.closes[i]?'　日経 '+D.closes[i].toLocaleString():'');
 }
+// ---- bar view: one day's distribution (P left / C right), date by slider or swipe
+function hmBarRows(){
+  var D=window.HM_DATA,n=D.dates.length;
+  return D.rows[HM_EXP].filter(function(r){for(var i=0;i<n;i++){if(r[1][i]||r[2][i])return true;}return false;});
+}
+function hmBarScale(rows){
+  var v=[];rows.forEach(function(r){r[1].concat(r[2]).forEach(function(x){if(x)v.push(x);});});
+  v.sort(function(a,b){return a-b;});
+  // 98th percentile, so one huge strike does not flatten all the others
+  return Math.max(1,(v[Math.floor(v.length*0.98)]||v[v.length-1]||1)*1.05);
+}
+function hmSide(cls,v,w,mx,rgb){
+  if(v===null) return '<div class="hm-side '+cls+'"></div>';
+  var f=function(x){return Math.min(100,x/mx*100);};
+  var put=cls==='hm-pl',far=put?'right':'left';
+  var o='<div class="hm-side '+cls+'" style="color:rgb('+rgb+')">';
+  var big=w!==null&&Math.abs(v-w)>=50;   // smaller moves are not drawn as change
+  // decrease: dashed outline over the part that disappeared since yesterday
+  if(big&&w>v) o+='<div class="hm-b dec" style="'+(put?'right':'left')+':'+f(v).toFixed(1)+'%;width:'+(f(w)-f(v)).toFixed(1)+'%"></div>';
+  // today's size; when it grew, the new part is drawn darker
+  if(v>0){
+    var g='rgba('+rgb+',.45)';
+    if(big&&v>w){var cut=(Math.min(w,v)/v*100).toFixed(1);
+      g='linear-gradient(to '+(put?'left':'right')+',rgba('+rgb+',.45) 0,rgba('+rgb+',.45) '+cut+'%,rgb('+rgb+') '+cut+'%)';}
+    o+='<div class="hm-b" style="width:'+f(v).toFixed(1)+'%;background:'+g+'"></div>';
+  }
+  var lab='';
+  if(v>mx) lab=(v/1000).toFixed(1)+'k'+(w!==null&&v!==w?' '+hmS(v-w):'');
+  else if(w!==null&&Math.abs(v-w)>=200) lab=hmS(v-w);
+  if(lab){
+    var e=Math.max(f(v),w!==null?f(w):0);
+    if(e>70) o+='<span class="hm-dv in" style="'+far+':4px">'+lab+'</span>';
+    else o+='<span class="hm-dv" style="'+far+':calc('+e.toFixed(1)+'% + 3px)">'+lab+'</span>';
+  }
+  return o+'</div>';
+}
+function hmBarHtml(){
+  var D=window.HM_DATA,i=HM_DI,rows=hmBarRows(),mx=hmBarScale(rows),c=D.closes[i];
+  window.HM_BROWS=rows;
+  var sp=-1,bd=1e18;if(c)rows.forEach(function(r,ri){var x=Math.abs(r[0]-c);if(x<bd){bd=x;sp=ri;}});
+  var o='<div class="hm-axis"><span style="color:rgb(220,80,80)">◀ プット</span><span>行使価格</span><span style="color:rgb(60,130,230)">コール ▶</span></div>';
+  for(var ri=rows.length-1;ri>=0;ri--){
+    var r=rows[ri],p=r[1][i],q=r[2][i],pw=i>0?r[1][i-1]:null,qw=i>0?r[2][i-1]:null;
+    o+='<div class="hm-row'+(ri===sp?' spot':'')+(HM_SEL&&HM_SEL[0]===ri?' sel':'')+'" onclick="hmBarPick('+ri+')">'
+      +hmSide('hm-pl',p,pw,mx,'220,80,80')+'<div class="hm-k">'+r[0].toLocaleString()+'</div>'+hmSide('hm-cl',q,qw,mx,'60,130,230')+'</div>';
+  }
+  return o;
+}
+function hmBarInfo(){
+  var i=HM_DI;
+  if(!HM_SEL) return '行をタップすると、その行使価格の数字を表示します。';
+  var r=(window.HM_BROWS||[])[HM_SEL[0]];if(!r) return '';
+  var f=function(s,a){var v=a[i],w=i>0?a[i-1]:null;if(v===null)return s+' —';return s+' '+v.toLocaleString()+(w!==null?'（'+hmS(v-w)+'）':'');};
+  return r[0].toLocaleString()+'　'+f('P',r[1])+'　'+f('C',r[2]);
+}
+function hmBarPick(ri){HM_SEL=(HM_SEL&&HM_SEL[0]===ri)?null:[ri];hmBarDraw();}
+function hmBarDraw(){
+  var D=window.HM_DATA,i=HM_DI,c=D.closes[i],pc=i>0?D.closes[i-1]:null;
+  var q=function(id){return document.getElementById(id);};
+  if(!q('hm-bars')) return;
+  q('hm-dl').innerHTML=hmD(D.dates[i])+(c?' <span class="sub">日経 '+c.toLocaleString()+(pc?'（'+hmS(c-pc)+'）':'')+'</span>':'');
+  q('hm-bars').innerHTML=hmBarHtml();
+  q('hm-info').innerHTML=hmBarInfo();
+  var rg=q('hm-range');if(rg&&+rg.value!==i)rg.value=i;
+}
+function hmGo(i){var n=window.HM_DATA.dates.length;HM_DI=Math.max(0,Math.min(n-1,i));hmBarDraw();}
+function hmPlay(){
+  var b=document.getElementById('hm-play');
+  if(HM_PLAY){clearInterval(HM_PLAY);HM_PLAY=null;if(b)b.textContent='▶';return;}
+  var n=window.HM_DATA.dates.length;if(HM_DI>=n-1)HM_DI=0;hmBarDraw();if(b)b.textContent='■';
+  HM_PLAY=setInterval(function(){if(HM_DI>=n-1){hmPlay();return;}hmGo(HM_DI+1);},700);
+}
+function hmSwipe(){
+  setTimeout(function(){var el=document.getElementById('hm-bars');if(!el||el.dataset.sw)return;el.dataset.sw=1;
+    var x0=null,y0=null;
+    el.addEventListener('touchstart',function(e){x0=e.touches[0].clientX;y0=e.touches[0].clientY;},{passive:true});
+    el.addEventListener('touchend',function(e){if(x0===null)return;var t=e.changedTouches[0],dx=t.clientX-x0,dy=t.clientY-y0;x0=null;
+      if(Math.abs(dx)>40&&Math.abs(dx)>Math.abs(dy)*1.5){hmGo(HM_DI+(dx<0?1:-1));}},{passive:true});
+  },0);
+}
+function hmBarInner(){
+  var D=window.HM_DATA,n=D.dates.length;if(HM_DI===null||HM_DI>=n)HM_DI=n-1;
+  var o='<div class="hm-def">選んだ日の建玉の分布です（左がプット、右がコール）。<b>グラフを左右にスワイプ</b>するか、つまみを動かすと日付が変わります。'
+    +'濃い色の部分は前日から<b>増えた</b>建玉、点線の枠は前日から<b>減った</b>分です。<b style="color:#92400e;background:rgba(251,191,36,.35);padding:0 3px;border-radius:3px">黄色</b>の行使価格はその日の終値に最も近いところです。</div>';
+  o+='<div class="hm-date"><button type="button" onclick="hmGo(HM_DI-1)">◀</button><div style="text-align:center"><b id="hm-dl"></b></div>'
+    +'<button type="button" onclick="hmGo(HM_DI+1)">▶</button></div>'
+    +'<div style="display:flex;align-items:center;gap:8px"><button type="button" class="hm-playb" id="hm-play" onclick="hmPlay()">▶</button>'
+    +'<input type="range" class="hm-range" id="hm-range" min="0" max="'+(n-1)+'" value="'+HM_DI+'" oninput="hmGo(+this.value)"></div>'
+    +'<div class="hm-hint">'+hmD(D.dates[0])+' 〜 '+hmD(D.dates[n-1])+'（'+n+'営業日）。左の▶で1日ずつ自動で進みます。</div>';
+  o+='<div class="hm-info" id="hm-info"></div><div class="hm-bars" id="hm-bars"></div>';
+  o+='<div class="hm-note">・棒の長さは期間を通した共通の目盛りです。とび抜けて大きい行使価格（例：P60,000）は棒を端で切り、建玉（k＝1,000枚）と前日比を数字で表示しています。<br>'
+    +'・±200枚以上の増減は棒の先に数字を出しています。建玉の増減だけでは、買いか売りかは分かりません。</div>';
+  setTimeout(hmBarDraw,0);hmSwipe();
+  return o;
+}
 function hmInner(){
   var D=window.HM_DATA;if(!HM_EXP||!D.rows[HM_EXP]) HM_EXP=D.exp0;
+  var top='<div class="hm-ctl"><span class="hm-tabs">'+[['bar','棒グラフ（日付を動かす）'],['tbl','表（全日付）']].map(function(x){
+      return '<button type="button" class="'+(x[0]===HM_VIEW?'on':'')+'" onclick="hmSet(\'HM_VIEW\',\''+x[0]+'\')">'+x[1]+'</button>';}).join('')+'</span>'
+    +(D.exps.length>1?'<select onchange="hmSet(\'HM_EXP\',this.value)">'+D.exps.map(function(e){
+      return '<option value="'+e+'"'+(e===HM_EXP?' selected':'')+'>20'+e.slice(0,2)+'年'+(+e.slice(2))+'月限</option>';}).join('')+'</select>':'')+'</div>';
+  if(HM_VIEW==='bar') return top+hmBarInner();
   var dates=D.dates,n=dates.length;
   // only the strikes that have open interest on the selected side
   var all=D.rows[HM_EXP],rows=all.filter(function(r){for(var i=0;i<n;i++){var v=hmVal(r,i);if(v)return true;}return false;});
@@ -158,14 +277,12 @@ function hmInner(){
   // the strike nearest each day's close, to draw the price path
   var spot=dates.map(function(d,i){var c=D.closes[i];if(!c)return -1;var b=-1,bd=1e18;
     rows.forEach(function(r,ri){var x=Math.abs(r[0]-c);if(x<bd){bd=x;b=ri;}});return b;});
-  var o='<div class="hm-def">行使価格（縦）ごとの建玉を日付（横）に並べました。色が濃いほど建玉が多い（前日比では増減が大きい）行使価格です。'
+  var o=top+'<div class="hm-def">行使価格（縦）ごとの建玉を日付（横）に並べました。色が濃いほど建玉が多い（前日比では増減が大きい）行使価格です。'
     +'<b style="color:#fbbf24">黄色の枠</b>はその日の日経平均終値に最も近い行使価格で、値動きの通り道を示します。</div>';
   o+='<div class="hm-ctl"><span class="hm-tabs">'+[['P','プット'],['C','コール'],['T','合計']].map(function(x){
       return '<button type="button" class="'+(x[0]===HM_SIDE?'on':'')+'" onclick="hmSet(\'HM_SIDE\',\''+x[0]+'\')">'+x[1]+'</button>';}).join('')+'</span>'
     +'<span class="hm-tabs">'+[['oi','建玉残高'],['chg','前日比']].map(function(x){
       return '<button type="button" class="'+(x[0]===HM_MODE?'on':'')+'" onclick="hmSet(\'HM_MODE\',\''+x[0]+'\')">'+x[1]+'</button>';}).join('')+'</span>'
-    +(D.exps.length>1?'<select onchange="hmSet(\'HM_EXP\',this.value)">'+D.exps.map(function(e){
-      return '<option value="'+e+'"'+(e===HM_EXP?' selected':'')+'>20'+e.slice(0,2)+'年'+(+e.slice(2))+'月限</option>';}).join('')+'</select>':'')
     +'</div>';
   o+='<div class="hm-info">'+hmInfo()+'</div>';
   o+='<div class="hm-wrap"><table class="hm-t"><thead><tr><th class="k">行使価格</th>'
