@@ -1312,10 +1312,10 @@
     }
   ],
   "source": "live",
-  "data_date": "20261116",
+  "data_date": "20261117",
   "strike_matrix": {
-    "atm": 60000,
-    "atm_round": 60000,
+    "atm": 59000,
+    "atm_round": 59000,
     "strikes": [
       60875,
       61000,
