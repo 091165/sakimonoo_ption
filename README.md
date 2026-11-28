@@ -24,9 +24,10 @@ JPXのデリバティブ建玉データを可視化するインタラクティ�
 | 建玉残高 | `YYYYMMDDopen_interest.xlsx` | 当日夕方 |
 | 参加者別建玉（週次） | `YYYYMMDD_nk225op_oi_by_tp.xlsx` / `YYYYMMDD_indexfut_oi_by_tp.xlsx` | 月曜 15:30頃（前週金曜分） |
 
-GitHub Actions（`.github/workflows/jpx-analysis.yml`）が平日 JST 18:07 / 20:37 / 23:07 に実行し、
-新しい日付の建玉残高・J-NET取引高・理論価格が揃った時点（または新しい週次ファイルが出た時点）でサイトを再生成します。
-手動で `data/` にファイルをpushする従来の方法もそのまま使えます。
+毎日の更新は、Claudeの定期タスクが平日 JST 20:00 ごろに GitHub Actions（`.github/workflows/jpx-analysis.yml`）を手動実行（workflow_dispatch）して行います。建玉残高が出るまで待ってから実行し、そのあとClaudeの分析（`data/manual_assessment_YYYYMMDD.md`）を入れて再実行します。
+GitHub側の定時実行（平日 JST 23:07）は、実行が漏れた日の予備です（GitHubの定時実行は数時間遅れることがあります）。新しい日付の建玉残高・J-NET取引高・理論価格がそろったとき（または新しい週次ファイルが出たとき）だけサイトを再生成します。
+先物ベーシスは、JPXの清算値段（`rbYYYYMMDD.csv`）のラージ先物の期近の清算価格と、その原資産（日経平均）の差です。
+手動で `data/` にファイルを `main` へpushする従来の方法もそのまま使えます。
 
 ```
 python scripts/fetch_jpx.py --datadir data --dry-run   # 取得対象の確認だけ

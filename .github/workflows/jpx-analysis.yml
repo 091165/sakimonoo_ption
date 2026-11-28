@@ -19,12 +19,15 @@ name: JPX Daily Analysis
 
 on:
   schedule:
-    # UTC. = JST 18:07 / 20:37 / 23:07 Mon-Fri. JPX publishes the day's files
-    # between 16:40 and 17:45 JST; the later runs retry if a file was late.
-    - cron: '7 9 * * 1-5'
-    - cron: '37 11 * * 1-5'
+    # Backup only. The daily update is started by a Claude scheduled task at
+    # about 20:00 JST (workflow_dispatch); GitHub's schedule ran 7-8 hours late
+    # in November 2026, so one late run is kept to catch a missed day.
+    # UTC 14:07 = JST 23:07 Mon-Fri. It builds only when there is a new day.
     - cron: '7 14 * * 1-5'
   push:
+    # main only: a push to a work branch used to start a run on that branch
+    # and leave an extra bot commit there.
+    branches: [main]
     paths:
       - 'data/*.xlsx'
       - 'data/*.xls'
@@ -146,7 +149,9 @@ jobs:
           if git diff --cached --quiet; then
             echo "No changes to commit"
           else
-            DATE=$(date +%Y%m%d)
+            # the data's date (newest open_interest file), not the run date
+            DATE=$(ls data/*open_interest.xlsx 2>/dev/null | sed -E 's#.*/([0-9]{8})open_interest.xlsx#\1#' | sort | tail -1)
+            [ -n "$DATE" ] || DATE=$(TZ=Asia/Tokyo date +%Y%m%d)
             git commit -m "${DATE} analysis update [automated]"
             git pull --rebase origin "${GITHUB_REF_NAME}"
             git push
