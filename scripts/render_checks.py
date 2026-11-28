@@ -42,21 +42,26 @@ def build(data_dir='data'):
             lines = open(f, encoding='utf-8').read().splitlines()
         except Exception:
             continue
-        target, items = None, []
+        # A file can hold several blocks: the previous day's points, and
+        # 「M/Dの注視点・持ち越し」 for conditional points from earlier days whose
+        # condition was met later (judged on the day it happened).
+        block = None
         for ln in lines:
-            h = HEAD.match(ln.strip())
+            t = ln.strip()
+            h = HEAD.match(t)
             if h:
-                target = '%s/%s' % (int(h.group(1)), int(h.group(2)))
+                block = {'date': date, 'target': '%s/%s' % (int(h.group(1)), int(h.group(2))),
+                         'carry': '持ち越し' in t, 'items': []}
+                days.append(block)
                 continue
-            if target is None:
+            if block is None:
                 continue
-            m = ITEM.match(ln.strip())
+            m = ITEM.match(t)
             if m:
-                items.append({'n': m.group(1), 'v': MARKS[m.group(2)], 'claim': m.group(3), 'result': m.group(4)})
-            elif items and ln.strip() and not ln.strip().startswith('・'):
-                break
-        if target and items:
-            days.append({'date': date, 'target': target, 'items': items})
+                block['items'].append({'n': m.group(1), 'v': MARKS[m.group(2)], 'claim': m.group(3), 'result': m.group(4)})
+            elif block['items'] and t and not t.startswith('・'):
+                block = None
+    days = [d for d in days if d['items']]
     if not days:
         return None
     cnt = {k: sum(1 for d in days for i in d['items'] if i['v'] == k) for k in MARKS.values()}
@@ -110,7 +115,7 @@ function ckBuild(){
     +'<span class="ck-na">－</span> 判定対象外（条件が起きなかった・状態の説明など）。的中率は ○＝1、△＝0.5 として、○△×の件数で割っています。</div>';
   D.days.forEach(function(d){
     var ds=(+d.date.slice(4,6))+'/'+(+d.date.slice(6));
-    o+='<div class="ck-day"><div class="ck-dh"><b>'+d.target+'</b>の注目点 → <b>'+ds+'</b>の結果</div>';
+    o+='<div class="ck-day"><div class="ck-dh"><b>'+d.target+'</b>の注目点'+(d.carry?'（持ち越し：条件がこの日に成立）':'')+' → <b>'+ds+'</b>の結果</div>';
     d.items.forEach(function(it){
       o+='<div class="ck-it"><div class="ck-m ck-'+it.v+'">'+sym[it.v]+'</div><div class="ck-c">'+it.n+' '+ckE(it.claim)+'</div>'
         +'<div class="ck-r">'+ckE(it.result)+'</div></div>';
