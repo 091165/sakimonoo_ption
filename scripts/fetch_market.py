@@ -53,6 +53,50 @@ def fetch_yahoo_nikkei():
     return None
 
 
+def fetch_jpx_settlement(want_date=None):
+    """Front-month Nikkei 225 (large) futures settlement price from JPX's
+    daily settlement file (清算値段, rbYYYYMMDD.csv), together with the index
+    value JPX used as the underlying. Same exchange and same day as the cash
+    close, so futures - underlying is a true basis.
+
+    Returns dict(price, underlying, contract, date) or None.
+    """
+    page = 'https://www.jpx.co.jp/markets/derivatives/settlement-price/index.html'
+    try:
+        html = urlopen(Request(page, headers={'User-Agent': 'Mozilla/5.0'}), timeout=15).read().decode('utf-8', 'ignore')
+        links = sorted(set(re.findall(r'href="([^"]*rb(\d{8})\.csv)"', html)), key=lambda x: x[1])
+        if not links:
+            print('[fetch] JPX settlement: no rb*.csv link on the page', file=sys.stderr)
+            return None
+        href, day = links[-1]
+        if want_date and day != want_date.replace('-', ''):
+            print('[fetch] JPX settlement file is for %s, not %s: skipped' % (day, want_date), file=sys.stderr)
+            return None
+        url = href if href.startswith('http') else 'https://www.jpx.co.jp' + href
+        raw = urlopen(Request(url, headers={'User-Agent': 'Mozilla/5.0'}), timeout=30).read()
+        text = raw.decode('cp932', 'ignore')
+        best = None
+        for ln in text.splitlines():
+            c = ln.split(',')
+            # 銘柄コード,銘柄名称,PUT/CAL,限月,権利行使価格,清算価格,理論価格,原資産価格,ボラティリティ,金利,残日数,原資産名称
+            if len(c) < 11 or not c[1].startswith('FUT_225_'):
+                continue
+            try:
+                months, price, under, days = c[3].strip(), float(c[5]), float(c[7]), int(float(c[10]))
+            except ValueError:
+                continue
+            if days <= 0:
+                continue
+            if best is None or months < best['contract']:
+                best = {'price': price, 'underlying': under, 'contract': months, 'date': day}
+        if best:
+            return best
+        print('[fetch] JPX settlement: no Nikkei 225 futures rows', file=sys.stderr)
+    except Exception as e:
+        print('[fetch] JPX settlement failed: %s' % e, file=sys.stderr)
+    return None
+
+
 def fetch_nikkei_official_vi():
     """Nikkei VI from Nikkei Inc.'s own daily CSV (the index owner).
     Returns (close, 'YYYY-MM-DD') or (None, None)."""
@@ -349,20 +393,34 @@ def run(args):
     if futures:
         print('[fetch] futures close from %s: %.0f' % (fut_source, futures), file=sys.stderr)
     else:
-        print('[fetch] futures close unavailable — basis will be omitted, ATM falls back to spot', file=sys.stderr)
+        print('[fetch] CME futures close unavailable (only used as an ATM fallback)', file=sys.stderr)
 
-    # Real basis = futures - spot (only when both are available; never faked)
+    # Real basis = OSE large-futures settlement - the index value JPX used, from
+    # JPX's own settlement file (same exchange, same day). The CME future NIY=F
+    # trades in a different session, so futures(NIY=F) - spot was off by several
+    # hundred yen around holidays (e.g. -855 on 11/24): it is no longer used for
+    # the basis. No JPX file for the day => no basis.
     basis = None
     basis_signal = None
-    if futures and spot:
-        basis = round(futures - spot)
+    basis_source = None
+    want = ohlc_history[-1]['date'] if ohlc_history else None
+    st = fetch_jpx_settlement(want)
+    if st and not want and spot and abs(st['underlying'] - spot) > 1:
+        # no dated history to check against: the file must be for the same close
+        print('[fetch] JPX settlement underlying %.2f != spot %.2f: skipped' % (st['underlying'], spot), file=sys.stderr)
+        st = None
+    if st:
+        basis = round(st['price'] - st['underlying'])
+        basis_source = 'jpx_settlement:%s' % st['contract']
+        print('[fetch] basis = OSE 225 futures %s settlement(%.0f) - index(%.2f) = %+d'
+              % (st['contract'], st['price'], st['underlying'], basis), file=sys.stderr)
+    if basis is not None:
         if basis > 0:
             basis_signal = 'コンタンゴ（先物プレミアム）'
         elif basis < 0:
             basis_signal = 'バックワーデーション（先物ディスカウント）'
         else:
             basis_signal = 'フラット'
-        print('[fetch] basis = futures(%.0f) - spot(%.0f) = %+d (%s)' % (futures, spot, basis, basis_signal), file=sys.stderr)
 
     # ATM prefers the CASH index close (^nkx, JST 15:00), which tracks the OSE
     # Nikkei 225 large-futures day-session close (15:15) within a few hundred yen.
@@ -404,6 +462,8 @@ def run(args):
         'futures_source': fut_source,
         'basis': basis,                   # real basis = futures - spot (or None)
         'basis_signal': basis_signal,
+        'basis_source': basis_source,
+        'futures_settlement': st['price'] if st else None,
         'vi': vi,
         'vi_source': vi_source,
         'vi_date': vi_date,
