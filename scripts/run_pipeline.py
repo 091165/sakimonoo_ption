@@ -13,6 +13,7 @@ If --nikkei/--vi are not provided, auto-fetches from web.
 
 import argparse
 import json
+import re
 import os
 import subprocess
 import sys
@@ -61,12 +62,30 @@ def main():
         if os.path.exists(market_json):
             with open(market_json) as f:
                 market = json.load(f)
+            # The close of the DATA's day, not of the day the pipeline runs:
+            # a rebuild on a weekend/holiday found no close "for today" and fell
+            # back to the CME future (58,970 instead of 58,711 for 11/27).
+            data_day = None
+            for _f in sorted(os.listdir(datadir)):
+                _m = re.match(r'(\d{8})open_interest\.xlsx$', _f)
+                if _m:
+                    data_day = _m.group(1)
+            row = None
+            if data_day:
+                _dd = '%s-%s-%s' % (data_day[:4], data_day[4:6], data_day[6:])
+                row = next((r for r in (market.get('ohlc_history') or []) if r.get('date') == _dd and r.get('close')), None)
+            if nikkei is None and row:
+                nikkei = float(row['close'])
+                market['nikkei_close'] = market['nikkei_spot'] = nikkei
+                print('[market] close of the data day %s from OHLC history: %.2f' % (data_day, nikkei))
             if nikkei is None and market.get('nikkei_close'):
                 nikkei = market['nikkei_close']
             if vi is None and market.get('vi'):
                 vi = market['vi']
             basis = market.get('basis')
             spot = market.get('nikkei_spot')
+            with open(market_json, 'w') as f:
+                json.dump(market, f, ensure_ascii=False, indent=2)
 
         if nikkei is None:
             print('[WARN] Nikkei close not available. Using ATM from futures as fallback.', file=sys.stderr)
